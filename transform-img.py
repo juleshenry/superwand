@@ -1,6 +1,8 @@
 class Img:
 	pass
 
+# https://www.losingfight.com/blog/2007/08/28/how-to-implement-a-magic-wand-tool/
+
 def flip(img: Img, dire="vertical") -> Img:
 	if dire =="vertical":
 		return
