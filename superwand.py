@@ -1,24 +1,58 @@
-from PIL import Image
-import argparse
+class Img:
+	pass
 
-def superwand(image: Image):
-    return
+# https://www.losingfight.com/blog/2007/08/28/how-to-implement-a-magic-wand-tool/
 
-if __name__ == "__main__":
-    # Create the parser
-    parser = argparse.ArgumentParser(description="Tatuagem")
-    st = "store_true"
-    parser.add_argument("--completeness", action=st, help="todo")  # fmt: skip
-    parser.add_argument("--style", action=st, help="todo")  # fmt: skip
-    parser.add_argument("--opacity", action=st, help="todo")  # fmt: skip
-     # Parse the first argument
-    args, positional_args = parser.parse_known_args()
-    image = positional_args[0]
-    # Access the option values
-    if args.completeness:
-        print("Text option is enabled")
-    if args.style:
-        print("Backsplash option is enabled")
-    if args.opacity:
-        print("Time stamp option is enabled")
-    superwand(image, **{a: getattr(args, a) for a in kwargs_list})
+def flip(img: Img, dire="vertical") -> Img:
+	if dire =="vertical":
+		return
+	else dire = "horizontal":
+		return
+	else:
+		return img
+
+
+def clamp(o: float, mn=0,mx=1) -> o:
+	return (mn if (mx if o > mx else o) < mn else o)
+
+def gradient_enforce(img: Img, style = "auto", completeness = "auto", opacity = "auto") -> Img:
+	"""
+	Converts monocolor regionswith directional gradient
+
+	style : 
+	~ direction of gradients
+		-> auto, best guess based on boosting
+		-> vertical
+		-> horizontal
+
+	completeness : 
+	~impacted regions
+		-> aggressive, all colors
+		-> auto, most impact
+		-> filter, color or set of colors
+	
+	opacity :
+	~makes achieve minimum opacity value in region
+		-> clamp {0, 1}
+		-> failsafe rounds
+	"""
+	if style == "auto":
+	else if style == "vertical":
+	else if style == "horizontal":
+	else:
+		style == "auto"
+
+	if completeness == "auto":
+	else if completeness == "aggressive":
+	else if completeness == "filter":
+	else: 
+		style == "auto"
+
+	opacity = clamp(opacity, 0, 1)
+
+
+	
+	return img
+
+
+
