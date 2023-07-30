@@ -1,10 +1,14 @@
 # superwand
-Leverage magic wand to breath life to vector art.
+Leverage magic wand to breath life to images, especially posterized and vector art images.
 
-
-![alt text](https://cdn.pixabay.com/photo/2012/04/24/17/48/magic-40641_1280.png)
-
-Here's what it should be.
+Here's what it is.
 
 1. Purpose: Allows color ranges to be replaced with gradients in vector art JPG's.
-2. How? Magic-wand from photoshop selects gradients
+2. How? Magic-wand selection of groups by color. Automatic testing of colors and gradients.
+
+Features:
+
+1. Arbitrary color variation on posterized images
+Spring, Summer, Winter, Fall, Safari, Urban Camoflauge, Etc.
+
+2. 
