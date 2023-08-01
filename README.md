@@ -9,6 +9,11 @@ Here's what it is.
 Features:
 
 1. Arbitrary color variation on posterized images
+
+Color themes include : 
+
 Spring, Summer, Winter, Fall, Safari, Urban Camoflauge, Etc.
+
+Inverse and other organically generated themes as well.
 
 2. 
