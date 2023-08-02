@@ -1,4 +1,5 @@
-from PIL import Image
+from PIL import Image, ImageOps
+import os
 
 def create_gif(images, output_path, delay=100):
     # images: List of PIL image objects
@@ -32,22 +33,40 @@ def create_gif(images, output_path, delay=100):
 
 #     from PIL import Image, ImageOps
 
-def invert_image(input_path, output_path):
-    # Load the image using PIL
-    image = Image.open(input_path)
+import numpy as np
+from PIL import Image
 
-    # Invert the image using ImageOps.invert()
-    inverted_image = ImageOps.invert(image)
+def get_distinct_colors(input_img):
+    image = Image.open(input_img)
+    img_array = np.array(image)
+    sex = set()
+    print(img_array[0][0])
+    img_array[:, :3] = np.clip(255 - img_array[:, :3], 0, 255)
+    print(img_array[0][0]);1/0
+    # for x in img_array:
+    #     all = tuple(tuple(y) for y in x)
+    #     sex.add(all)
+    # print(sorted(list(sex)))
+
+def invert_image_numpy(input_filename, output_filename):
+    # Load the image using PIL
+    image = Image.open(input_filename)
+
+    # Convert the image to a NumPy array
+    img_array = np.array(image)
+
+    # Invert the image using NumPy
+    inverted_img_array = (255 - img_array) 
+
+    # Create a new PIL image from the inverted NumPy array
+    inverted_image = Image.fromarray(inverted_img_array)
 
     # Save the inverted image
-    inverted_image.save(output_path)
+    inverted_image.save(output_filename)
 
 if __name__ == "__main__":
-    # Replace 'input_image.png' with the path to your input image
-    input_image_path = 'input_image.png'
+    iif = 'examples/pngs/pikachu_sprite.png' 
+    # output_image_filename = 'output_image.png'
+    # invert_image_numpy(input_image_filename, output_image_filename)
 
-    # Replace 'output_image.png' with the desired output path for the inverted image
-    output_image_path = 'output_image.png'
-
-    # Call the function to invert the image
-    invert_image(input_image_path, output_image_path)
+    get_distinct_colors(iif)
