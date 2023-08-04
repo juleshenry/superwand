@@ -3,11 +3,11 @@ class Img:
 
 # https://www.losingfight.com/blog/2007/08/28/how-to-implement-a-magic-wand-tool/
 
-def flip(img: Img, dire="vertical") -> Img:
-	if dire =="vertical":
-		return
-	else dire = "horizontal":
-		return
+def flip(img: Img, direction="vertical") -> Img:
+	if direction == "vertical":
+		return img
+	else direction = "horizontal":
+		return img
 	else:
 		return img
 
