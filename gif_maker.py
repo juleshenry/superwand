@@ -18,55 +18,30 @@ def create_gif(images, output_path, delay=100):
         loop=0
     )
 
-# if __name__ == "__main__":
-#     # Replace 'image1.png', 'image2.png', etc., with your actual image file paths
-#     image_files = ['image1.png', 'image2.png', 'image3.png']
-
-#     # Load the images using PIL
-#     images = [Image.open(file_path) for file_path in image_files]
-
-#     # Specify the output file path
-#     output_file = 'output.gif'
-
-#     # Call the function to create the GIF with a 100ms delay
-#     create_gif(images, output_file, delay=100)
-
-#     from PIL import Image, ImageOps
-
 import numpy as np
 from PIL import Image
 
-def get_distinct_colors(input_img):
-    image = Image.open(input_img)
-    img_array = np.array(image)
+def inv(input_img):
+    img_array = np.array(input_img)
     sex = set()
-    print(img_array[0][0])
-    img_array[:, :3] = np.clip(255 - img_array[:, :3], 0, 255)
-    print(img_array[0][0]);1/0
-    # for x in img_array:
-    #     all = tuple(tuple(y) for y in x)
-    #     sex.add(all)
-    # print(sorted(list(sex)))
+    img_array[:, :3] = 255 - img_array[:, :3]
+    return Image.fromarray(img_array)
 
 def invert_image_numpy(input_filename, output_filename):
     # Load the image using PIL
     image = Image.open(input_filename)
-
-    # Convert the image to a NumPy array
-    img_array = np.array(image)
-
     # Invert the image using NumPy
-    inverted_img_array = (255 - img_array) 
-
-    # Create a new PIL image from the inverted NumPy array
-    inverted_image = Image.fromarray(inverted_img_array)
-
+    inverted_img = inv(image)
     # Save the inverted image
-    inverted_image.save(output_filename)
+    inverted_img.save(output_filename)
+
+
 
 if __name__ == "__main__":
-    iif = 'examples/pngs/pikachu_sprite.png' 
-    # output_image_filename = 'output_image.png'
-    # invert_image_numpy(input_image_filename, output_image_filename)
+    image_files = ['image1.png', 'image2.png', 'image3.png']
+    images = [Image.open(file_path) for file_path in image_files]
+    output_file = 'output.gif'
+    create_gif(images, output_file, delay=100)
 
-    get_distinct_colors(iif)
+    iif = 'examples/pngs/pickahu_sprite.png' 
+    invert_image_numpy(iif,'s.png')
