@@ -44,11 +44,11 @@ def make_theme_splash():
 
         # Display the image
         # img.show()
-        img.save(f"themes_jpgs/{theme}.jpg")
+        img.save(f"themes_jpgs/{theme}Theme.jpg")
 
 def make_readme_includes():
     for c in color_themes:
-        print(rf"![{c}](/themes_jpgs/{c}.jpg)")
+        print(rf"![{c}](/themes_jpgs/{c}Theme.jpg)")
 
 make_theme_splash()
 make_readme_includes()
