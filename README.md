@@ -10,9 +10,17 @@ Features:
 
 1. Arbitrary color variation on posterized images
 
-Color themes include : 
-
-Spring, Summer, Winter, Fall, Safari, Urban Camoflauge, Etc.
+Color themes supported: 
+![Spring](/Spring.jpg)
+![Summer](/Summer.jpg)
+![Winter](/Winter.jpg)
+![Fall](/Fall.jpg)
+![Safari](/Safari.jpg)
+![Urban](/Urban.jpg)
+![Neon](/Neon.jpg)
+![Tropical](/Tropical.jpg)
+![Arctic](/Arctic.jpg)
+![Paixão](/Paixão.jpg)
 
 Inverse and other organically generated themes as well.
 
