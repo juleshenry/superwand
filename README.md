@@ -12,25 +12,25 @@ Features:
 
 Color themes included:
 
-![Spring](/themes_jpgs/Spring.jpg)
+![Spring](/themes_jpgs/SpringTheme.jpg)
 
-![Summer](/themes_jpgs/Summer.jpg)
+![Summer](/themes_jpgs/SummerTheme.jpg)
 
-![Winter](/themes_jpgs/Winter.jpg)
+![Winter](/themes_jpgs/WinterTheme.jpg)
 
-![Fall](/themes_jpgs/Fall.jpg)
+![Fall](/themes_jpgs/FallTheme.jpg)
 
-![Safari](/themes_jpgs/Safari.jpg)
+![Safari](/themes_jpgs/SafariTheme.jpg)
 
-![Urban](/themes_jpgs/Urban.jpg)
+![Urban](/themes_jpgs/UrbanTheme.jpg)
 
-![Neon](/themes_jpgs/Neon.jpg)
+![Neon](/themes_jpgs/NeonTheme.jpg)
 
-![Tropical](/themes_jpgs/Tropical.jpg)
+![Tropical](/themes_jpgs/TropicalTheme.jpg)
 
-![Arctic](/themes_jpgs/Arctic.jpg)
+![Arctic](/themes_jpgs/ArcticTheme.jpg)
 
-![Paixão](/themes_jpgs/Paixão.jpg)
+![Paixão](/themes_jpgs/PaixãoTheme.jpg)
 
 Inverse and other organically generated themes as well.
 
