@@ -3,9 +3,8 @@ from PIL import Image
 import numpy as np
 from scipy.spatial.distance import euclidean
 
-def identify_regions(image_path, tolerance=20):
+def identify_regions(image_path, target_color, tolerance=20):
     # Convert target_color to RGB tuple if it's a string or hex
-    target_color = get_prominent_colors(image_path)[0][0]
     # Open the image
     image = Image.open(image_path).convert('RGB')
     width, height = image.size
@@ -30,5 +29,7 @@ def identify_regions(image_path, tolerance=20):
 
 if __name__=='__main__':
     # Example usage
-    matched_pixels = identify_regions('examples/pngs/zebra.png', tolerance=50)
-    # print(matched_pixels)
+    ip = 'examples/pngs/zebra.png'
+    target_color = get_prominent_colors(ip)
+    for t in target_color:
+        matched_pixels = identify_regions(ip, t[0], tolerance=50)
