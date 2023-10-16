@@ -48,6 +48,6 @@ def make_theme_splash():
 
 def make_readme_includes():
     for c in color_themes:
-        print(rf"![{c}](/{c}.jpg)")
+        print(rf"![{c}](/themes_jpgs/{c}.jpg)")
 
 make_readme_includes()
