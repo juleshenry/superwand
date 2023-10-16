@@ -2,15 +2,14 @@ from PIL import Image, ImageDraw, ImageFont
 from colorgram import extract
 from collections import Counter
 
-def get_prominent_colors(image_path):
-    # Extract colors from the image
-    colors = extract(image_path, 4)  # Change '4' to the number of colors you want to extract
+def get_prominent_colors(image_path, number = 5):
+    # Extract #number of colors from the image, default is 5
     
+    colors = extract(image_path, number)  
     # Count the occurrences of each color
     color_counter = Counter((color.rgb.r, color.rgb.g, color.rgb.b) for color in colors)
-    
     # Get the four most common colors
-    prominent_colors = color_counter.most_common(4)
+    prominent_colors = color_counter.most_common(number)
     
     return prominent_colors
 
@@ -68,5 +67,5 @@ def make_readme_includes():
 
 # make_theme_splash()
 # make_readme_includes()
-# Can extract theme from any image
-get_prominent_colors('./examples/pngs/me.webp')
+# # Can extract theme from any image
+# get_prominent_colors('./examples/pngs/me.webp')
