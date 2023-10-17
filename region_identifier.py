@@ -50,14 +50,19 @@ def get_prominent_regions(ip, number = 4):
     return color_regions
 
 
-def inject_theme(cpd, theme):
-    for c in zip(cpd, theme):
-        print(c)
+def inject_theme(cpd, theme, image_path):
+    image = Image.open(image_path).convert("RGB")
+    injected_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    for cpd_theme in zip(cpd, theme):
+        for xy in cpd[cpd_theme[0]]:
+            x,y = xy
+            injected_image.putpixel((x, y), (*cpd_theme[1], 255))
+        injected_image.show()
 
 if __name__ == "__main__":
     ip = "examples/images/mantis_shrimp.jpeg"
     ip = "examples/images/pikachu_sprite.png"
     color_pix_dict = get_prominent_regions(ip)
     color_theme = [x for x in color_themes['Arctic'][0]]
-    inject_theme(color_pix_dict, color_theme)
+    inject_theme(color_pix_dict, color_theme, ip)
     
