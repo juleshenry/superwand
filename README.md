@@ -29,7 +29,22 @@ Color themes included:
   </tr>
 </table>
 
-
+<table>
+  <tr>
+    <td><img src="/charizards/Fall_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Tropical_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Summer_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Urban_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Spring_charizard.png" alt="Image 3"></td>
+  </tr>
+  <tr>
+    <td><img src="/charizards/Paixão_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Safari_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Neon_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Arctic_charizard.png" alt="Image 3"></td>
+    <td><img src="/charizards/Winter_charizard.png" alt="Image 3"></td>
+  </tr>
+</table>
 
 Inverse and other organically generated themes as well.
 
