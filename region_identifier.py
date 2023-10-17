@@ -20,7 +20,8 @@ def identify_regions(image_path, target_color, tolerance=20, debug=False):
                     y,
                 )
             )
-            # print(r,g,b)
+            if (r,g,b,) == (0,0,0,):
+                print(r,g,b);1/0
             if (
                 euclidean(
                     target_color,
@@ -50,19 +51,24 @@ def get_prominent_regions(ip, number = 4):
     return color_regions
 
 
-def inject_theme(cpd, theme, image_path):
+def inject_theme(cpd, theme_name, image_path):
+    print(theme_name)
+    theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
-    injected_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
-    for cpd_theme in zip(cpd, theme):
+    # themed_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    for cpd_theme in zip(cpd, theme_rgbs):
         for xy in cpd[cpd_theme[0]]:
             x,y = xy
-            injected_image.putpixel((x, y), (*cpd_theme[1], 255))
-        injected_image.show()
+            image.putpixel((x, y), (*cpd_theme[1], 255))
+    image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
 if __name__ == "__main__":
-    ip = "examples/images/mantis_shrimp.jpeg"
     ip = "examples/images/pikachu_sprite.png"
+    ip = "examples/images/zebra.png"
+    ip = "examples/images/mantis_shrimp.jpeg"
+    ip = "examples/images/charizard.png"
     color_pix_dict = get_prominent_regions(ip)
-    color_theme = [x for x in color_themes['Arctic'][0]]
-    inject_theme(color_pix_dict, color_theme, ip)
+    for theme_name in color_themes:
+        inject_theme(color_pix_dict, theme_name, ip)
+        # break
     
