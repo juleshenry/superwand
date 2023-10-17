@@ -3,8 +3,8 @@ from colorgram import extract
 from collections import Counter
 
 
-def get_prominent_colors(image_path, number=5):
-    # Extract #number of colors from the image, default is 5
+def get_prominent_colors(image_path, number=4):
+    # Extract #number of colors from the image, default is 4, the number for themes
 
     colors = extract(image_path, number)
     # Count the occurrences of each color
@@ -12,7 +12,7 @@ def get_prominent_colors(image_path, number=5):
     # Get the four most common colors
     prominent_colors = color_counter.most_common(number)
 
-    return prominent_colors
+    return [pc[0] for pc in prominent_colors]
 
 
 # Define the color themes
