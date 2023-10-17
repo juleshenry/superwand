@@ -12,25 +12,24 @@ Features:
 
 Color themes included:
 
-![Spring](/themes_jpgs/SpringTheme.jpg)
+<table>
+  <tr>
+    <td><img src="/themes_jpgs/SpringTheme.jpg" alt="Image 1"></td>
+    <td><img src="/themes_jpgs/SummerTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/WinterTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/FallTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/ArcticTheme.jpg" alt="tropical">
+  </tr>
+  <tr>
+    <td><img src="/themes_jpgs/SafariTheme.jpg" alt="Image 3"></td>
+    <td><img src="/themes_jpgs/UrbanTheme.jpg" alt="Image 4"></td>
+    <td><img src="/themes_jpgs/NeonTheme.jpg" alt="Image 4"></td>
+    <td><img src="/themes_jpgs/TropicalTheme.jpg" alt="ADSF">
+    <td><img src="/themes_jpgs/PaixãoTheme.jpg" alt="ADSF">
+  </tr>
+</table>
 
-![Summer](/themes_jpgs/SummerTheme.jpg)
 
-![Winter](/themes_jpgs/WinterTheme.jpg)
-
-![Fall](/themes_jpgs/FallTheme.jpg)
-
-![Safari](/themes_jpgs/SafariTheme.jpg)
-
-![Urban](/themes_jpgs/UrbanTheme.jpg)
-
-![Neon](/themes_jpgs/NeonTheme.jpg)
-
-![Tropical](/themes_jpgs/TropicalTheme.jpg)
-
-![Arctic](/themes_jpgs/ArcticTheme.jpg)
-
-![Paixão](/themes_jpgs/PaixãoTheme.jpg)
 
 Inverse and other organically generated themes as well.
 
