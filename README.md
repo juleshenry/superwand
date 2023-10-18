@@ -31,18 +31,18 @@ Color themes included:
 
 <table>
   <tr>
-    <td><img src="/charizards/Spring_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Summer_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Fall_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Winter_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Arctic_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Spring_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Summer_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Fall_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Winter_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Arctic_charizard.png" alt="Image 3"></td>
   </tr>
   <tr>
-    <td><img src="/charizards/Safari_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Urban_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Neon_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Tropical_charizard.png" alt="Image 3"></td>
-    <td><img src="/charizards/Paixão_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Safari_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Urban_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Neon_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Tropical_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Paixão_charizard.png" alt="Image 3"></td>
   </tr>
 </table>
 
