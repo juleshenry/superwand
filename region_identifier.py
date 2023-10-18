@@ -5,6 +5,7 @@ from scipy.spatial.distance import euclidean
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 from collections import OrderedDict
 
+
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
     # Convert target_color to RGB tuple if it's a string or hex
     # Open the image
@@ -43,7 +44,7 @@ def identify_regions(image_path, target_color, tolerance=20, debug=False):
     return matching_pixels
 
 
-def get_prominent_regions(ip, number = 4):
+def get_prominent_regions(ip, number=4):
     target_colors = get_prominent_colors(ip, number=number)
     color_regions = OrderedDict()
     for color in target_colors:
@@ -58,21 +59,17 @@ def inject_theme(cpd, theme_name, image_path):
     # themed_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
     for cpd_theme in zip(cpd, theme_rgbs):
         for xy in cpd[cpd_theme[0]]:
-            x,y = xy
+            x, y = xy
             image.putpixel((x, y), (*cpd_theme[1], 255))
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
+
 if __name__ == "__main__":
-    ip = "examples/images/pikachu_sprite.png"
-    ip = "examples/images/zebra.png"
-    ip = "examples/images/mantis_shrimp.jpeg"
-    ip = "examples/images/charizard.png"
-    ip = "examples/obama.jpeg"
+    ip = "cool.png"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
-        if theme_name!='Fall':
+        if theme_name != "Tropical":
             continue
         else:
             inject_theme(color_pix_dict, theme_name, ip)
         # break
-    
