@@ -20,8 +20,8 @@ def identify_regions(image_path, target_color, tolerance=20, debug=False):
                     y,
                 )
             )
-            if (r,g,b,) == (0,0,0,):
-                print(r,g,b);1/0
+            # if (r,g,b,) == (0,0,0,):
+            #     print(r,g,b);1/0
             if (
                 euclidean(
                     target_color,
@@ -67,8 +67,12 @@ if __name__ == "__main__":
     ip = "examples/images/zebra.png"
     ip = "examples/images/mantis_shrimp.jpeg"
     ip = "examples/images/charizard.png"
+    ip = "examples/obama.jpeg"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
-        inject_theme(color_pix_dict, theme_name, ip)
+        if theme_name!='Fall':
+            continue
+        else:
+            inject_theme(color_pix_dict, theme_name, ip)
         # break
     
