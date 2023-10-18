@@ -1,8 +1,10 @@
+from region_identifier import get_prominent_regions, inject_theme
+from __color_themes__ import color_themes
+import argparse
+
+
 class Img:
     pass
-
-
-# https://www.losingfight.com/blog/2007/08/28/how-to-implement-a-magic-wand-tool/
 
 
 def flip(img: Img, direction="vertical") -> Img:
@@ -12,10 +14,6 @@ def flip(img: Img, direction="vertical") -> Img:
         return img
     else:
         return img
-
-
-def clamp(o: float, mn=0, mx=1) -> o:
-    return mn if (mx if o > mx else o) < mn else o
 
 
 def gradient_enforce(
@@ -62,3 +60,34 @@ def gradient_enforce(
     opacity = clamp(opacity, 0, 1)
 
     return img
+
+
+class SuperWand:
+    def __init__(self, color_themes):
+        self.color_themes = color_themes
+
+    @staticmethod
+    def apply_theme_to_image(img_path, theme_name):
+        color_pix_dict = get_prominent_regions(img_path)
+        inject_theme(color_pix_dict, theme_name, img_path)
+
+    def apply_all_themes_to_image(self, img_path):
+        for theme_name in self.color_themes:
+            color_pix_dict = get_prominent_regions(img_path)
+            inject_theme(color_pix_dict, theme_name, img_path)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Process an image with a specified theme."
+    )
+    parser.add_argument("image_path", type=str, help="Path to the input image file.")
+    parser.add_argument(
+        "theme",
+        type=str,
+        choices=[ct for ct in color_themes],
+        help="Theme to apply (Tropical, Urban, Winter, etc.).",
+    )
+    args = parser.parse_args()
+    sw = SuperWand(color_themes)
+    sw.apply_theme_to_image(args.image_path, args.theme)
