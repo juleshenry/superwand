@@ -1,17 +1,22 @@
 # superwand
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
-Here's what it is.
+Uses:
 
-1. Purpose: Allows color ranges to be replaced with colors based on a theme.
-2. How? Magic-wand selection of groups by color. Automatic testing of colors and gradients.
-
-
+1. Given an image, Purpose: Allows color ranges to be replaced with colors based on a theme.
 # Example: Arbitrary color variation on posterized images
 ```python3 superwand.py examples/images/zebra.png 'Urban'```
+2. Given a CSS style sheet, dynamically identify color scheme and replace with a theme
+# Example: Arbitrary color variation on css themes
+```python3 superwand.py examples/css/site.css 'Tropical'```
+3. Given vector art, replace colors with a gradient 
+Gradients included: vertical gradient, then left-right, right-left, bottom-down, radial
+# Example: Arbitrary color variation on posterized images
+```python3 superwand.py examples/images/rocket_vector.jpeg 'Spring'```
+
+
 
 Color themes included:
-
 <table>
   <tr>
     <td><img src="/themes_jpgs/SpringTheme.jpg" alt="Image 1"></td>
@@ -45,6 +50,9 @@ Color themes included:
     <td><img src="/examples/charizards/Paixão_charizard.png" alt="Image 3"></td>
   </tr>
 </table>
+
+
+
 
 See also, spring theme art:
 <table>
