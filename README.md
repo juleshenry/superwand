@@ -13,11 +13,11 @@ Uses:
 <table>
   <tr>
     <td><img src="/examples/css/before.png" alt="Image 3"></td>
-    <td><img src="/examples/images/after_tropical.png" alt="Image 3"></td>
+    <td><img src="/examples/css/after_tropical.png" alt="Image 3"></td>
   </tr>
     <tr>
-    <td><img src="/examples/images/menu.png" alt="Image 3"></td>
-    <td><img src="/examples/images/menu_tropical.png" alt="Image 3"></td>
+    <td><img src="/examples/css/menu.png" alt="Image 3"></td>
+    <td><img src="/examples/css/menu_tropical.png" alt="Image 3"></td>
   </tr>
 </table>
 
