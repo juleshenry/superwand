@@ -9,6 +9,18 @@ Uses:
 2. Given a CSS style sheet, dynamically identify color scheme and replace with a theme
 # Example: Arbitrary color variation on css themes
 ```python3 superwand.py examples/css/site.css 'Tropical'```
+
+<table>
+  <tr>
+    <td><img src="/examples/css/before.png" alt="Image 3"></td>
+    <td><img src="/examples/images/after_tropical.png" alt="Image 3"></td>
+  </tr>
+    <tr>
+    <td><img src="/examples/images/menu.png" alt="Image 3"></td>
+    <td><img src="/examples/images/menu_tropical.png" alt="Image 3"></td>
+  </tr>
+</table>
+
 3. Given vector art, replace colors with a gradient 
 Gradients included: vertical gradient, then left-right, right-left, bottom-down, radial
 # Example: Arbitrary color variation on posterized images
