@@ -1,4 +1,4 @@
-from region_identifier import get_prominent_regions, inject_theme
+from region_identifier import get_prominent_regions, inject_theme, get_prominent_colors
 from __color_themes__ import color_themes
 import argparse
 
@@ -57,8 +57,6 @@ def gradient_enforce(
     else:
         style == "auto"
 
-    opacity = clamp(opacity, 0, 1)
-
     return img
 
 
@@ -75,6 +73,12 @@ class SuperWand:
         for theme_name in self.color_themes:
             color_pix_dict = get_prominent_regions(img_path)
             inject_theme(color_pix_dict, theme_name, img_path)
+
+    @staticmethod
+    def apply_theme_to_css(img_path, theme_name):
+        color_pix_dict = get_prominent_regions(img_path)
+        print(color_)
+
 
 
 if __name__ == "__main__":
