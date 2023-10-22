@@ -24,7 +24,7 @@ Uses:
 3. Given vector art, replace colors with a gradient 
 Gradients included: vertical gradient, then left-right, right-left, bottom-down, radial
 # Example: Arbitrary color variation on posterized images
-```python3 superwand.py examples/images/rocket_vector.jpeg 'Spring'```
+```python3 superwand.py --image_path examples/images/rocket_vector.jpeg --theme 'Spring'```
 
 
 
