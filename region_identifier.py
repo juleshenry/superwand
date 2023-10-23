@@ -82,7 +82,7 @@ def inject_theme(cpd, theme_name, image_path, gradient_direction="vertical"):
 
 
 if __name__ == "__main__":
-    ip = "cool.png"
+    ip = "examples/images/charizard.png"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
         if theme_name != "Tropical":
