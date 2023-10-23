@@ -64,19 +64,29 @@ def inject_theme(cpd, theme_name, image_path, gradient_direction="vertical"):
         for xy in cpd[cpd_theme[0]]:
             x, y = xy
             if gradient_direction == "vertical":
-                gradient = ImageDraw.LinearGradient((0, 0, 0, image.height), start_color, end_color)
+                gradient = ImageDraw.LinearGradient(
+                    (0, 0, 0, image.height), start_color, end_color
+                )
                 draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "left-right":
-                gradient = ImageDraw.LinearGradient((0, 0, image.width, 0), start_color, end_color)
+                gradient = ImageDraw.LinearGradient(
+                    (0, 0, image.width, 0), start_color, end_color
+                )
                 draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "right-left":
-                gradient = ImageDraw.LinearGradient((image.width, 0, 0, 0), start_color, end_color)
+                gradient = ImageDraw.LinearGradient(
+                    (image.width, 0, 0, 0), start_color, end_color
+                )
                 draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "bottom-down":
-                gradient = ImageDraw.LinearGradient((0, image.height, 0, 0), start_color, end_color)
+                gradient = ImageDraw.LinearGradient(
+                    (0, image.height, 0, 0), start_color, end_color
+                )
                 draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "radial":
-                gradient = ImageDraw.RadialGradient((image.width//2, image.height//2), start_color, end_color)
+                gradient = ImageDraw.RadialGradient(
+                    (image.width // 2, image.height // 2), start_color, end_color
+                )
                 draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
