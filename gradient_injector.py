@@ -1,5 +1,5 @@
 
-#  1. Open image and identify major colors in text. Show color regions.
+# ✅ 1. Open image and identify major colors in text. Show color regions.
 #  2. Prompt replacement selection
 #  3. Get pixels of selected region
 #  4. Form a convex hull polygon from the selected region
@@ -48,10 +48,30 @@ def create_image(rgb_tuples, grid_size, cell_size):
 
     return image
 
+def append_images_vertically(image1_path, color_image, output_path=None):
+    # Open the images
+    image1 = color_image
+    image2 = Image.open(image1_path)
+
+    # Ensure both images have the same width
+    width = max(image1.width, image2.width)
+
+    # image1 = image1.resize((width, image1.height ))
+    # image2 = image2.resize((width, image2.height ))
+
+    # Create a new image with the combined height
+    new_height = image1.height + image2.height
+    result = Image.new('RGB', (width, new_height))
+    
+    # Paste the images one below the other
+    result.paste(image1, (0, 0))
+    result.paste(image2, (0, image1.height))
+    result.show()
+
 from math import sqrt
 
 if __name__=='__main__':
-    ip = './examples/images/charizard.png'
+    ip = './examples/images/rocket_vector.jpeg'
     color_numbers = 16
     prs = get_prominent_regions(ip, number=color_numbers)
     grid_size = int(round(sqrt(color_numbers),0))
@@ -59,4 +79,6 @@ if __name__=='__main__':
     grid_size = (grid_size, grid_size,)
     cell_size = 100
     output_image = create_image(rgb_tuples, grid_size, cell_size)
-    output_image.show()
+    append_images_vertically(ip, output_image)
+    # output_image.show() 
+    
