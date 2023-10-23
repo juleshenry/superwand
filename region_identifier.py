@@ -58,21 +58,26 @@ def inject_theme(cpd, theme_name, image_path, gradient_direction="vertical"):
     print(theme_name)
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
-    # themed_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
+    start_color, end_color = theme_rgbs[0], theme_rgbs[-1]
     for cpd_theme in zip(cpd, theme_rgbs):
         for xy in cpd[cpd_theme[0]]:
             x, y = xy
             if gradient_direction == "vertical":
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+                gradient = ImageDraw.LinearGradient((0, 0, 0, image.height), start_color, end_color)
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "left-right":
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+                gradient = ImageDraw.LinearGradient((0, 0, image.width, 0), start_color, end_color)
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "right-left":
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+                gradient = ImageDraw.LinearGradient((image.width, 0, 0, 0), start_color, end_color)
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "bottom-down":
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+                gradient = ImageDraw.LinearGradient((0, image.height, 0, 0), start_color, end_color)
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
             elif gradient_direction == "radial":
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+                gradient = ImageDraw.RadialGradient((image.width//2, image.height//2), start_color, end_color)
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
 
