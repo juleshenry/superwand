@@ -1,9 +1,11 @@
-from __color_themes__ import get_prominent_colors, color_themes
-from PIL import Image, ImageDraw
-import numpy as np
-from scipy.spatial.distance import euclidean
-from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 from collections import OrderedDict
+
+import numpy as np
+from PIL import Image, ImageDraw
+from scipy.spatial.distance import euclidean
+from webcolors import CSS3_HEX_TO_NAMES, hex_to_rgb, rgb_to_name
+
+from __color_themes__ import color_themes, get_prominent_colors
 
 
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
@@ -52,7 +54,7 @@ def get_prominent_regions(ip, number=4):
     return color_regions
 
 
-def inject_theme(cpd, theme_name, image_path, gradient_direction='vertical'):
+def inject_theme(cpd, theme_name, image_path, gradient_direction="vertical"):
     print(theme_name)
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
@@ -61,16 +63,16 @@ def inject_theme(cpd, theme_name, image_path, gradient_direction='vertical'):
     for cpd_theme in zip(cpd, theme_rgbs):
         for xy in cpd[cpd_theme[0]]:
             x, y = xy
-            if gradient_direction == 'vertical':
-                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
-            elif gradient_direction == 'left-right':
-                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
-            elif gradient_direction == 'right-left':
-                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
-            elif gradient_direction == 'bottom-down':
-                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
-            elif gradient_direction == 'radial':
-                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
+            if gradient_direction == "vertical":
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+            elif gradient_direction == "left-right":
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+            elif gradient_direction == "right-left":
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+            elif gradient_direction == "bottom-down":
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
+            elif gradient_direction == "radial":
+                draw.rectangle([(x, y), (x + 1, y + 1)], fill=cpd_theme[1])
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
 
