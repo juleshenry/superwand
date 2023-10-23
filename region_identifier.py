@@ -1,5 +1,5 @@
 from __color_themes__ import get_prominent_colors, color_themes
-from PIL import Image
+from PIL import Image, ImageDraw
 import numpy as np
 from scipy.spatial.distance import euclidean
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
@@ -52,15 +52,25 @@ def get_prominent_regions(ip, number=4):
     return color_regions
 
 
-def inject_theme(cpd, theme_name, image_path):
+def inject_theme(cpd, theme_name, image_path, gradient_direction='vertical'):
     print(theme_name)
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
     # themed_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
     for cpd_theme in zip(cpd, theme_rgbs):
         for xy in cpd[cpd_theme[0]]:
             x, y = xy
-            image.putpixel((x, y), (*cpd_theme[1], 255))
+            if gradient_direction == 'vertical':
+                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
+            elif gradient_direction == 'left-right':
+                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
+            elif gradient_direction == 'right-left':
+                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
+            elif gradient_direction == 'bottom-down':
+                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
+            elif gradient_direction == 'radial':
+                draw.rectangle([(x, y), (x+1, y+1)], fill=cpd_theme[1])
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
 
