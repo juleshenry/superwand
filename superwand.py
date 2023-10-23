@@ -67,15 +67,14 @@ class SuperWand:
         self.color_themes = color_themes
 
     @staticmethod
-    def apply_theme_to_image(img_path, theme_name):
+    def apply_theme_to_image(img_path, theme_name, gradient_direction='vertical'):
         color_pix_dict = get_prominent_regions(img_path)
-        inject_theme(color_pix_dict, theme_name, img_path)
+        inject_theme(color_pix_dict, theme_name, img_path, gradient_direction)
 
     def apply_all_themes_to_image(self, img_path):
         for theme_name in self.color_themes:
             color_pix_dict = get_prominent_regions(img_path)
             inject_theme(color_pix_dict, theme_name, img_path)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
