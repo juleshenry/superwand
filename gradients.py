@@ -6,9 +6,8 @@ from PIL import Image, ImageDraw
 # Draw polygon with linear gradient from point 1 to point 2 and ranging
 # from color 1 to color 2 on given image
 def linear_gradient(i, poly, p1, p2, c1, c2):
-
     # Draw initial polygon, alpha channel only, on an empty canvas of image size
-    ii = Image.new('RGBA', i.size, (0, 0, 0, 0))
+    ii = Image.new("RGBA", i.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(ii)
     draw.polygon(poly, fill=(0, 0, 0, 255), outline=None)
 
@@ -28,16 +27,18 @@ def linear_gradient(i, poly, p1, p2, c1, c2):
     gradient = Image.fromarray(gradient)
 
     # Paste gradient on blank canvas of sufficient size
-    temp = Image.new('RGBA', (max(i.size[0], gradient.size[0]),
-                              max(i.size[1], gradient.size[1])), (0, 0, 0, 0))
+    temp = Image.new(
+        "RGBA",
+        (max(i.size[0], gradient.size[0]), max(i.size[1], gradient.size[1])),
+        (0, 0, 0, 0),
+    )
     temp.paste(gradient)
     gradient = temp
 
     # Rotate and translate gradient appropriately
     x = np.sin(angle * np.pi / 180) * ht
     y = np.cos(angle * np.pi / 180) * ht
-    gradient = gradient.rotate(-angle, center=(0, 0),
-                               translate=(p1[0] + x, p1[1] - y))
+    gradient = gradient.rotate(-angle, center=(0, 0), translate=(p1[0] + x, p1[1] - y))
 
     # Paste gradient on temporary image
     ii.paste(gradient.crop((0, 0, ii.size[0], ii.size[1])), mask=ii)
@@ -51,9 +52,8 @@ def linear_gradient(i, poly, p1, p2, c1, c2):
 # Draw polygon with radial gradient from point to the polygon border
 # ranging from color 1 to color 2 on given image
 def radial_gradient(i, poly, p, c1, c2):
-
     # Draw initial polygon, alpha channel only, on an empty canvas of image size
-    ii = Image.new('RGBA', i.size, (0, 0, 0, 0))
+    ii = Image.new("RGBA", i.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(ii)
     draw.polygon(poly, fill=(0, 0, 0, 255), outline=None)
 
@@ -79,7 +79,7 @@ def radial_gradient(i, poly, p, c1, c2):
 
 # Create blank canvas with zero alpha channel
 w, h = (800, 600)
-image = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+image = Image.new("RGBA", (w, h), (0, 0, 0, 0))
 
 # Draw first polygon with radial gradient
 polygon = [(100, 200), (320, 130), (460, 300), (700, 500), (350, 550), (200, 400)]
@@ -105,4 +105,4 @@ color2 = (255, 128, 0)
 image = linear_gradient(image, polygon, point1, point2, color1, color2)
 
 # Save image
-image.save('image.png')
+image.save("image.png")
