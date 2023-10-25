@@ -1,6 +1,6 @@
 # ✅ 1. Open image and identify major colors in text. Show color regions.
-#  2. Prompt replacement selection
-#  3. Get pixels of selected region
+# ✅ 2. Prompt replacement selection
+# ✅ 3. Get pixels of selected region
 #  4. Form a convex hull polygon from the selected region
 #  5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
 from math import sqrt
