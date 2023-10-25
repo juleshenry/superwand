@@ -69,6 +69,18 @@ def append_images_vertically(image1_path, color_image, output_path=None):
     if output_path:
         result.save(output_path)
 
+
+def prompt_input(rgb_tuples):
+    def handle_input():
+
+    def prompt():
+        for ij in enumerate(rgb_tuples):
+            print(f'{ij[0]}_{ij}')
+        i = input("Type the color # , comma-separated by the replacement rgb, also comma-separated")
+        iss = i.split(',')
+        if not len(iss)==5:
+            raise ValueError("small.") #format : off
+        handle_input(iss[0],iss[1:3])
 if __name__=='__main__':
     ip = './examples/images/rocket_vector.jpeg'
     color_numbers = 16
