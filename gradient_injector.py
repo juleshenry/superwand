@@ -5,7 +5,7 @@
 #  5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
 from math import sqrt
 from region_identifier import get_prominent_regions, inject
-
+from PIL import Image, ImageDraw, ImageFont
 
 def resolve_gradient_kw(gradient_direction):
     if gradient_direction == "vertical":
@@ -35,7 +35,6 @@ def resolve_gradient_kw(gradient_direction):
         draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
 
 
-from PIL import Image, ImageDraw, ImageFont
 
 
 def create_image(rgb_tuples, grid_size, cell_size):
@@ -90,7 +89,7 @@ def append_images_vertically(image1, image2, output_path=None):
         result.save(output_path)
 
 
-def prompt_input(img, rgb_tuples, prs):
+def prompt_input(img, prompt_image, rgb_tuples, prs):
     delta = []
 
     def handle_input(img, pixel_arr, color):
@@ -98,7 +97,8 @@ def prompt_input(img, rgb_tuples, prs):
         return ii
 
     def prompt():
-        append_images_vertically(img, output_image)
+        
+        append_images_vertically(img, prompt_image)
         for ij in enumerate(rgb_tuples):
             print(f'{":".join(map(str,list(ij)))}')
         i = input(
@@ -120,7 +120,7 @@ def prompt_input(img, rgb_tuples, prs):
 
 
 if __name__ == "__main__":
-    ip = "./examples/images/charizard.png"
+    ip = "./examples/images/obama.jpeg"
     color_numbers = 16
     prs = get_prominent_regions(ip, number=color_numbers)
     grid_size = int(round(sqrt(color_numbers), 0))
@@ -130,8 +130,8 @@ if __name__ == "__main__":
         grid_size,
     )
     cell_size = 100
-    output_image = create_image(rgb_tuples, grid_size, cell_size)
-
+    prompt_image = create_image(rgb_tuples, grid_size, cell_size)
+    
     img_as_class = Image.open(ip).convert("RGB")
-    prompt_input(img_as_class, rgb_tuples, prs)
+    prompt_input(img_as_class, prompt_image, rgb_tuples, prs)
     # output_image.show()
