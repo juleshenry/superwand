@@ -1,10 +1,9 @@
-
 # ✅ 1. Open image and identify major colors in text. Show color regions.
 #  2. Prompt replacement selection
 #  3. Get pixels of selected region
 #  4. Form a convex hull polygon from the selected region
-#  5. Insert a gradient, based on two colors and a type (vertical, radial, etc.)
-
+#  5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
+from math import sqrt
 from region_identifier import get_prominent_regions
 
 def resolve_gradient_kw(gradient_direction):
@@ -67,8 +66,8 @@ def append_images_vertically(image1_path, color_image, output_path=None):
     result.paste(image1, (0, 0))
     result.paste(image2, (0, image1.height))
     result.show()
-
-from math import sqrt
+    if output_path:
+        result.save(output_path)
 
 if __name__=='__main__':
     ip = './examples/images/rocket_vector.jpeg'
