@@ -58,7 +58,6 @@ def inject(img, pixel_arr, pixel):
     return img
 
 def inject_theme(cpd, theme_name, image_path):
-    print(theme_name)
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
     for cpd_theme in zip(cpd, theme_rgbs):
@@ -67,7 +66,7 @@ def inject_theme(cpd, theme_name, image_path):
 
 
 if __name__ == "__main__":
-    ip = "cool.png"
+    ip = "examples/images/mantis_shrimp.jpeg"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
         if theme_name != "Tropical":
