@@ -67,7 +67,6 @@ def make_theme_splash():
             )
 
         # Display the image
-        # img.show()
         img.save(f"themes_jpgs/{theme}Theme.jpg")
 
 
