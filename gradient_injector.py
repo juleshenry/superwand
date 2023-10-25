@@ -62,7 +62,7 @@ def create_image(rgb_tuples, grid_size, cell_size):
                 x + cell_size // 3,
                 y + cell_size // 3,
             ),
-            str(i+1),
+            str(i + 1),
             font=choice_font,
             fill=(
                 abs(255 - r),
@@ -74,24 +74,17 @@ def create_image(rgb_tuples, grid_size, cell_size):
     return image
 
 
-def append_images_vertically(image1_path, color_image, output_path=None):
-    # Open the images
-    image1 = color_image
-    image2 = Image.open(image1_path)
-
+def append_images_vertically(image1, image2, output_path=None):
     # Ensure both images have the same width
     width = max(image1.width, image2.width)
-
-    # image1 = image1.resize((width, image1.height ))
-    # image2 = image2.resize((width, image2.height ))
 
     # Create a new image with the combined height
     new_height = image1.height + image2.height
     result = Image.new("RGB", (width, new_height))
 
     # Paste the images one below the other
-    result.paste(image1, (0, 0))
-    result.paste(image2, (0, image1.height))
+    result.paste(image2, (0, 0))
+    result.paste(image1, (0, image2.height))
     result.show()
     if output_path:
         result.save(output_path)
@@ -105,19 +98,17 @@ def prompt_input(img, rgb_tuples, prs):
         return ii
 
     def prompt():
+        append_images_vertically(img, output_image)
         for ij in enumerate(rgb_tuples):
             print(f'{":".join(map(str,list(ij)))}')
-        if 0:
-            i = input(
-                "Type the color # , comma-separated by the replacement rgb,"\
-                " also comma-separated\nElse, exit\n"
-            )
-            iss = i.split(",")
-            
-        iss= list(map(int,'3,0,255,0'.split(',')))
+        i = input(
+            "Type the color # , comma-separated by the replacement rgb,"
+            " also comma-separated\nElse, exit\n"
+        )
+        iss = list(map(int, "3,0,255,0".split(",")))
         if len(iss) != 4:
             raise ValueError("small.")  # format : off
-        clean_choice_pixels = prs.get(list(rgb_tuples)[int(iss[0])-1])
+        clean_choice_pixels = prs.get(list(rgb_tuples)[int(iss[0]) - 1])
         clean_color = tuple(iss[1:3])
         hi = handle_input(img, clean_choice_pixels, clean_color)
         return hi
@@ -126,6 +117,7 @@ def prompt_input(img, rgb_tuples, prs):
         pr = prompt()
         delta.append(pr)
     delta[0].show()
+
 
 if __name__ == "__main__":
     ip = "./examples/images/charizard.png"
@@ -139,8 +131,7 @@ if __name__ == "__main__":
     )
     cell_size = 100
     output_image = create_image(rgb_tuples, grid_size, cell_size)
-    append_images_vertically(ip, output_image)
-    # Pass the image class
+
     img_as_class = Image.open(ip).convert("RGB")
     prompt_input(img_as_class, rgb_tuples, prs)
     # output_image.show()
