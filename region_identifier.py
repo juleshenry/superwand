@@ -1,11 +1,10 @@
+from __color_themes__ import get_prominent_colors, color_themes
+from PIL import Image
+import numpy as np
+from scipy.spatial.distance import euclidean
+from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 from collections import OrderedDict
 
-import numpy as np
-from PIL import Image, ImageDraw
-from scipy.spatial.distance import euclidean
-from webcolors import CSS3_HEX_TO_NAMES, hex_to_rgb, rgb_to_name
-
-from __color_themes__ import color_themes, get_prominent_colors
 
 
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
@@ -37,7 +36,6 @@ def identify_regions(image_path, target_color, tolerance=20, debug=False):
                 < tolerance
             ):
                 matching_pixels.append([x, y])
-
     region_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
     for x, y in matching_pixels:
         region_image.putpixel((x, y), (*target_color, 255))
@@ -53,46 +51,23 @@ def get_prominent_regions(ip, number=4):
         color_regions[color] = identify_regions(ip, color, tolerance=50)
     return color_regions
 
+def inject(img, pixel_arr, pixel):
+    for xy in pixel_arr:
+        x, y = xy
+        img.putpixel((x, y), (*pixel, 255))
+    return img
 
-def inject_theme(cpd, theme_name, image_path, gradient_direction="vertical"):
+def inject_theme(cpd, theme_name, image_path):
     print(theme_name)
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
-    draw = ImageDraw.Draw(image)
-    start_color, end_color = theme_rgbs[0], theme_rgbs[-1]
     for cpd_theme in zip(cpd, theme_rgbs):
-        for xy in cpd[cpd_theme[0]]:
-            x, y = xy
-            if gradient_direction == "vertical":
-                gradient = ImageDraw.LinearGradient(
-                    (0, 0, 0, image.height), start_color, end_color
-                )
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-            elif gradient_direction == "left-right":
-                gradient = ImageDraw.LinearGradient(
-                    (0, 0, image.width, 0), start_color, end_color
-                )
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-            elif gradient_direction == "right-left":
-                gradient = ImageDraw.LinearGradient(
-                    (image.width, 0, 0, 0), start_color, end_color
-                )
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-            elif gradient_direction == "bottom-down":
-                gradient = ImageDraw.LinearGradient(
-                    (0, image.height, 0, 0), start_color, end_color
-                )
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-            elif gradient_direction == "radial":
-                gradient = ImageDraw.RadialGradient(
-                    (image.width // 2, image.height // 2), start_color, end_color
-                )
-                draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
+        image = inject(image, cpd[cpd_theme[0]], cpd_theme[1])
     image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
 
 
 if __name__ == "__main__":
-    ip = "examples/images/charizard.png"
+    ip = "cool.png"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
         if theme_name != "Tropical":
