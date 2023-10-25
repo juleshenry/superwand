@@ -6,7 +6,6 @@ from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 from collections import OrderedDict
 
 
-
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
     # Convert target_color to RGB tuple if it's a string or hex
     # Open the image
@@ -51,11 +50,13 @@ def get_prominent_regions(ip, number=4):
         color_regions[color] = identify_regions(ip, color, tolerance=50)
     return color_regions
 
+
 def inject(img, pixel_arr, pixel):
     for xy in pixel_arr:
         x, y = xy
         img.putpixel((x, y), (*pixel, 255))
     return img
+
 
 def inject_theme(cpd, theme_name, image_path):
     theme_rgbs = color_themes[theme_name]
