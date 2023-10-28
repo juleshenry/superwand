@@ -17,23 +17,24 @@ def append_images_vertically(image1, image2, output_path=None):
         result.save(output_path)
 
 
-def prompt_input(img, prompt_image, rgb_tuples, prs):
+def prompt_input(img, prompt_image, rgb_tuples, prs, error=None):
     delta = []
 
     def handle_input(img, pixel_arr, color):
         ii = inject(img, pixel_arr, color)
         return ii
 
-    def prompt():
+    def prompt(_error=None):
         # Show color wheel and original image
         append_images_vertically(img, prompt_image)
         for ij in enumerate(rgb_tuples):
             print(f'{":".join(map(str,list(ij)))}')
-        # i = input(
-        #     "Type the color # , comma-separated by the replacement rgb,"
-        #     " also comma-separated\nElse, exit\n"
-        # )
-        i = "3,0,255,0"
+        i = input(
+            "Type the color # , comma-separated by the replacement rgb,"
+            " also comma-separated\nElse, exit\n"
+        )
+        if _error:
+            i = "3,0,255,0"
         iss = list(map(int, i.split(",")))
         if len(iss) != 4:
             raise ValueError("small.")  # format : off
@@ -43,6 +44,6 @@ def prompt_input(img, prompt_image, rgb_tuples, prs):
         return hi
 
     while len(delta) < 1:
-        pr = prompt()
+        pr = prompt(error)
         delta.append(pr)
     delta[0].show()

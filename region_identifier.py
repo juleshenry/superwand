@@ -58,8 +58,6 @@ def inject(img, pixel_arr, pixel):
     return img
 
 
-
-
 def inject_theme(cpd, theme_name, image_path):
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
