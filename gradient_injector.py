@@ -6,35 +6,38 @@
 from math import sqrt
 from region_identifier import get_prominent_regions, inject
 from PIL import Image, ImageDraw, ImageFont
+from gradients import linear_gradient, radial_gradient
+from scipy.spatial import ConvexHull
+import numpy as np
 
 def resolve_gradient_kw(gradient_direction):
-    if gradient_direction == "vertical":
-        gradient = ImageDraw.LinearGradient(
-            (0, 0, 0, image.height), start_color, end_color
-        )
-        draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-    elif gradient_direction == "left-right":
-        gradient = ImageDraw.LinearGradient(
-            (0, 0, image.width, 0), start_color, end_color
-        )
-        draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-    elif gradient_direction == "right-left":
-        gradient = ImageDraw.LinearGradient(
-            (image.width, 0, 0, 0), start_color, end_color
-        )
-        draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-    elif gradient_direction == "bottom-down":
-        gradient = ImageDraw.LinearGradient(
-            (0, image.height, 0, 0), start_color, end_color
-        )
-        draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
-    elif gradient_direction == "radial":
-        gradient = ImageDraw.RadialGradient(
-            (image.width // 2, image.height // 2), start_color, end_color
-        )
-        draw.rectangle([(x, y), (x + 1, y + 1)], fill=gradient)
+    def process_gradient(grad):
+        match gradient_direction:
+            case "bottom-up":
+                return ((0,0),(0,1),)
+            case "left-right":
+                return ((1,0),(0,0),)
+            case "right-left":
+                return ((0,0),(1,0),)
+            case "bottom-down":
+                return ((0,0),(0,1),)
+            case "radial":
+                return ((1,1,),(1,1,))
+            case _:
+                raise ValueError("Unsupported")
+    grad_vector = process_gradient(gradient_direction)
 
 
+def inject_gradient(img, pixel_arr, start_color, end_color, grad_dir):
+    # Convert the list of points to a numpy array
+    points = np.array(pixel_arr)
+
+    # Compute the convex hull
+    hull = ConvexHull(points)
+
+    # The vertices of the convex hull will be in 'hull.vertices'
+    convex_hull_points = points[hull.vertices]
+    grad_vector = resolve_gradient_kw(grad_dir)
 
 
 def create_image(rgb_tuples, grid_size, cell_size):
@@ -97,15 +100,16 @@ def prompt_input(img, prompt_image, rgb_tuples, prs):
         return ii
 
     def prompt():
-        
+        # Show color wheel and original image
         append_images_vertically(img, prompt_image)
         for ij in enumerate(rgb_tuples):
             print(f'{":".join(map(str,list(ij)))}')
-        i = input(
-            "Type the color # , comma-separated by the replacement rgb,"
-            " also comma-separated\nElse, exit\n"
-        )
-        iss = list(map(int, "3,0,255,0".split(",")))
+        # i = input(
+        #     "Type the color # , comma-separated by the replacement rgb,"
+        #     " also comma-separated\nElse, exit\n"
+        # )
+        i = "3,0,255,0"
+        iss = list(map(int, i.split(",")))
         if len(iss) != 4:
             raise ValueError("small.")  # format : off
         clean_choice_pixels = prs.get(list(rgb_tuples)[int(iss[0]) - 1])
@@ -120,7 +124,7 @@ def prompt_input(img, prompt_image, rgb_tuples, prs):
 
 
 if __name__ == "__main__":
-    ip = "./examples/images/obama.jpeg"
+    ip = "./examples/images/charizard.png"
     color_numbers = 16
     prs = get_prominent_regions(ip, number=color_numbers)
     grid_size = int(round(sqrt(color_numbers), 0))
