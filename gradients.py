@@ -5,9 +5,9 @@ from PIL import Image, ImageDraw
 
 # Draw polygon with linear gradient from point 1 to point 2 and ranging
 # from color 1 to color 2 on given image
-def linear_gradient(i, poly, p1, p2, c1, c2):
+def linear_gradient(img_class, poly, p1, p2, c1, c2):
     # Draw initial polygon, alpha channel only, on an empty canvas of image size
-    ii = Image.new("RGBA", i.size, (0, 0, 0, 0))
+    ii = Image.new("RGBA", img_class.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(ii)
     draw.polygon(poly, fill=(0, 0, 0, 255), outline=None)
 
@@ -29,7 +29,7 @@ def linear_gradient(i, poly, p1, p2, c1, c2):
     # Paste gradient on blank canvas of sufficient size
     temp = Image.new(
         "RGBA",
-        (max(i.size[0], gradient.size[0]), max(i.size[1], gradient.size[1])),
+        (max(img_class.size[0], gradient.size[0]), max(img_class.size[1], gradient.size[1])),
         (0, 0, 0, 0),
     )
     temp.paste(gradient)
@@ -44,9 +44,9 @@ def linear_gradient(i, poly, p1, p2, c1, c2):
     ii.paste(gradient.crop((0, 0, ii.size[0], ii.size[1])), mask=ii)
 
     # Paste temporary image on actual image
-    i.paste(ii, mask=ii)
+    img_class.paste(ii, mask=ii)
 
-    return i
+    return img_class
 
 
 # Draw polygon with radial gradient from point to the polygon border
@@ -105,4 +105,4 @@ color2 = (255, 128, 0)
 image = linear_gradient(image, polygon, point1, point2, color1, color2)
 
 # Save image
-image.save("image.png")
+image.save("grad-emdo.png")
