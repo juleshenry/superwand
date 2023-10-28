@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 from gradients import linear_gradient, radial_gradient
 from scipy.spatial import ConvexHull
 import numpy as np
-
+from prompt_input import prompt_input
 
 def resolve_gradient_kw(gradient_direction):
     def process_gradient(grad):
@@ -117,7 +117,6 @@ def create_image_prompt(ip: str):
     return prompt_image, prs
 
 
-from prompt_input import prompt_input
 
 if __name__ == "__main__":
     # Choose base image
