@@ -1,6 +1,7 @@
 from PIL import Image
 from region_identifier import inject
 
+
 def append_images_vertically(image1, image2, output_path=None):
     # Ensure both images have the same width
     width = max(image1.width, image2.width)
