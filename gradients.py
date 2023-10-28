@@ -44,9 +44,9 @@ def linear_gradient(img_class, poly, p1, p2, c1, c2):
     ii.paste(gradient.crop((0, 0, ii.size[0], ii.size[1])), mask=ii)
 
     # Paste temporary image on actual image
-    i.paste(ii, mask=ii)
+    img_class.paste(ii, mask=ii)
 
-    return i
+    return img_class
 
 
 # Draw polygon with radial gradient from point to the polygon border
