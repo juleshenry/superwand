@@ -5,9 +5,9 @@ from PIL import Image, ImageDraw
 
 # Draw polygon with linear gradient from point 1 to point 2 and ranging
 # from color 1 to color 2 on given image
-def linear_gradient(i, poly, p1, p2, c1, c2):
+def linear_gradient(img_class, poly, p1, p2, c1, c2):
     # Draw initial polygon, alpha channel only, on an empty canvas of image size
-    ii = Image.new("RGBA", i.size, (0, 0, 0, 0))
+    ii = Image.new("RGBA", img_class.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(ii)
     draw.polygon(poly, fill=(0, 0, 0, 255), outline=None)
 
