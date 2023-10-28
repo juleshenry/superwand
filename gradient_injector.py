@@ -1,8 +1,9 @@
 # ✅ 1. Open image and identify major colors in text. Show color regions.
 # ✅ 2. Prompt replacement selection
 # ✅ 3. Get pixels of selected region
-#  4. Form a convex hull polygon from the selected region
-#  5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
+# ✅ 4. Form a convex hull polygon from the selected region
+# ✅ 4. Form a convex hull polygon from the selected region
+# ✅ 5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
 from math import sqrt
 from region_identifier import get_prominent_regions
 from PIL import Image, ImageDraw, ImageFont
@@ -28,17 +29,17 @@ def resolve_gradient_kw(gradient_direction):
     grad_vector = process_gradient(gradient_direction)
 
 
-def inject_gradient(img, pixel_arr, start_color, end_color, grad_dir):
+def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     # Convert the list of points to a numpy array
     points = np.array(pixel_arr)
-
     # Compute the convex hull
     hull = ConvexHull(points)
-
     # The vertices of the convex hull will be in 'hull.vertices'
     convex_hull_points = points[hull.vertices]
     grad_vector = resolve_gradient_kw(grad_dir)
-    linear_gradient()
+    p1,p2 = midpoint_hover
+
+    linear_gradient(img_class, convex_hull_points, p1, p2, start_color, end_color)
 
 
 def create_image(rgb_tuples, grid_size, cell_size):
@@ -76,15 +77,7 @@ def create_image(rgb_tuples, grid_size, cell_size):
 
     return image
 
-
-
-
-from prompt_input import prompt_input
-
-if __name__ == "__main__":
-    # Choose base image
-    ip = "./examples/images/charizard.png"
-    # Create image prompt to allow choice
+def create_image_prompt(ip:str):
     color_numbers = 16
     prs = get_prominent_regions(ip, number=color_numbers)
     grid_size = int(round(sqrt(color_numbers), 0))
@@ -96,6 +89,15 @@ if __name__ == "__main__":
     cell_size = 100
     prompt_image = create_image(rgb_tuples, grid_size, cell_size)
 
+    
+
+from prompt_input import prompt_input
+
+if __name__ == "__main__":
+    # Choose base image
+    ip = "./examples/images/charizard.png"
+    # Create image prompt to allow choice
+    prompt_image = create_image_prompt(ip)
     img_as_class = Image.open(ip).convert("RGB")
     prompt_input(img_as_class, prompt_image, rgb_tuples, prs)
     # output_image.show()
