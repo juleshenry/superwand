@@ -29,7 +29,7 @@ def linear_gradient(img_class, poly, p1, p2, c1, c2):
     # Paste gradient on blank canvas of sufficient size
     temp = Image.new(
         "RGBA",
-        (max(i.size[0], gradient.size[0]), max(i.size[1], gradient.size[1])),
+        (max(img_class.size[0], gradient.size[0]), max(img_class.size[1], gradient.size[1])),
         (0, 0, 0, 0),
     )
     temp.paste(gradient)
@@ -105,4 +105,4 @@ color2 = (255, 128, 0)
 image = linear_gradient(image, polygon, point1, point2, color1, color2)
 
 # Save image
-image.save("image.png")
+image.save("grad-emdo.png")
