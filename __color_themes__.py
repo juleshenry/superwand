@@ -5,13 +5,11 @@ from collections import Counter
 
 def get_prominent_colors(image_path, number=4):
     # Extract #number of colors from the image, default is 4, the number for themes
-
     colors = extract(image_path, number)
     # Count the occurrences of each color
     color_counter = Counter((color.rgb.r, color.rgb.g, color.rgb.b) for color in colors)
     # Get the four most common colors
     prominent_colors = color_counter.most_common(number)
-
     return [pc[0] for pc in prominent_colors]
 
 
