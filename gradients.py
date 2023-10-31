@@ -29,7 +29,10 @@ def linear_gradient(img_class, poly, p1, p2, c1, c2):
     # Paste gradient on blank canvas of sufficient size
     temp = Image.new(
         "RGBA",
-        (max(img_class.size[0], gradient.size[0]), max(img_class.size[1], gradient.size[1])),
+        (
+            max(img_class.size[0], gradient.size[0]),
+            max(img_class.size[1], gradient.size[1]),
+        ),
         (0, 0, 0, 0),
     )
     temp.paste(gradient)
