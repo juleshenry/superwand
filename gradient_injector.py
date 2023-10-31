@@ -149,6 +149,7 @@ def gradient_single_change():
     img = inject_gradient(img, polygon, s, e, "bottom-up")
     img.save("newblue.png")
 
+
 def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     # Convert the list of points to a numpy array
     points = np.array(pixel_arr)
