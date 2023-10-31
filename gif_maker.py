@@ -41,6 +41,5 @@ if __name__ == "__main__":
     images = [Image.open(file_path) for file_path in image_files]
     output_file = "output.gif"
     create_gif(images, output_file, delay=100)
-
     iif = "examples/pngs/pickahu_sprite.png"
     invert_image_numpy(iif, "s.png")

@@ -12,9 +12,10 @@ from scipy.spatial import ConvexHull
 import numpy as np
 from prompt_input import prompt_input
 
+
 def resolve_gradient_kw(gradient_direction):
     def process_gradient(grad):
-        match gradient_direction:
+        match grad:
             case "bottom-up":
                 return (
                     (0, 0),
@@ -22,37 +23,38 @@ def resolve_gradient_kw(gradient_direction):
                 )
             case "left-right":
                 return (
-                    (1, 0),
                     (0, 0),
+                    (1, 0),
                 )
             case "right-left":
                 return (
                     (0, 0),
-                    (1, 0),
+                    (-1, 0),
                 )
             case "bottom-down":
                 return (
                     (0, 0),
-                    (0, 1),
+                    (0, -1),
                 )
             case "radial":
                 return (
                     (
-                        1,
-                        1,
+                        0,
+                        0,
                     ),
                     (
-                        1,
-                        1,
+                        0,
+                        0,
                     ),
                 )
             case _:
                 raise ValueError("Unsupported")
 
     grad_vector = process_gradient(gradient_direction)
+    return grad_vector
 
 
-def midpoint_hover():
+def midpoint_hover(grad_vector, pixel_arr):
     return 0, 0
 
 
@@ -64,7 +66,7 @@ def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     # The vertices of the convex hull will be in 'hull.vertices'
     convex_hull_points = points[hull.vertices]
     grad_vector = resolve_gradient_kw(grad_dir)
-    p1, p2 = midpoint_hover()
+    p1, p2 = midpoint_hover(grad_vector, pixel_arr)
     linear_gradient(img_class, convex_hull_points, p1, p2, start_color, end_color)
 
 
@@ -75,7 +77,6 @@ def create_image(rgb_tuples, grid_size, cell_size):
     draw = ImageDraw.Draw(image)
     font = ImageFont.load_default()
     choice_font = ImageFont.truetype(font="./fonts/arial.ttf", size=36)
-
     for i, (r, g, b) in enumerate(rgb_tuples):
         x = (i % grid_size[0]) * cell_size
         y = (i // grid_size[0]) * cell_size
@@ -117,13 +118,26 @@ def create_image_prompt(ip: str):
     return prompt_image, prs
 
 
-
-if __name__ == "__main__":
+def prompted_single_change():
     # Choose base image
     ip = "./examples/images/charizard.png"
-    # Create image prompt to allow choice
+    # Create image prompt to allow choice, get prominent regions
     prompt_image, prs = create_image_prompt(ip)
-    img_as_class = Image.open(ip).convert("RGB")
-    # Get out
-    prompt_input(img_as_class, prompt_image, prs.keys(), prs)
-    # output_image.show()
+    # Show prompt of color grid and replace.
+    modified_image = prompt_input(
+        Image.open(ip).convert("RGB"), prompt_image, prs, error=3
+    )
+    modified_image.save("modified_" + ip.split("/")[-1])
+
+
+def gradient_single_change(start_color, end_color, grad_dir):
+    # Choose base image
+    ip = "./examples/images/charizard.png"
+    # Create image prompt to allow choice, get prominent regions
+    prs = get_prominent_regions(ip)
+    for o in prs:
+        print(o)
+
+
+if __name__ == "__main__":
+    gradient_single_change()
