@@ -49,20 +49,23 @@ def resolve_gradient_kw(gradient_direction):
                 )
             case _:
                 raise ValueError("Unsupported")
+
     grad_vector = process_gradient(gradient_direction)
     return grad_vector
 
 
 def midpoint_hover(grad, pixel_arr):
-    print("processing",grad)
+    print("processing", grad)
     match grad:
         case "bottom-up":
             # y is min y
             # x is midpoint of low-x,high-x
-            mid_x = (min([xy[0] for xy in pixel_arr]) + max([xy[0] for xy in pixel_arr]))/2
+            mid_x = (
+                min([xy[0] for xy in pixel_arr]) + max([xy[0] for xy in pixel_arr])
+            ) / 2
             min_y = min([xy[1] for xy in pixel_arr])
             max_y = max([xy[1] for xy in pixel_arr])
-            return (mid_x, min_y),(mid_x, max_y)
+            return (mid_x, min_y), (mid_x, max_y)
         case "bottom-down":
             return (
                 (0, 0),
@@ -70,7 +73,6 @@ def midpoint_hover(grad, pixel_arr):
             )
         case _:
             raise ValueError("fails")
-
 
 
 def create_image(rgb_tuples, grid_size, cell_size):
@@ -135,16 +137,27 @@ def prompted_single_change():
 
 def gradient_single_change():
     # from red to blue
-    s,e = (255,0,0,), (0,255,0,)
+    s, e = (
+        255,
+        0,
+        0,
+    ), (
+        0,
+        255,
+        0,
+    )
     # Choose base image
     ip = "./examples/images/charizard.png"
     # Create image prompt to allow choice, get prominent regions
     pixel_regions = get_prominent_regions(ip)
     color, polygon = list(pixel_regions.items())[0]
-    print('Color:', color)
+    print("Color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
-    print("Dimensions:", (img.width, img.height),)
+    print(
+        "Dimensions:",
+        (img.width, img.height),
+    )
     img = Image.new("RGBA", (img.width, img.height), (0, 0, 0, 0))
     img = inject_gradient(img, polygon, s, e, "bottom-up")
     img.save("newblue.png")
@@ -160,11 +173,11 @@ def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     print(convex_hull_points[:100])
     # grad_vector = resolve_gradient_kw(grad_dir)
     p1, p2 = midpoint_hover(grad_dir, pixel_arr)
-    p1,p2 = (img_class.width, 0), (0, img_class.height)
+    p1, p2 = (img_class.width, 0), (0, img_class.height)
     # print((img_class, convex_hull_points, p1, p2, start_color, end_color),);1/0
     img = linear_gradient(img_class, convex_hull_points, p1, p2, start_color, end_color)
     return img
 
+
 if __name__ == "__main__":
-    
     gradient_single_change()
