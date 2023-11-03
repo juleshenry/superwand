@@ -3,8 +3,18 @@ Leverage magic wand to breath life to images, especially posterized and vector a
 
 
 # Example: Arbitrary color replacement on posterized images
-## Example: Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
-```python3 gradient_injector.py'```
+## Example: 
+```python3 gradient_injector.py```
+Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
+<table>
+  <tr>
+    <td><img src="/examples/css/gradient_bottom-up_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/css/gradient_top-down_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/css/gradient_left-right_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/css/gradient_righ-left_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/css/gradient_radial_charizard.png" alt="Image 3"></td>
+  </tr>
+</table>
 
 # Given a CSS style sheet, dynamically identify color scheme and replace with a theme
 ## Example:
@@ -21,9 +31,8 @@ Leverage magic wand to breath life to images, especially posterized and vector a
   </tr>
 </table>
 
-# Given an image, replace colors with a gradient 
-
-## Example: Arbitrary color variation on posterized images
+# Arbitrary color replacement on posterized images, based on a theme
+## Example:
 ```python3 superwand.py examples/images/zebra.png 'Urban'```
 
 Color themes included:
@@ -62,9 +71,6 @@ Examples applied to Charizard:
     <td><img src="/examples/charizards/Paixão_charizard.png" alt="Image 3"></td>
   </tr>
 </table>
-
-
-
 
 See also, spring theme art:
 <table>
