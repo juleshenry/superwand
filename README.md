@@ -2,7 +2,7 @@
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
 
-# Example: Arbitrary color replacement on posterized images
+# Given a color, an image and a gradient-keyword, replace the region with a start color and end color
 ## Example: 
 ```python3 gradient_injector.py```
 
