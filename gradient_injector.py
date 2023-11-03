@@ -13,47 +13,6 @@ import numpy as np
 from prompt_input import prompt_input
 
 
-def resolve_gradient_kw(gradient_direction):
-    def process_gradient(grad):
-        match grad:
-            case "bottom-up":
-                return (
-                    (0, 0),
-                    (0, 1),
-                )
-            case "left-right":
-                return (
-                    (0, 0),
-                    (1, 0),
-                )
-            case "right-left":
-                return (
-                    (0, 0),
-                    (-1, 0),
-                )
-            case "bottom-down":
-                return (
-                    (0, 0),
-                    (0, -1),
-                )
-            case "radial":
-                return (
-                    (
-                        0,
-                        0,
-                    ),
-                    (
-                        0,
-                        0,
-                    ),
-                )
-            case _:
-                raise ValueError("Unsupported")
-
-    grad_vector = process_gradient(gradient_direction)
-    return grad_vector
-
-
 def midpoint_hover(grad, pixel_arr):
     print("processing", grad)
     match grad:
@@ -136,21 +95,11 @@ def prompted_single_change():
 
 
 def gradient_single_change():
-    # from red to blue
-    s, e = (
-        255,
-        0,
-        0,
-    ), (
-        0,
-        255,
-        0,
-    )
     # Choose base image
     ip = "./examples/images/charizard.png"
     # Create image prompt to allow choice, get prominent regions
     pixel_regions = get_prominent_regions(ip)
-    color, polygon = list(pixel_regions.items())[0]
+    color, polygon = list(pixel_regions.items())[1]
     print("Color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
@@ -158,9 +107,10 @@ def gradient_single_change():
         "Dimensions:",
         (img.width, img.height),
     )
+    # from red to blue
     img = Image.new("RGBA", (img.width, img.height), (0, 0, 0, 0))
-    img = inject_gradient(img, polygon, s, e, "bottom-up")
-    img.save("newblue.png")
+    x = inject_gradient(img, polygon, (255,0,0,), (0,0,255,), "bottom-up")
+    x.save("x.png")
 
 
 def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
@@ -169,11 +119,11 @@ def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     # Compute the convex hull
     hull = ConvexHull(points)
     # The vertices of the convex hull will be in 'hull.vertices'
-    convex_hull_points = points[hull.vertices]
-    print(convex_hull_points[:100])
+    convex_hull_points = list(map(tuple,points[hull.vertices].tolist()))
     # grad_vector = resolve_gradient_kw(grad_dir)
     p1, p2 = midpoint_hover(grad_dir, pixel_arr)
-    p1, p2 = (img_class.width, 0), (0, img_class.height)
+    print('calced mids',p1,p2)
+    # p1, p2 = (img_class.width, 0), (0, img_class.height)
     # print((img_class, convex_hull_points, p1, p2, start_color, end_color),);1/0
     img = linear_gradient(img_class, convex_hull_points, p1, p2, start_color, end_color)
     return img
