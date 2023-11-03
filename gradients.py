@@ -3,17 +3,26 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 
-def linear_gradient(img_class, pixel_arr, p1, p2, c1, c2):
-    # Draw initial polygon, alpha channel only, on an empty canvas of image size
-    gradient_img = Image.new("RGBA", img_class.size, (0, 0, 0, 0))
+def linear_gradient(img_class, pixel_arr, start_pole, end_pole, start_color, end_color, grad_dr):
     draw = ImageDraw.Draw(img_class)
+    spx,spy=start_pole
+    epx,epy=end_pole
     w, h = img_class.size
-    start_r, start_g, start_b = c1
-    end_r, end_g, end_b = c2
+    s_r, s_g, s_b = start_color
+    e_r, e_g, e_b = end_color
+
+    # left-right
+    # for x,y in pixel_arr:
+    #     r = int(s_r + (e_r - s_r) * (x / w))
+    #     g = int(s_g + (e_g - s_g) * (x / w))
+    #     b = int(s_b + (e_b - s_b) * (x / w))
+    #     draw.point((x, y), fill=(r, g, b))
+
+    # bottom-up
     for x,y in pixel_arr:
-        r = int(start_r + (end_r - start_r) * (x / w))
-        g = int(start_g + (end_g - start_g) * (x / w))
-        b = int(start_b + (end_b - start_b) * (x / w))
+        r = int(s_r + (e_r - s_r) * ((y - spy) / (epy - spy)))
+        g = int(s_g + (e_g - s_g) * ((y - spy) / (epy - spy)))
+        b = int(s_b + (e_b - s_b) * ((y - spy) / (epy - spy)))
         draw.point((x, y), fill=(r, g, b))
     # img_class.paste(gradient_img)
     return img_class
