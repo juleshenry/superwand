@@ -99,7 +99,7 @@ def gradient_single_change():
     ip = "./examples/images/charizard.png"
     # Create image prompt to allow choice, get prominent regions
     pixel_regions = get_prominent_regions(ip)
-    color, polygon = list(pixel_regions.items())[1]
+    color, polygon = list(pixel_regions.items())[3]
     print("Color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
