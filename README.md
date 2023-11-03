@@ -1,13 +1,13 @@
 # superwand
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
-Uses:
 
-1. Given an image, Purpose: Allows color ranges to be replaced with colors based on a theme.
-# Example: Arbitrary color variation on posterized images
-```python3 superwand.py examples/images/zebra.png 'Urban'```
-2. Given a CSS style sheet, dynamically identify color scheme and replace with a theme
-# Example: Arbitrary color variation on css themes
+# Example: Arbitrary color replacement on posterized images
+## Example: Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
+```python3 gradient_injector.py'```
+
+# Given a CSS style sheet, dynamically identify color scheme and replace with a theme
+## Example:
 ```python3 superwand.py examples/css/site.css 'Tropical'```
 
 <table>
@@ -21,12 +21,10 @@ Uses:
   </tr>
 </table>
 
-3. Given vector art, replace colors with a gradient 
-Gradients included: vertical gradient, then left-right, right-left, bottom-down, radial
-# Example: Arbitrary color variation on posterized images
-```python3 superwand.py --image_path examples/images/rocket_vector.jpeg --theme 'Spring'```
+# Given an image, replace colors with a gradient 
 
-
+## Example: Arbitrary color variation on posterized images
+```python3 superwand.py examples/images/zebra.png 'Urban'```
 
 Color themes included:
 <table>
@@ -45,6 +43,8 @@ Color themes included:
     <td><img src="/themes_jpgs/PaixãoTheme.jpg" alt="ADSF">
   </tr>
 </table>
+
+Examples applied to Charizard:
 
 <table>
   <tr>
