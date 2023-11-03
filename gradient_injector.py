@@ -130,10 +130,11 @@ def prompted_single_change():
     modified_image.save("modified_" + ip.split("/")[-1])
 
 
-def gradient_single_change(start_color, end_color, grad_dir):
+def gradient_single_change(start_color, end_color, grad_dir, color_to_replace=None):
     ip = "./examples/images/charizard.png"
-    pixel_regions = get_prominent_regions(ip, number=10)
-    color, polygon = list(pixel_regions.items())[4]
+    if not color_to_replace:
+        pixel_regions = get_prominent_regions(ip, number=10)
+        color, polygon = list(pixel_regions.items())[0]
     print("Replacing color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
