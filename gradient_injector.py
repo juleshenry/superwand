@@ -13,7 +13,7 @@ import numpy as np
 from prompt_input import prompt_input
 
 
-def midpoint_hover(grad_kw, pixel_arr):
+def calc_gradient_poles(grad_kw, pixel_arr):
     print("processing", grad_kw)
     match grad_kw:
         case "bottom-up":
@@ -25,7 +25,7 @@ def midpoint_hover(grad_kw, pixel_arr):
             min_y = min([xy[1] for xy in pixel_arr])
             max_y = max([xy[1] for xy in pixel_arr])
             return (mid_x, min_y), (mid_x, max_y)
-        case "bottom-down":
+        case "top-down":
             return (
                 (0, 0),
                 (0, -1),
@@ -94,21 +94,21 @@ def prompted_single_change():
     modified_image.save("modified_" + ip.split("/")[-1])
 
 
-def gradient_single_change(start_color, end_color, gradient_kw):
+def gradient_single_change(start_color, end_color, grad_dir):
     ip = "./examples/images/charizard.png"
-    pixel_regions = get_prominent_regions(ip)
-    color, polygon = list(pixel_regions.items())[1]
+    pixel_regions = get_prominent_regions(ip,number=10)
+    color, polygon = list(pixel_regions.items())[9]
     print("Replacing color:",color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
-    x = inject_gradient(img, polygon, start_color, end_color, gradient_kw)
-    x.save("xx.png")
+    injected = inject_gradient(img, polygon, start_color, end_color, grad_dir)
+    injected.save(f"gradient_{ip.split('/')[-1].split('.')[0]}.png")
 
 
 def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
-    p1, p2 = midpoint_hover(grad_dir, pixel_arr)
-    print('calced mids',p1,p2)
-    img = linear_gradient(img_class, pixel_arr, p1, p2, start_color, end_color)
+    p1, p2 = calc_gradient_poles(grad_dir, pixel_arr)
+    print('Calculated poles for gradient:', p1, p2)
+    img = linear_gradient(img_class, pixel_arr, p1, p2, start_color, end_color, grad_dir)
     return img
 
 
