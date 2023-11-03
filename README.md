@@ -15,7 +15,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
     <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
   </tr>
   <tr>
-    <td><img src="/examples/images/rocket_vector.png" alt="Image 3"></td>
+    <td><img src="/examples/images/rocket_vector.jpeg" alt="Image 3"></td>
     <td><img src="/examples/images/gradient_bottom-up_rocket_vector.png" alt="Image 3"></td>
   </tr>
 </table>
