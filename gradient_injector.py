@@ -7,8 +7,7 @@
 from math import sqrt
 from region_identifier import get_prominent_regions
 from PIL import Image, ImageDraw, ImageFont
-from gradients import linear_gradient, radial_gradient
-from scipy.spatial import ConvexHull
+from gradients import paste_gradient
 import numpy as np
 from prompt_input import prompt_input
 import math
@@ -132,7 +131,7 @@ def prompted_single_change():
 def gradient_single_change(start_color, end_color, grad_dir):
     ip = "./examples/images/charizard.png"
     pixel_regions = get_prominent_regions(ip,number=10)
-    color, polygon = list(pixel_regions.items())[9]
+    color, polygon = list(pixel_regions.items())[4]
     print("Replacing color:",color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
@@ -143,9 +142,9 @@ def gradient_single_change(start_color, end_color, grad_dir):
 def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
     p1, p2 = calc_gradient_poles(grad_dir, pixel_arr)
     print('Calculated poles for gradient:', p1, p2)
-    img = linear_gradient(img_class, pixel_arr, p1, p2, start_color, end_color, grad_dir)
+    img = paste_gradient(img_class, pixel_arr, p1, p2, start_color, end_color, grad_dir)
     return img
 
 
 if __name__ == "__main__":
-    gradient_single_change((255,0,0,), (0,0,255,), "left-right")
+    gradient_single_change((255,0,0,), (0,0,255,), "top-down")
