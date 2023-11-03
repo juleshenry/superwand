@@ -13,9 +13,9 @@ import numpy as np
 from prompt_input import prompt_input
 
 
-def midpoint_hover(grad, pixel_arr):
-    print("processing", grad)
-    match grad:
+def midpoint_hover(grad_kw, pixel_arr):
+    print("processing", grad_kw)
+    match grad_kw:
         case "bottom-up":
             # y is min y
             # x is midpoint of low-x,high-x
@@ -94,40 +94,28 @@ def prompted_single_change():
     modified_image.save("modified_" + ip.split("/")[-1])
 
 
-def gradient_single_change():
+def gradient_single_change(start_color, end_color, gradient_kw):
     # Choose base image
     ip = "./examples/images/charizard.png"
     # Create image prompt to allow choice, get prominent regions
     pixel_regions = get_prominent_regions(ip)
-    color, polygon = list(pixel_regions.items())[3]
+    color, polygon = list(pixel_regions.items())[1]
     print("Color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
-    print(
-        "Dimensions:",
-        (img.width, img.height),
-    )
+    print("Dimensions:",(img.width, img.height),)
     # from red to blue
     img = Image.new("RGBA", (img.width, img.height), (0, 0, 0, 0))
-    x = inject_gradient(img, polygon, (255,0,0,), (0,0,255,), "bottom-up")
-    x.save("x.png")
+    x = inject_gradient(img, polygon, start_color, end_color, gradient_kw)
+    x.save("xx.png")
 
 
 def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
-    # Convert the list of points to a numpy array
-    points = np.array(pixel_arr)
-    # Compute the convex hull
-    hull = ConvexHull(points)
-    # The vertices of the convex hull will be in 'hull.vertices'
-    convex_hull_points = list(map(tuple,points[hull.vertices].tolist()))
-    # grad_vector = resolve_gradient_kw(grad_dir)
     p1, p2 = midpoint_hover(grad_dir, pixel_arr)
     print('calced mids',p1,p2)
-    # p1, p2 = (img_class.width, 0), (0, img_class.height)
-    # print((img_class, convex_hull_points, p1, p2, start_color, end_color),);1/0
-    img = linear_gradient(img_class, convex_hull_points, p1, p2, start_color, end_color)
+    img = linear_gradient(img_class, pixel_arr, p1, p2, start_color, end_color)
     return img
 
 
 if __name__ == "__main__":
-    gradient_single_change()
+    gradient_single_change((255,0,0,), (0,0,255,), "bottom-up")
