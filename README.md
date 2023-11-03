@@ -11,7 +11,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
     <td><img src="/examples/charizards/gradient_bottom-up_charizard.png" alt="Image 3"></td>
     <td><img src="/examples/charizards/gradient_top-down_charizard.png" alt="Image 3"></td>
     <td><img src="/examples/charizards/gradient_left-right_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/charizards/gradient_righ-left_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_right-left_charizard.png" alt="Image 3"></td>
     <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
   </tr>
 </table>
