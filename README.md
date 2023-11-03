@@ -39,7 +39,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
   </tr>
 </table>
 
-# Arbitrary color replacement on posterized images, based on a theme
+# Given an image and a color theme, apply it to main regions
 ## Example:
 ```python3 superwand.py examples/images/zebra.png 'Urban'```
 
