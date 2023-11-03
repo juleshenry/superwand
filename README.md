@@ -5,6 +5,8 @@ Leverage magic wand to breath life to images, especially posterized and vector a
 # Example: Arbitrary color replacement on posterized images
 ## Example: 
 ```python3 gradient_injector.py```
+
+
 Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
 <table>
   <tr>
@@ -14,12 +16,13 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
     <td><img src="/examples/charizards/gradient_right-left_charizard.png" alt="Image 3"></td>
     <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
   </tr>
+</table>
+<table>
   <tr>
     <td><img src="/examples/images/rocket_vector.jpeg" alt="Image 3"></td>
     <td><img src="/examples/images/gradient_bottom-up_rocket_vector.png" alt="Image 3"></td>
   </tr>
 </table>
-
 # Given a CSS style sheet, dynamically identify color scheme and replace with a theme
 ## Example:
 ```python3 superwand.py examples/css/site.css 'Tropical'```
