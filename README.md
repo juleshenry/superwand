@@ -8,11 +8,11 @@ Leverage magic wand to breath life to images, especially posterized and vector a
 Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
 <table>
   <tr>
-    <td><img src="/examples/css/gradient_bottom-up_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/css/gradient_top-down_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/css/gradient_left-right_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/css/gradient_righ-left_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/css/gradient_radial_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_bottom-up_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_top-down_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_left-right_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_righ-left_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
   </tr>
 </table>
 
