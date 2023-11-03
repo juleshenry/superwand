@@ -1,9 +1,3 @@
-# ✅ 1. Open image and identify major colors in text. Show color regions.
-# ✅ 2. Prompt replacement selection
-# ✅ 3. Get pixels of selected region
-# ✅ 4. Form a convex hull polygon from the selected region
-# ✅ 4. Form a convex hull polygon from the selected region
-# ✅ 5. Insert a gradient, based on a color region, a new color twople and a type (vertical, radial, etc.)
 from math import sqrt
 from region_identifier import get_prominent_regions
 from PIL import Image, ImageDraw, ImageFont
@@ -131,10 +125,10 @@ def prompted_single_change():
 
 
 def gradient_single_change(start_color, end_color, grad_dir, color_to_replace=None):
-    ip = "./examples/images/charizard.png"
+    ip = "./examples/images/rocket_vector.jpeg"
     if not color_to_replace:
         pixel_regions = get_prominent_regions(ip, number=10)
-        color, polygon = list(pixel_regions.items())[0]
+        color, polygon = list(pixel_regions.items())[1]
     print("Replacing color:", color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
@@ -150,20 +144,20 @@ def inject_gradient(img_class, pixel_arr, start_color, end_color, grad_dir):
 
 
 if __name__ == "__main__":
-    # gradient_single_change((255,0,0,), (0,0,255,), "bottom-up")
+    gradient_single_change((255,0,0,), (0,0,255,), "bottom-up")
     # gradient_single_change((255,0,0,), (0,0,255,), "top-down")
     # gradient_single_change((255,0,0,), (0,0,255,), "left-right")
     # gradient_single_change((255,0,0,), (0,0,255,), "right-left")
-    gradient_single_change(
-        (
-            255,
-            0,
-            0,
-        ),
-        (
-            0,
-            0,
-            255,
-        ),
-        "radial",
-    )
+    # gradient_single_change(
+    #     (
+    #         255,
+    #         0,
+    #         0,
+    #     ),
+    #     (
+    #         0,
+    #         0,
+    #         255,
+    #     ),
+    #     "radial",
+    # )
