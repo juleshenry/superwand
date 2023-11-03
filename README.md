@@ -79,12 +79,8 @@ Examples applied to Charizard:
   </tr>
 </table>
 
-See also, spring theme art:
+Some other fun examples:
 <table>
-  <tr>
-    <td><img src="/examples/images/zebra.png" alt="Image 3"></td>
-    <td><img src="/examples/images/Spring_zebra.png" alt="Image 3"></td>
-  </tr>
   <tr>
     <td><img src="/examples/images/mantis_shrimp.jpeg" alt="Image 3"></td>
     <td><img src="/examples/images/Spring_mantis_shrimp.png" alt="Image 3"></td>
