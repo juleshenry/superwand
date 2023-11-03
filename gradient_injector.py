@@ -95,17 +95,12 @@ def prompted_single_change():
 
 
 def gradient_single_change(start_color, end_color, gradient_kw):
-    # Choose base image
     ip = "./examples/images/charizard.png"
-    # Create image prompt to allow choice, get prominent regions
     pixel_regions = get_prominent_regions(ip)
     color, polygon = list(pixel_regions.items())[1]
-    print("Color:", color)
+    print("Replacing color:",color)
     polygon = [tuple(p) for p in polygon]
     img = Image.open(ip).convert("RGB")
-    print("Dimensions:",(img.width, img.height),)
-    # from red to blue
-    img = Image.new("RGBA", (img.width, img.height), (0, 0, 0, 0))
     x = inject_gradient(img, polygon, start_color, end_color, gradient_kw)
     x.save("xx.png")
 
