@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw
 # Draw polygon with linear gradient from point 1 to point 2 and ranging
 # from color 1 to color 2 on given image
 def linear_gradient(img_class, poly, p1, p2, c1, c2):
+    print(poly[0],type(poly[0]))
     # Draw initial polygon, alpha channel only, on an empty canvas of image size
     ii = Image.new("RGBA", img_class.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(ii)
@@ -20,10 +21,11 @@ def linear_gradient(img_class, poly, p1, p2, c1, c2):
     temp = ii.rotate(angle, expand=True)
     temp = temp.crop(temp.getbbox())
     wt, ht = temp.size
+    print('working on an image of size:',ii.size,'->', temp.size)
 
     # Create gradient from color 1 to 2 of appropriate size
     gradient = np.linspace(c1, c2, wt, True).astype(np.uint8)
-    gradient = np.tile(gradient, [2 * h, 1, 1])
+    gradient = np.tile(gradient, [2 * ht, 1, 1])
     gradient = Image.fromarray(gradient)
 
     # Paste gradient on blank canvas of sufficient size
@@ -80,32 +82,31 @@ def radial_gradient(i, poly, p, c1, c2):
     return i
 
 
-# Create blank canvas with zero alpha channel
-w, h = (800, 600)
-image = Image.new("RGBA", (w, h), (0, 0, 0, 0))
 
-# Draw first polygon with radial gradient
-polygon = [(100, 200), (320, 130), (460, 300), (700, 500), (350, 550), (200, 400)]
-point = (350, 350)
-color1 = (255, 0, 0)
-color2 = (0, 255, 0)
-image = radial_gradient(image, polygon, point, color1, color2)
 
-# Draw second polygon with linear gradient
-polygon = [(500, 50), (650, 250), (775, 150), (700, 25)]
-point1 = (700, 25)
-point2 = (650, 250)
-color1 = (255, 255, 0)
-color2 = (0, 0, 255)
-image = linear_gradient(image, polygon, point1, point2, color1, color2)
+# # Draw first polygon with radial gradient
+# polygon = [(100, 200), (320, 130), (460, 300), (700, 500), (350, 550), (200, 400)]
+# point = (350, 350)
+# color1 = (255, 0, 0)
+# color2 = (0, 255, 0)
+# image = radial_gradient(image, polygon, point, color1, color2)
 
-# Draw third polygon with linear gradient
-polygon = [(50, 550), (200, 575), (200, 500), (100, 300), (25, 450)]
-point1 = (100, 300)
-point2 = (200, 575)
-color1 = (255, 255, 255)
-color2 = (255, 128, 0)
-image = linear_gradient(image, polygon, point1, point2, color1, color2)
+# # Draw second polygon with linear gradient
+# polygon = [(500, 50), (650, 250), (775, 150), (700, 25)]
+# point1 = (700, 25)
+# point2 = (650, 250)
+# color1 = (255, 255, 0)
+# color2 = (0, 0, 255)
+# image = linear_gradient(image, polygon, point1, point2, color1, color2)
 
-# Save image
-image.save("grad-emdo.png")
+if __name__=='__main__':
+    # Create blank canvas with zero alpha channel
+    w, h = (800, 600)
+    image = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    # Draw third polygon with linear gradient
+    polygon = [(50, 550), (200, 575), (200, 500), (100, 300), (25, 450)]
+    point1, point2 = (100, 300), (200, 575)
+    color1, color2 = (255, 255, 255), (255, 128, 0)
+    image = linear_gradient(image, polygon, point1, point2, color1, color2)
+    # Save image
+    image.save("simple_linear.png")
