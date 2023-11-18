@@ -1,6 +1,8 @@
 # superwand
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
+# SETUP:
+`pip3 install colorgram.py webcolors`
 
 # Given a color, an image and a gradient-keyword, replace the region with a start color and end color
 ## Example: 
@@ -39,7 +41,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
   </tr>
 </table>
 
-# Arbitrary color replacement on posterized images, based on a theme
+# Given an image and a color theme, apply it to main regions
 ## Example:
 ```python3 superwand.py examples/images/zebra.png 'Urban'```
 
