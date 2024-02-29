@@ -67,10 +67,13 @@ class SuperWand:
     def __init__(self, color_themes):
         self.color_themes = color_themes
 
-    @staticmethod
-    def apply_theme_to_image(img_path, theme_name):
-        color_pix_dict = get_prominent_regions(img_path)
-        inject_theme(color_pix_dict, theme_name, img_path)
+    def apply_theme_to_image(self, img_path, theme_name):
+        list(
+            map(
+                lambda t: inject_theme(get_prominent_regions(img_path), t, img_path),
+                self.color_themes if not theme_name else [theme_name],
+            )
+        )
 
     def apply_all_themes_to_image(self, img_path):
         for theme_name in self.color_themes:
@@ -84,9 +87,10 @@ if __name__ == "__main__":
     )
     parser.add_argument("image_path", type=str, help="Path to the input image file.")
     parser.add_argument(
-        "theme",
+        "-theme",
         type=str,
         choices=[ct for ct in color_themes],
+        
         help="Theme to apply (Tropical, Urban, Winter, etc.).",
     )
     args = parser.parse_args()
