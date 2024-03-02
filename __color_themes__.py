@@ -55,14 +55,15 @@ def make_theme_splash():
 
         # Draw squares with the specified colors
         draw = ImageDraw.Draw(img)
-        for i, color in enumerate(colors[0]):
+        list(map(lambda i, color:
             draw.rectangle(
                 [
                     (i * square_size, header_height),
                     ((i + 1) * square_size, header_height + square_size),
                 ],
                 fill=color,
-            )
+            ),
+            enumerate(colors[0])))
 
         # Display the image
         img.save(f"themes_jpgs/{theme}Theme.jpg")
