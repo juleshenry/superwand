@@ -1,45 +1,48 @@
 from __color_themes__ import get_prominent_colors, color_themes
 from PIL import Image
 import numpy as np
-from scipy.spatial.distance import euclidean
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 from collections import OrderedDict
+from tqdm import tqdm
 
+def rgb_distance(color1, color2):
+    return np.sqrt(np.sum((color1 - color2) ** 2))
 
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
     # Convert target_color to RGB tuple if it's a string or hex
+    if isinstance(target_color, str):
+        target_color = hex_to_rgb(target_color)
+    elif isinstance(target_color, tuple):
+        target_color = np.array(target_color)
+
     # Open the image
     image = Image.open(image_path).convert("RGB")
     width, height = image.size
+
+    # Convert target_color to numpy array for faster computation
+    target_color = np.array(target_color)
+
     matching_pixels = []
-    for y in range(height):
+
+
+    for y in tqdm(range(height)):
         for x in range(width):
             # Get the RGB values of the current pixel
-            r, g, b = image.getpixel(
-                (
-                    x,
-                    y,
-                )
-            )
-            # if (r,g,b,) == (0,0,0,):
-            #     print(r,g,b);1/0
-            if (
-                euclidean(
-                    target_color,
-                    (
-                        r,
-                        g,
-                        b,
-                    ),
-                )
-                < tolerance
-            ):
+            pixel_color = np.array(image.getpixel((x, y)))
+
+            # Calculate the distance between the target color and the current pixel color
+            distance = rgb_distance(target_color, pixel_color)
+
+            if distance < tolerance:
                 matching_pixels.append([x, y])
+   
     region_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
     for x, y in matching_pixels:
         region_image.putpixel((x, y), (*target_color, 255))
+
     if debug:
         region_image.show()
+
     return matching_pixels
 
 
@@ -63,7 +66,7 @@ def inject_theme(cpd, theme_name, image_path):
     image = Image.open(image_path).convert("RGB")
     for cpd_theme in zip(cpd, theme_rgbs):
         image = inject(image, cpd[cpd_theme[0]], cpd_theme[1])
-    image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
+    image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
 
 
 if __name__ == "__main__":
