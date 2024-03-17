@@ -6,62 +6,60 @@ from collections import OrderedDict
 from tqdm import tqdm
 
 def rgb_distance(color1, color2):
-    """
-    Calculate the Euclidean distance between two RGB colors.
-
-    Args:
-        color1 (tuple): RGB values of the first color.
-        color2 (tuple): RGB values of the second color.
-
-    Returns:
-        float: The Euclidean distance between the two colors.
-    """
     return np.sqrt(np.sum((color1 - color2) ** 2))
 
 def identify_regions(image_path, target_color, tolerance=20, debug=False):
-    """
-    Identify regions in an image that match a target color within a given tolerance.
+    # Convert target_color to RGB tuple if it's a string or hex
+    if isinstance(target_color, str):
+        target_color = hex_to_rgb(target_color)
+    elif isinstance(target_color, tuple):
+        target_color = np.array(target_color)
 
-    Args:
-        image_path (str): Path to the image file.
-        target_color (str or tuple): Target color to identify regions for. Can be a string (color name) or a tuple (RGB values).
-        tolerance (int): Maximum allowed distance between the target color and a pixel color to be considered a match. Default is 20.
-        debug (bool): Whether to display the resulting region image. Default is False.
+    # Open the image
+    image = Image.open(image_path).convert("RGB")
+    width, height = image.size
 
-    Returns:
-        list: List of pixel coordinates (x, y) that belong to the identified regions.
-    """
-    # Function implementation goes here
-    pass
+    # Convert target_color to numpy array for faster computation
+    target_color = np.array(target_color)
+
+    matching_pixels = []
+
+
+    for y in tqdm(range(height)):
+        for x in range(width):
+            # Get the RGB values of the current pixel
+            pixel_color = np.array(image.getpixel((x, y)))
+
+            # Calculate the distance between the target color and the current pixel color
+            distance = rgb_distance(target_color, pixel_color)
+
+            if distance < tolerance:
+                matching_pixels.append([x, y])
+   
+    region_image = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    for x, y in matching_pixels:
+        region_image.putpixel((x, y), (*target_color, 255))
+
+    if debug:
+        region_image.show()
+
+    return matching_pixels
+
 
 def get_prominent_regions(ip, number=4):
-    """
-    Get the prominent regions in an image based on the most prominent colors.
+    target_colors = get_prominent_colors(ip, number=number)
+    color_regions = OrderedDict()
+    for color in target_colors:
+        color_regions[color] = identify_regions(ip, color, tolerance=50)
+    return color_regions
 
-    Args:
-        ip (str): Path to the image file.
-        number (int): Number of prominent colors to consider. Default is 4.
-
-    Returns:
-        OrderedDict: Dictionary where the keys are the prominent colors and the values are lists of pixel coordinates (x, y) that belong to the identified regions.
-    """
-    # Function implementation goes here
-    pass
 
 def inject(img, pixel_arr, pixel):
-    """
-    Inject a specific color into an image for a given set of pixel coordinates.
+    for xy in pixel_arr:
+        x, y = xy
+        img.putpixel((x, y), (*pixel, 255))
+    return img
 
-    Args:
-        img (PIL.Image.Image): Image object to inject the color into.
-        pixel_arr (list): List of pixel coordinates (x, y) to inject the color.
-        pixel (tuple): RGB values of the color to inject.
-
-    Returns:
-        PIL.Image.Image: Image object with the injected color.
-    """
-    # Function implementation goes here
-    pass
 
 def inject_theme(cpd, theme_name, image_path):
     """
@@ -77,9 +75,26 @@ def inject_theme(cpd, theme_name, image_path):
     """
     # Function implementation goes here
     pass
+        image_path (str): Path to the image file.
+
+    Returns:
+        None
+    """
+    # Function implementation goes here
+    pass
+        image_path (str): Path to the image file.
+
+    Returns:
+        None
+    """
+    theme_rgbs = color_themes[theme_name]
+    image = Image.open(image_path).convert("RGB")
+    for cpd_theme in zip(cpd, theme_rgbs):
+        image = inject(image, cpd[cpd_theme[0]], cpd_theme[1])
+    image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
+
 
 if __name__ == "__main__":
-    # Example usage
     ip = "examples/images/mantis_shrimp.jpeg"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
@@ -87,3 +102,4 @@ if __name__ == "__main__":
             continue
         else:
             inject_theme(color_pix_dict, theme_name, ip)
+        # break
