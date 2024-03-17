@@ -90,7 +90,6 @@ if __name__ == "__main__":
         "-theme",
         type=str,
         choices=[ct for ct in color_themes],
-        
         help="Theme to apply (Tropical, Urban, Winter, etc.).",
     )
     args = parser.parse_args()
