@@ -69,24 +69,7 @@ def inject_theme(cpd, theme_name, image_path):
         cpd (list): List of color palette dictionary keys.
         theme_name (str): Name of the color theme to inject.
         image_path (str): Path to the image file.
-
-    Returns:
-        None
-    """
-    # Function implementation goes here
-    pass
-        image_path (str): Path to the image file.
-
-    Returns:
-        None
-    """
-    # Function implementation goes here
-    pass
-        image_path (str): Path to the image file.
-
-    Returns:
-        None
-    """
+"""
     theme_rgbs = color_themes[theme_name]
     image = Image.open(image_path).convert("RGB")
     for cpd_theme in zip(cpd, theme_rgbs):
@@ -94,7 +77,7 @@ def inject_theme(cpd, theme_name, image_path):
     image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
 
 
-if __name__ == "__main__":
+if __name__ == "__masin__":
     ip = "examples/images/mantis_shrimp.jpeg"
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
@@ -103,3 +86,6 @@ if __name__ == "__main__":
         else:
             inject_theme(color_pix_dict, theme_name, ip)
         # break
+            
+if __name__=='__main__':
+
