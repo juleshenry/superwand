@@ -2,7 +2,7 @@
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
 # SETUP:
-`pip3 install colorgram.py webcolors`
+`pip3 install colorgram.py webcolors scipy`
 
 # Given a color, an image and a gradient-keyword, replace the region with a start color and end color
 ## Example: 
