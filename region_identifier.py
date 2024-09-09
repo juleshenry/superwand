@@ -2,7 +2,7 @@ from __color_themes__ import get_prominent_colors, color_themes
 from PIL import Image
 import numpy as np
 from scipy.spatial.distance import euclidean
-from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
+from webcolors import rgb_to_name, hex_to_rgb
 from collections import OrderedDict
 
 
