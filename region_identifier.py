@@ -63,7 +63,7 @@ def inject_theme(cpd, theme_name, image_path):
     image = Image.open(image_path).convert("RGB")
     for cpd_theme in zip(cpd, theme_rgbs):
         image = inject(image, cpd[cpd_theme[0]], cpd_theme[1])
-    image.save(f"{theme_name}_{image_path.split('/')[-1].split('.')[0]}.png")
+    image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
 
 
 if __name__ == "__main__":
