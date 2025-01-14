@@ -26,65 +26,49 @@ def np_get_prominent_regions(ip, number=4):
         color_regions[color_tuple] = np_id_regiones(ip, color, tolerance=50)
     return color_regions
 
+
 def np_inject(image, pixel_arr, pixel):
     # Convert the image to a NumPy array
     arr = np.array(image)
-
-    # Ensure the array has 4 channels (RGBA)
     if arr.shape[-1] == 3:  # If the image is RGB, add an alpha channel
         arr = np.concatenate(
             [arr, np.full((*arr.shape[:2], 1), 255, dtype=np.uint8)], axis=-1
         )
-
-    # Convert pixel_arr to a NumPy array if it isn't already
     pixel_arr = np.array(pixel_arr)
-
-    # Ensure pixel_arr contains valid integer indices
     pixel_arr = pixel_arr.astype(int)
-
-    # Bounds-check to remove out-of-bound indices
     height, width = arr.shape[:2]
     valid_mask = (pixel_arr[:, 1] < height) & (pixel_arr[:, 0] < width)
     pixel_arr = pixel_arr[valid_mask]
-
-    # Correct the coordinate order for (y, x) indexing
     arr[pixel_arr[:, 1], pixel_arr[:, 0]] = (*pixel, 255)
-
-    # Convert the updated array back to an image
     return Image.fromarray(arr, 'RGBA')
 
-def np_inject(image, pixel_arr, pixel):
+
+
+
+
+
+def np_inject_2(image, pixel_arr, pixel):
     # Convert the image to a NumPy array
     arr = np.array(image)
-
-    # Ensure the array has 4 channels (RGBA)
     if arr.shape[-1] == 3:  # If the image is RGB, add an alpha channel
         arr = np.concatenate(
             [arr, np.full((*arr.shape[:2], 1), 255, dtype=np.uint8)], axis=-1
         )
-
-    # Convert pixel_arr to a NumPy array if it isn't already
     pixel_arr = np.array(pixel_arr)
-
-    # Ensure pixel_arr contains valid integer indices
     pixel_arr = pixel_arr.astype(int)
-
-    # Bounds-check to remove out-of-bound indices
+    pixel_arr = pixel_arr[:, [1, 0]]  # Swap the columns (x, y) to (y, x)
     height, width = arr.shape[:2]
     valid_mask = (pixel_arr[:, 1] < height) & (pixel_arr[:, 0] < width)
     pixel_arr = pixel_arr[valid_mask]
-
-    # Assign the new pixel values
     arr[pixel_arr[:, 1], pixel_arr[:, 0]] = (*pixel, 255)
-
-    # Convert the updated array back to an image
     return Image.fromarray(arr, 'RGBA')
 
 def np_inject_theme(cpd, theme_name, image_path):
     theme_rgbs = CORES[theme_name]
     image = Image.open(image_path).convert("RGB")
     for cpd_theme in zip(cpd, theme_rgbs):
-        image = np_inject(image, cpd[cpd_theme[0]], cpd_theme[1])
+        print(cpd_theme)
+        image = np_inject_2(image, cpd[cpd_theme[0]], cpd_theme[1])
     image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
 
 
