@@ -1,5 +1,6 @@
 from __np_color_themes__ import np_get_prominent_colors, CORES_DOIS as CORES
 from PIL import Image
+import secrets 
 import numpy as np
 import datetime as dt
 from scipy.spatial.distance import euclidean
@@ -50,9 +51,15 @@ def np_inject_2(image, pixel_arr, pixel):
     return Image.fromarray(arr, "RGBA")
 
 
-def np_inject_theme(cpd, theme_name, image_path):
-    theme_rgbs = CORES[theme_name]
+def np_inject_theme(cpd, theme_name, image_path, number = 4):
+    #fmt : off
+    theme_rgbs = (c:=CORES[theme_name])[:min(number,len(c))] + [secrets.choice(c) for _ in range(max(number - len(c),0))]
+    print(theme_rgbs)
+    print(len(theme_rgbs))
+    #fmt : on 
     image = Image.open(image_path).convert("RGB")
+    print("@"*8)
+    print(len(cpd), len(theme_rgbs))
     for cpd_theme in zip(cpd, theme_rgbs):
         print(cpd_theme)
         image = np_inject_2(image, cpd[cpd_theme[0]], cpd_theme[1])
