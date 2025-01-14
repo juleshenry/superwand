@@ -64,7 +64,7 @@ def np_inject(image, pixel_arr, pixel):
         )
 
     # Convert pixel_arr to a NumPy array if it isn't already
-    pixel_arr = np.array(pixel_arr).T
+    pixel_arr = np.array(pixel_arr)
 
     # Ensure pixel_arr contains valid integer indices
     pixel_arr = pixel_arr.astype(int)
