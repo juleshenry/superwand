@@ -69,7 +69,7 @@ class SuperWand:
         self.number = number 
 
     def apply_theme_to_image(self, img_path, theme_name):
-        regs = np_get_prominent_regions(img_path, self.number)
+        regs = np_get_prominent_regions(img_path, number = self.number)
         list(
             map(
                 lambda t: np_inject_theme(regs, t, img_path, number = self.number),
@@ -96,5 +96,5 @@ if __name__ == "__main__":
         help="Theme to apply (Tropical, Urban, Winter, etc.).",
     )
     args = parser.parse_args()
-    sw = SuperWand(color_themes, 16)
+    sw = SuperWand(color_themes, 8)
     sw.apply_theme_to_image(args.image_path, args.theme)
