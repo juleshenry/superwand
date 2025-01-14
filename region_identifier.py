@@ -71,7 +71,7 @@ if __name__ == "__main__":
     print(s:=(o:=lambda:dt.datetime.now())())
     color_pix_dict = get_prominent_regions(ip)
     for theme_name in color_themes:
-        if theme_name != "Tropical":
+        if theme_name != "Paixão":
             continue
         else:
             inject_theme(color_pix_dict, theme_name, ip)

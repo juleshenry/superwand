@@ -94,7 +94,7 @@ if __name__ == "__main__":
     print(s:=(o:=lambda:dt.datetime.now())())
     np_color_pix_dict = np_get_prominent_regions(ip)
     for theme_name in CORES:
-        if theme_name != "Tropical":
+        if theme_name != "Neon":
             continue
         else:
             np_inject_theme(np_color_pix_dict, theme_name, ip)
