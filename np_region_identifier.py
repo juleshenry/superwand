@@ -58,6 +58,8 @@ def np_inject_theme(cpd, theme_name, image_path, number = 4):
     print(len(theme_rgbs))
     #fmt : on 
     image = Image.open(image_path).convert("RGB")
+    print("@"*8)
+    print(len(cpd), len(theme_rgbs))
     for cpd_theme in zip(cpd, theme_rgbs):
         print(cpd_theme)
         image = np_inject_2(image, cpd[cpd_theme[0]], cpd_theme[1])
