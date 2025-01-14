@@ -16,13 +16,13 @@ class Color:
             str(self.rgb), str(self.proportion * 100)
         )
 
-    @property
-    def hsl(self):
-        try:
-            return self._hsl
-        except AttributeError:
-            self._hsl = Hsl(*hsl(*self.rgb))
-            return self._hsl
+    # @property
+    # def hsl(self):
+    #     try:
+    #         return self._hsl
+    #     except AttributeError:
+    #         self._hsl = Hsl(*self.hsl(*self.rgb))
+    #         return self._hsl
 
 
 def np_extract(image_path, number_of_colors):
