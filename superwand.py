@@ -1,7 +1,7 @@
 import argparse
 
 from __color_themes__ import color_themes
-from region_identifier import get_prominent_regions, inject_theme
+from np_region_identifier import np_get_prominent_regions, np_inject_theme
 
 
 class Img:
@@ -68,17 +68,18 @@ class SuperWand:
         self.color_themes = color_themes
 
     def apply_theme_to_image(self, img_path, theme_name):
+        regs = np_get_prominent_regions(img_path, number=8)
         list(
             map(
-                lambda t: inject_theme(get_prominent_regions(img_path), t, img_path),
+                lambda t: np_inject_theme(regs, t, img_path),
                 self.color_themes if not theme_name else [theme_name],
             )
         )
 
     def apply_all_themes_to_image(self, img_path):
         for theme_name in self.color_themes:
-            color_pix_dict = get_prominent_regions(img_path)
-            inject_theme(color_pix_dict, theme_name, img_path)
+            color_pix_dict = np_get_prominent_regions(img_path)
+            np_inject_theme(color_pix_dict, theme_name, img_path)
 
 
 if __name__ == "__main__":
