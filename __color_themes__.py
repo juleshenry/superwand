@@ -1,17 +1,38 @@
 from PIL import Image, ImageDraw, ImageFont
 from colorgram import extract
+from np_colorgram import np_extract
 from collections import Counter
-
+import numpy as np
+import os
 
 def get_prominent_colors(image_path, number=4):
     # Extract #number of colors from the image, default is 4, the number for themes
+    print('extractin')
     colors = extract(image_path, number)
+    print('.done')
     # Count the occurrences of each color
     color_counter = Counter((color.rgb.r, color.rgb.g, color.rgb.b) for color in colors)
     # Get the four most common colors
     prominent_colors = color_counter.most_common(number)
-    return [pc[0] for pc in prominent_colors]
+    x = [pc[0] for pc in prominent_colors]
+    return x
 
+def np_get_prominent_colors(image_path, number=4):
+    # Extract colors from the image
+    print('extractin')
+    colors = np_extract(image_path, number)
+    print('.done')
+    # Convert colors to a numpy array of RGB values
+    rgb_values = np.array([(color.rgb.r, color.rgb.g, color.rgb.b) for color in colors])
+    
+    # Count unique RGB values and their occurrences
+    unique_colors, counts = np.unique(rgb_values, axis=0, return_counts=True)
+    print('np get prom')
+    # Sort by counts in descending order and get the top 'number' colors
+    top_indices = np.argsort(-counts)[:number]
+    prominent_colors = unique_colors[top_indices]
+    
+    return prominent_colors.tolist()
 
 # Define the color themes
 color_themes = {
@@ -67,6 +88,40 @@ def make_theme_splash():
         # Display the image
         img.save(f"themes_jpgs/{theme}Theme.jpg")
 
+
+
+def np_make_theme_splash(color_themes, square_size=50, header_height=30, output_dir="themes_jpgs"):
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Loop through the color themes
+    for theme, colors in color_themes.items():
+        # Calculate the width of the image
+        img_width = square_size * len(colors)
+
+        # Create a new blank image with header
+        img = Image.new("RGB", (img_width, square_size + header_height), color=(255, 255, 255))
+
+        # Draw the header with centered text
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.load_default()
+        text_width = font.getlength(theme)
+        text_x = (img_width - text_width) // 2
+        text_y = (header_height - 12) // 2  # Default font height is approximately 12
+        draw.text((text_x, text_y), theme, fill=(0, 0, 0), font=font)
+
+        # Draw squares with the specified colors
+        for i, color in enumerate(colors):
+            draw.rectangle(
+                [
+                    (i * square_size, header_height),
+                    ((i + 1) * square_size, header_height + square_size),
+                ],
+                fill=color,
+            )
+
+        # Save the image to the output directory
+        img.save(os.path.join(output_dir, f"{theme}Theme.jpg"))
 
 def make_readme_includes():
     for c in color_themes:
