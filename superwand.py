@@ -64,14 +64,15 @@ def gradient_enforce(
 
 
 class SuperWand:
-    def __init__(self, color_themes):
+    def __init__(self, color_themes, number):
         self.color_themes = color_themes
+        self.number = number 
 
     def apply_theme_to_image(self, img_path, theme_name):
-        regs = np_get_prominent_regions(img_path, number=8)
+        regs = np_get_prominent_regions(img_path, number = self.number)
         list(
             map(
-                lambda t: np_inject_theme(regs, t, img_path),
+                lambda t: np_inject_theme(regs, t, img_path, number = self.number),
                 self.color_themes if not theme_name else [theme_name],
             )
         )
@@ -95,5 +96,5 @@ if __name__ == "__main__":
         help="Theme to apply (Tropical, Urban, Winter, etc.).",
     )
     args = parser.parse_args()
-    sw = SuperWand(color_themes)
+    sw = SuperWand(color_themes, 8)
     sw.apply_theme_to_image(args.image_path, args.theme)

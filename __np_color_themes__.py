@@ -10,7 +10,6 @@ def np_get_prominent_colors(image_path, number=4):
     # Extract colors from the image
     print('extractin')
     colors = np_extract(image_path, number)
-    print('.done')
     # Convert colors to a numpy array of RGB values
     rgb_values = np.array([(color.rgb.r, color.rgb.g, color.rgb.b) for color in colors])
     
@@ -20,7 +19,7 @@ def np_get_prominent_colors(image_path, number=4):
     # Sort by counts in descending order and get the top 'number' colors
     top_indices = np.argsort(-counts)[:number]
     prominent_colors = unique_colors[top_indices]
-    
+    print('>>>',prominent_colors)
     return prominent_colors.tolist()
 
 
