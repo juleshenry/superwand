@@ -110,9 +110,17 @@ def hsl_numpy(r, g, b):
 
     # Compute the difference
     diff = max_val - min_val
+    # Cast to a signed/wider integer to avoid uint8 overflow when adding constants like 510/1020
+    r = r.astype(np.int32)
+    g = g.astype(np.int32)
+    b = b.astype(np.int32)
+    max_val = max_val.astype(np.int32)
+    min_val = min_val.astype(np.int32)
+    l = l.astype(np.int32)
+    diff = diff.astype(np.int32)
 
     # Compute saturation
-    s = np.zeros_like(l)
+    s = np.zeros_like(l, dtype=np.int32)
     denom1 = (510 - max_val - min_val)
     denom2 = (max_val + min_val)
 
@@ -122,11 +130,18 @@ def hsl_numpy(r, g, b):
         s = np.where(diff == 0, 0, s)
 
     # Compute hue
-    h = np.zeros_like(r)
+    h = np.zeros_like(r, dtype=np.int32)
     mask = diff > 0
-    h[mask & (max_val == r)] = (g[mask & (max_val == r)] - b[mask & (max_val == r)]) * 255 // diff[mask & (max_val == r)]
-    h[mask & (max_val == g)] = (b[mask & (max_val == g)] - r[mask & (max_val == g)]) * 255 // diff[mask & (max_val == g)] + 510
-    h[mask & (max_val == b)] = (r[mask & (max_val == b)] - g[mask & (max_val == b)]) * 255 // diff[mask & (max_val == b)] + 1020
-    h = (h // 6) % 255  # Normalize hue to 0-255
+
+    mask_r = mask & (max_val == r)
+    mask_g = mask & (max_val == g)
+    mask_b = mask & (max_val == b)
+
+    h[mask_r] = (g[mask_r] - b[mask_r]) * 255 // diff[mask_r]
+    h[mask_g] = (b[mask_g] - r[mask_g]) * 255 // diff[mask_g] + 510
+    h[mask_b] = (r[mask_b] - g[mask_b]) * 255 // diff[mask_b] + 1020
+
+    # Normalize hue to 0-254 (consistent with original intent)
+    h = (h // 6) % 255
 
     return h, s, l
