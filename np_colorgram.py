@@ -16,15 +16,6 @@ class Color:
             str(self.rgb), str(self.proportion * 100)
         )
 
-    # @property
-    # def hsl(self):
-    #     try:
-    #         return self._hsl
-    #     except AttributeError:
-    #         self._hsl = Hsl(*self.hsl(*self.rgb))
-    #         return self._hsl
-
-
 def np_extract(image_path, number_of_colors):
     print("extracting "+str(number_of_colors)+ 'colorz')
     # Load the image and convert to RGB if necessary

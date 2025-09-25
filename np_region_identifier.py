@@ -4,8 +4,6 @@ import secrets
 import numpy as np
 import datetime as dt
 from scipy.spatial.distance import euclidean
-
-# from webcolors import rgb_to_name, hex_to_rgb
 from collections import OrderedDict
 
 
