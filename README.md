@@ -2,7 +2,7 @@
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
 # SETUP:
-`pip3 install colorgram.py webcolors scipy`
+`pip install superwand`
 
 # Given a color, an image and a gradient-keyword, replace the region with a start color and end color
 ## Example: 
@@ -28,7 +28,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
 
 # Given a CSS style sheet, dynamically identify color scheme and replace with a theme
 ## Example:
-```python3 superwand.py examples/css/site.css 'Tropical'```
+```python3 css_rethemer.py examples/css/site.css 'Tropical'```
 
 <table>
   <tr>
@@ -43,7 +43,7 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
 
 # Given an image and a color theme, apply it to main regions
 ## Example:
-```python3 superwand.py examples/images/zebra.png 'Urban'```
+```superwand examples/images/zebra.png -theme Urban```
 
 Color themes included:
 <table>
@@ -91,5 +91,46 @@ Some other fun examples:
   <tr>
     <td><img src="/examples/images/obama.jpeg" alt="Image 3"></td>
     <td><img src="/examples/images/Fall_obama.png" alt="Image 3"></td>
+  </tr>
+</table>
+
+# More Examples
+
+## Rio
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/rio07.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/rio07_Neon.png" alt="Neon"></td>
+    <td><img src="/examples/more_examples/rio07_Tropical.png" alt="Tropical"></td>
+    <td><img src="/examples/more_examples/rio07_Safari.png" alt="Safari"></td>
+  </tr>
+</table>
+
+## Plankton
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/plankt_oct19.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Arctic.png" alt="Arctic"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Paixão.png" alt="Paixão"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Fall.png" alt="Fall"></td>
+  </tr>
+</table>
+
+## Sad
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/sad.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/sad_Summer.png" alt="Summer"></td>
+    <td><img src="/examples/more_examples/sad_Urban.png" alt="Urban"></td>
+    <td><img src="/examples/more_examples/sad_Winter.png" alt="Winter"></td>
+  </tr>
+</table>
+
+## IMG_7609
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/IMG_7609.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/IMG_7609_Spring.png" alt="Spring"></td>
+    <td><img src="/examples/more_examples/IMG_7609_Fall.png" alt="Fall"></td>
   </tr>
 </table>
