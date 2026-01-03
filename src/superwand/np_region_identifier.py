@@ -38,7 +38,7 @@
 
 """
 
-from __np_color_themes__ import np_get_prominent_colors, CORES_DOIS as CORES
+from .__np_color_themes__ import np_get_prominent_colors, CORES_DOIS as CORES
 from PIL import Image
 import secrets 
 import numpy as np
