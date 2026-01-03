@@ -43,6 +43,10 @@ from __color_themes__ import color_themes
 from np_region_identifier import np_get_prominent_regions, np_inject_theme
 
 
+def clamp(value, min_val, max_val):
+    return max(min_val, min(value, max_val))
+
+
 class Img:
     pass
 
@@ -122,7 +126,7 @@ class SuperWand:
             np_inject_theme(color_pix_dict, theme_name, img_path)
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Process an image with a specified theme."
     )
@@ -131,9 +135,13 @@ if __name__ == "__main__":
         "-theme",
         type=str,
         choices=[ct for ct in color_themes],
-        
+
         help="Theme to apply (Tropical, Urban, Winter, etc.).",
     )
     args = parser.parse_args()
     sw = SuperWand(color_themes, 8)
     sw.apply_theme_to_image(args.image_path, args.theme)
+
+
+if __name__ == "__main__":
+    main()
