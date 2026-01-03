@@ -7,11 +7,11 @@ name = "superwand"
 version = "0.1.0"
 description = "Convenient posterize library. Like a magic wand to breath life to images and css."
 readme = "README.md"
-license = {file = "LICENSE"}
-requires-python = ">=3.6"
+authors = [{name = "Julian Henry"}]
+license = "MIT"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
