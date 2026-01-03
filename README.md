@@ -1,5 +1,6 @@
 # superwand
 [![Coverage Status](https://coveralls.io/repos/github/juleshenry/superwand/badge.svg?branch=main)](https://coveralls.io/github/juleshenry/superwand?branch=main)
+![Coverage](./coverage.svg)
 
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
