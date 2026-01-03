@@ -1,0 +1,9 @@
+Pillow
+numpy
+scikit-learn
+scipy
+matplotlib
+
+[dev]
+pytest
+pytest-cov

@@ -1,0 +1,194 @@
+Metadata-Version: 2.4
+Name: superwand
+Version: 0.1.0
+Summary: Convenient posterize library. Like a magic wand to breath life to images and css.
+Author: Julian Henry
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/juleshenry/superwand
+Project-URL: Issues, https://github.com/juleshenry/superwand
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Pillow
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: matplotlib
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Dynamic: license-file
+
+# superwand
+[![Coverage Status](https://coveralls.io/repos/github/juleshenry/superwand/badge.svg?branch=main)](https://coveralls.io/github/juleshenry/superwand?branch=main)
+![Coverage](./coverage.svg)
+
+Leverage magic wand to breath life to images, especially posterized and vector art images.
+
+# SETUP:
+`pip install superwand`
+
+# DEVELOPMENT:
+`pip install -e .[dev]`
+
+# TESTING:
+`pytest`
+
+# Given a color, an image and a gradient-keyword, replace the region with a start color and end color
+## Example: 
+```python3 gradient_injector.py```
+
+
+Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
+<table>
+  <tr>
+    <td><img src="/examples/charizards/gradient_bottom-up_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_top-down_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_left-right_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_right-left_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td><img src="/examples/images/rocket_vector.jpeg" alt="Image 3"></td>
+    <td><img src="/examples/images/gradient_bottom-up_rocket_vector.png" alt="Image 3"></td>
+  </tr>
+</table>
+
+# Given an image, automatically enforce gradients on prominent regions
+## Example:
+```python3 gradient_enforce.py examples/images/rocket_vector.jpeg --style vertical --completeness aggressive```
+
+# Given a CSS style sheet, dynamically identify color scheme and replace with a theme
+## Example:
+```python3 css_rethemer.py examples/css/site.css 'Tropical'```
+
+<table>
+  <tr>
+    <td><img src="/examples/css/before.png" alt="Image 3"></td>
+    <td><img src="/examples/css/after_tropical.png" alt="Image 3"></td>
+  </tr>
+    <tr>
+    <td><img src="/examples/css/menu.png" alt="Image 3"></td>
+    <td><img src="/examples/css/menu_tropical.png" alt="Image 3"></td>
+  </tr>
+</table>
+
+# Given an image and a color theme, apply it to main regions
+## Example:
+```superwand examples/images/zebra.png -theme Urban```
+
+Color themes included:
+<table>
+  <tr>
+    <td><img src="/themes_jpgs/SpringTheme.jpg" alt="Image 1"></td>
+    <td><img src="/themes_jpgs/SummerTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/WinterTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/FallTheme.jpg" alt="Image 2"></td>
+    <td><img src="/themes_jpgs/ArcticTheme.jpg" alt="tropical">
+  </tr>
+  <tr>
+    <td><img src="/themes_jpgs/SafariTheme.jpg" alt="Image 3"></td>
+    <td><img src="/themes_jpgs/UrbanTheme.jpg" alt="Image 4"></td>
+    <td><img src="/themes_jpgs/NeonTheme.jpg" alt="Image 4"></td>
+    <td><img src="/themes_jpgs/TropicalTheme.jpg" alt="ADSF">
+    <td><img src="/themes_jpgs/PaixãoTheme.jpg" alt="ADSF">
+   </tr>
+</table>
+
+## Theme Descriptions
+- **Spring**: Fresh greens, yellows, and light blues for a vibrant, natural feel.
+- **Summer**: Warm oranges, reds, and blues evoking sunny beach vibes.
+- **Fall**: Earthy reds, oranges, and browns like autumn leaves.
+- **Winter**: Cool whites, blues, and silvers for icy, crisp aesthetics.
+- **Arctic**: Pale whites and icy blues for polar-inspired designs.
+- **Safari**: Browns, tans, and greens mimicking savanna landscapes.
+- **Urban**: Grays, blacks, and metallics for city street styles.
+- **Neon**: Electric pinks, cyans, and yellows for glowing, futuristic looks.
+- **Tropical**: Bright pinks, blues, and purples for exotic, island themes.
+- **Paixão**: Passionate reds, purples, and golds for intense, romantic palettes.
+
+## Adding Custom Themes
+To create your own theme, modify the `color_themes` dictionary in `__color_themes__.py`. Add a new key with a list of RGB color tuples (0-255).
+
+Example:
+```python
+"MyCustomTheme": [(255, 100, 0), (0, 200, 100), (150, 50, 255)],
+```
+
+Then, use it: `superwand image.png -theme MyCustomTheme`. Contributions welcome!
+
+Examples applied to Charizard:
+
+<table>
+  <tr>
+    <td><img src="/examples/charizards/Spring_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Summer_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Fall_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Winter_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Arctic_charizard.png" alt="Image 3"></td>
+  </tr>
+  <tr>
+    <td><img src="/examples/charizards/Safari_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Urban_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Neon_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Tropical_charizard.png" alt="Image 3"></td>
+    <td><img src="/examples/charizards/Paixão_charizard.png" alt="Image 3"></td>
+  </tr>
+</table>
+
+Some other fun examples:
+<table>
+  <tr>
+    <td><img src="/examples/images/mantis_shrimp.jpeg" alt="Image 3"></td>
+    <td><img src="/examples/images/Spring_mantis_shrimp.png" alt="Image 3"></td>
+  </tr>
+  <tr>
+    <td><img src="/examples/images/obama.jpeg" alt="Image 3"></td>
+    <td><img src="/examples/images/Fall_obama.png" alt="Image 3"></td>
+  </tr>
+</table>
+
+# More Examples
+
+## Rio
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/rio07.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/rio07_Neon.png" alt="Neon"></td>
+    <td><img src="/examples/more_examples/rio07_Tropical.png" alt="Tropical"></td>
+    <td><img src="/examples/more_examples/rio07_Safari.png" alt="Safari"></td>
+  </tr>
+</table>
+
+## Plankton
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/plankt_oct19.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Arctic.png" alt="Arctic"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Paixão.png" alt="Paixão"></td>
+    <td><img src="/examples/more_examples/plankt_oct19_Fall.png" alt="Fall"></td>
+  </tr>
+</table>
+
+## Sad
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/sad.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/sad_Summer.png" alt="Summer"></td>
+    <td><img src="/examples/more_examples/sad_Urban.png" alt="Urban"></td>
+    <td><img src="/examples/more_examples/sad_Winter.png" alt="Winter"></td>
+  </tr>
+</table>
+
+## IMG_7609
+<table>
+  <tr>
+    <td><img src="/examples/more_examples/IMG_7609.jpg" alt="Original"></td>
+    <td><img src="/examples/more_examples/IMG_7609_Spring.png" alt="Spring"></td>
+    <td><img src="/examples/more_examples/IMG_7609_Fall.png" alt="Fall"></td>
+  </tr>
+</table>
