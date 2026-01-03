@@ -40,7 +40,7 @@
 
 from PIL import Image, ImageDraw, ImageFont
 #from colorgram import extract
-from np_colorgram import np_extract
+from .np_colorgram import np_extract
 from collections import Counter
 import numpy as np
 import os

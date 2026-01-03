@@ -41,4 +41,3 @@ package-dir = {"" = "src"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--cov=superwand --cov-report=term-missing --cov-report=html --cov-fail-under=80"

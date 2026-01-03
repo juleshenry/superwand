@@ -39,8 +39,8 @@
 """
 
 import argparse
-from __color_themes__ import color_themes
-from np_region_identifier import np_get_prominent_regions, np_inject_theme
+from .__color_themes__ import color_themes
+from .np_region_identifier import np_get_prominent_regions, np_inject_theme
 
 
 class Img:
