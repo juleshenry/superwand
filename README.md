@@ -1,8 +1,16 @@
 # superwand
+[![Coverage Status](https://coveralls.io/repos/github/juleshenry/superwand/badge.svg?branch=main)](https://coveralls.io/github/juleshenry/superwand?branch=main)
+
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
 # SETUP:
 `pip install superwand`
+
+# DEVELOPMENT:
+`pip install -e .[dev]`
+
+# TESTING:
+`pytest`
 
 # Given a color, an image and a gradient-keyword, replace the region with a start color and end color
 ## Example: 
@@ -25,6 +33,10 @@ Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, ra
     <td><img src="/examples/images/gradient_bottom-up_rocket_vector.png" alt="Image 3"></td>
   </tr>
 </table>
+
+# Given an image, automatically enforce gradients on prominent regions
+## Example:
+```python3 gradient_enforce.py examples/images/rocket_vector.jpeg --style vertical --completeness aggressive```
 
 # Given a CSS style sheet, dynamically identify color scheme and replace with a theme
 ## Example:
@@ -60,8 +72,30 @@ Color themes included:
     <td><img src="/themes_jpgs/NeonTheme.jpg" alt="Image 4"></td>
     <td><img src="/themes_jpgs/TropicalTheme.jpg" alt="ADSF">
     <td><img src="/themes_jpgs/PaixãoTheme.jpg" alt="ADSF">
-  </tr>
+   </tr>
 </table>
+
+## Theme Descriptions
+- **Spring**: Fresh greens, yellows, and light blues for a vibrant, natural feel.
+- **Summer**: Warm oranges, reds, and blues evoking sunny beach vibes.
+- **Fall**: Earthy reds, oranges, and browns like autumn leaves.
+- **Winter**: Cool whites, blues, and silvers for icy, crisp aesthetics.
+- **Arctic**: Pale whites and icy blues for polar-inspired designs.
+- **Safari**: Browns, tans, and greens mimicking savanna landscapes.
+- **Urban**: Grays, blacks, and metallics for city street styles.
+- **Neon**: Electric pinks, cyans, and yellows for glowing, futuristic looks.
+- **Tropical**: Bright pinks, blues, and purples for exotic, island themes.
+- **Paixão**: Passionate reds, purples, and golds for intense, romantic palettes.
+
+## Adding Custom Themes
+To create your own theme, modify the `color_themes` dictionary in `__color_themes__.py`. Add a new key with a list of RGB color tuples (0-255).
+
+Example:
+```python
+"MyCustomTheme": [(255, 100, 0), (0, 200, 100), (150, 50, 255)],
+```
+
+Then, use it: `superwand image.png -theme MyCustomTheme`. Contributions welcome!
 
 Examples applied to Charizard:
 

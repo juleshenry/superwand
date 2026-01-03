@@ -43,67 +43,8 @@ from __color_themes__ import color_themes
 from np_region_identifier import np_get_prominent_regions, np_inject_theme
 
 
-def clamp(value, min_val, max_val):
-    return max(min_val, min(value, max_val))
-
-
 class Img:
     pass
-
-
-def flip(img: Img, direction="vertical") -> Img:
-    if direction == "vertical":
-        return img
-    elif direction == "horizontal":
-        return img
-    else:
-        return img
-
-
-def gradient_enforce(
-    img: Img, style="auto", completeness="auto", opacity="auto"
-) -> Img:
-    """
-    Converts monocolor regionswith directional gradient
-
-    style :
-    ~ direction of gradients
-            -> auto, best guess based on boosting
-            -> vertical
-            -> horizontal
-
-    completeness :
-    ~impacted regions
-            -> aggressive, all colors
-            -> auto, most impact
-            -> filter, color or set of colors
-
-    opacity :
-    ~makes achieve minimum opacity value in region
-            -> clamp {0, 1}
-            -> failsafe rounds
-    """
-    if style == "auto":
-        pass
-    elif style == "vertical":
-        pass
-    elif style == "horizontal":
-        pass
-    else:
-        style == "auto"
-
-    if completeness == "auto":
-        pass
-    elif completeness == "aggressive":
-        pass
-    elif completeness == "filter":
-        pass
-    else:
-        style == "auto"
-
-    opacity = clamp(opacity, 0, 1)
-
-    return img
 
 
 class SuperWand:
