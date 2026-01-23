@@ -1,10 +1,8 @@
 LICENSE
 README.md
 pyproject.toml
-setup.cfg
-setup.py
-fonts/arial.ttf
 src/superwand/__color_themes__.py
+src/superwand/__init__.py
 src/superwand/__np_color_themes__.py
 src/superwand/css_rethemer.py
 src/superwand/gif_maker.py

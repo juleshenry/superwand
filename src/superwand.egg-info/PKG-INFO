@@ -3,7 +3,7 @@ Name: superwand
 Version: 0.1.0
 Summary: Convenient posterize library. Like a magic wand to breath life to images and css.
 Author: Julian Henry
-License-Expression: MIT
+License-Expression: Apache-2.0
 Project-URL: Homepage, https://github.com/juleshenry/superwand
 Project-URL: Issues, https://github.com/juleshenry/superwand
 Classifier: Programming Language :: Python :: 3
@@ -22,64 +22,59 @@ Requires-Dist: pytest-cov; extra == "dev"
 Dynamic: license-file
 
 # superwand
+[![PyPI version](https://badge.fury.io/py/superwand.svg)](https://badge.fury.io/py/superwand)
 [![Coverage Status](https://coveralls.io/repos/github/juleshenry/superwand/badge.svg?branch=main)](https://coveralls.io/github/juleshenry/superwand?branch=main)
 ![Coverage](./coverage.svg)
 
-Leverage magic wand to breath life to images, especially posterized and vector art images.
+`superwand` is a powerful posterization and color retheming tool that acts like a "magic wand" for images and CSS. It allows you to breathe new life into images (especially vector art and posterized graphics) by injecting gradients, enforcing color themes, or dynamically updating CSS stylesheets.
 
-# SETUP:
-`pip install superwand`
+## Features
+- **Gradient Injection**: Replace solid color regions with customizable gradients (radial, linear).
+- **Automatic Gradient Enforcement**: Automatically identify prominent regions and apply gradients for a polished look.
+- **CSS Retheming**: Dynamically update CSS color schemes based on predefined or custom themes.
+- **Image Retheming**: Apply consistent color themes to your images with a single command.
+- **Predefined Themes**: Includes 10+ professional color themes like Neon, Urban, Tropical, and more.
 
-# DEVELOPMENT:
-`pip install -e .[dev]`
+## Installation
+```bash
+pip install superwand
+```
 
-# TESTING:
-`pytest`
+## Quick Start
 
-# Given a color, an image and a gradient-keyword, replace the region with a start color and end color
-## Example: 
-```python3 gradient_injector.py```
+### 1. Apply a Color Theme to an Image
+Use the `superwand` command to instantly retheme an image:
+```bash
+superwand input.png -theme Urban
+```
 
+### 2. Inject Gradients Manually
+Replace specific colors with gradients using `gradient_injector.py`:
+```bash
+python3 src/superwand/gradient_injector.py --input image.png --color "#FFFFFF" --gradient radial --start "#FF0000" --end "#0000FF"
+```
 
-Gradients included: bottom-up, top-down, left-right, right-left, bottom-down, radial
-<table>
-  <tr>
-    <td><img src="/examples/charizards/gradient_bottom-up_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/charizards/gradient_top-down_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/charizards/gradient_left-right_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/charizards/gradient_right-left_charizard.png" alt="Image 3"></td>
-    <td><img src="/examples/charizards/gradient_radial_charizard.png" alt="Image 3"></td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td><img src="/examples/images/rocket_vector.jpeg" alt="Image 3"></td>
-    <td><img src="/examples/images/gradient_bottom-up_rocket_vector.png" alt="Image 3"></td>
-  </tr>
-</table>
+### 3. Automatically Enforce Gradients
+Let `superwand` decide where to put the magic:
+```bash
+python3 src/superwand/gradient_enforce.py input.png --style vertical --completeness aggressive
+```
 
-# Given an image, automatically enforce gradients on prominent regions
-## Example:
-```python3 gradient_enforce.py examples/images/rocket_vector.jpeg --style vertical --completeness aggressive```
+### 4. Retheme CSS Stylesheets
+Update your website's look in seconds:
+```bash
+python3 src/superwand/css_rethemer.py site.css 'Tropical'
+```
 
-# Given a CSS style sheet, dynamically identify color scheme and replace with a theme
-## Example:
-```python3 css_rethemer.py examples/css/site.css 'Tropical'```
+## Development
+```bash
+pip install -e .[dev]
+```
 
-<table>
-  <tr>
-    <td><img src="/examples/css/before.png" alt="Image 3"></td>
-    <td><img src="/examples/css/after_tropical.png" alt="Image 3"></td>
-  </tr>
-    <tr>
-    <td><img src="/examples/css/menu.png" alt="Image 3"></td>
-    <td><img src="/examples/css/menu_tropical.png" alt="Image 3"></td>
-  </tr>
-</table>
-
-# Given an image and a color theme, apply it to main regions
-## Example:
-```superwand examples/images/zebra.png -theme Urban```
+## Testing
+```bash
+pytest
+```
 
 Color themes included:
 <table>
