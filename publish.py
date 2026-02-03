@@ -75,8 +75,8 @@ def main():
     print("Cleaning old builds...")
     if os.path.exists("dist"):
         run_command("rm -rf dist/*")
-    if os.path.exists("tatuagem.egg-info"):
-        run_command("rm -rf tatuagem.egg-info")
+    if os.path.exists("superwand.egg-info"):
+        run_command("rm -rf superwand.egg-info")
 
     print("Installing/Updating build tools...")
     run_command("python3 -m pip install --upgrade --break-system-packages build twine")
