@@ -1,0 +1,12 @@
+venv/
+.git/
+__pycache__/
+dist/
+build/
+*.egg-info/
+.tatignore
+.gitignore
+LICENSE
+README.md
+*.jpg
+*.png

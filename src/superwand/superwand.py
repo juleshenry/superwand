@@ -1,0 +1,107 @@
+"""
+                                       ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
+                                       ███████▇▃ ▅██▆                                               
+                                       ▅██████▇▅▁███▃                                               
+                                       ▄██████▇▃▁██▆▁                                               
+                                       ▁▇██████▅▃██▅                                                
+                                    ▁▃  ▇█████▆ ▁██▅ ▁▃▁                                            
+                                    ███▆▇█████▆▁▁▇█▇▅██▇                                            
+                                    ▇█████▇▇▇█▇▄▄▇▇▆███▅                                            
+                                    ▁▃▇██████████████▆▂                                             
+                                      ▁▁▅██▇▆▇▁▆▇▅█▆▁                                               
+                                        ▁▆█▂ ▇▁▁ ▁▆▁                                                
+                                         ▃█▇▆▆▇▅▅▇█▃                                                
+                                      ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁                                             
+                                  ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁                                        
+                                 ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄                                       
+                                ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁                                     
+                                ▄████▅▁  ▃▁       ▅   ▂███████▂                                     
+                                ██████▄  ▄▁       ▅  ▂████████▇▁                                    
+                               ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄                                    
+                              ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁                                   
+                              ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆                                   
+                             ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃                                  
+                            ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁                                 
+                           ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁                                
+                           ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁                               
+                           ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅                               
+                           ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂                               
+                          ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁                               
+                          █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄                               
+                        ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅                               
+                      ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄                               
+                   ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂                                
+                 ▂▄▇▅▁             ▁██████████████████████▁                                         
+               ▁▂▆▃▁               ▁██████████▇███████████▁                                         
+            ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁                                         
+          ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁                                         
+       ▂▁▂▂▁                        ▃█████████▁ ▄█████████                                          
+       ▁▂▁                          ▁▅███████▆  ▃████████▃                                          
+                                     ▃██████▇▁   ▇███████▂                                          
+                                      ██████▇    ▁██████▇▂                                          
+                                      ▂█████▃     ▇█████▁                                           
+                                      ▂█████▂     ▄█████▁                                           
+                                     ▂██████▄     ▄█████▆▁                                          
+                                   ▁▄██████▆▃     ▃██████▇▂                                         
+                                  ▁█████▆▂▁        ▁▂▅█████▅▁                                       
+                                   ▂▂▂▂▁              ▁▄▅▇▇▇▂                                       
+                                                                                                    
+
+                                                                            ||` 
+                                                                            ||  
+       ('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||  
+        `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||  
+       `...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||. 
+                       ||                                                       
+                      .||                                                       
+                                  by Julian Henry 
+"""
+
+import argparse
+from .__color_themes__ import color_themes
+from .np_region_identifier import np_get_prominent_regions, np_inject_theme
+
+
+class Img:
+    pass
+
+
+class SuperWand:
+    def __init__(self, color_themes, number):
+        self.color_themes = color_themes
+        self.number = number 
+
+    def apply_theme_to_image(self, img_path, theme_name):
+        regs = np_get_prominent_regions(img_path, number = self.number)
+        list(
+            map(
+                lambda t: np_inject_theme(regs, t, img_path, number = self.number),
+                self.color_themes if not theme_name else [theme_name],
+            )
+        )
+
+    def apply_all_themes_to_image(self, img_path):
+        for theme_name in self.color_themes:
+            color_pix_dict = np_get_prominent_regions(img_path)
+            np_inject_theme(color_pix_dict, theme_name, img_path)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Process an image with a specified theme."
+    )
+    parser.add_argument("image_path", type=str, help="Path to the input image file.")
+    parser.add_argument(
+        "-theme",
+        type=str,
+        choices=[ct for ct in color_themes],
+
+        help="Theme to apply (Tropical, Urban, Winter, etc.).",
+    )
+    args = parser.parse_args()
+    sw = SuperWand(color_themes, 8)
+    sw.apply_theme_to_image(args.image_path, args.theme)
+
+
+if __name__ == "__main__":
+    main()
