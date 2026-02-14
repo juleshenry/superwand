@@ -59,7 +59,7 @@
 
 import os
 from math import sqrt
-from .region_identifier import get_prominent_regions
+from ..core.region_identifier import get_prominent_regions
 from PIL import Image, ImageDraw, ImageFont
 from .gradients import paste_gradient, calc_gradient_poles
 import numpy as np
@@ -73,7 +73,9 @@ def create_image(rgb_tuples, grid_size, cell_size):
     image = Image.new("RGB", (width, height), "white")
     draw = ImageDraw.Draw(image)
     font = ImageFont.load_default()
-    font_path = os.path.join(os.path.dirname(__file__), "fonts", "arial.ttf")
+    font_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "assets", "fonts", "arial.ttf"
+    )
     choice_font = ImageFont.truetype(font=font_path, size=36)
     for i, (r, g, b) in enumerate(rgb_tuples):
         x = (i % grid_size[0]) * cell_size

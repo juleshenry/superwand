@@ -57,7 +57,7 @@
                            by Julian Henry
 """
 
-from .__color_themes__ import (
+from .themes import (
     get_prominent_colors,
     np_get_prominent_colors,
     color_themes,

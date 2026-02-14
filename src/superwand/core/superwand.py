@@ -59,7 +59,7 @@
 
 import argparse
 import os
-from .__color_themes__ import color_themes
+from .themes import color_themes
 from .np_region_identifier import np_get_prominent_regions, np_inject_theme
 
 
@@ -151,7 +151,7 @@ def main():
     args = parser.parse_args()
 
     if not args.headless and not args.theme:
-        from .studio.app import app
+        from ..studio.app import app
 
         app.run(debug=True, port=5001)
         return
