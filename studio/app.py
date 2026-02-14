@@ -3,7 +3,7 @@ import io
 import base64
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
-from PIL import Image
+from PIL import Image, ImageOps
 import numpy as np
 from superwand.np_region_identifier import (
     np_get_prominent_regions,
@@ -53,18 +53,26 @@ def process_image():
         # Prepare theme colors
         # If user provided colors, use them.
         theme_rgbs = []
-        for i in range(len(regions)):
+        region_keys = list(regions.keys())
+        for i in range(len(region_keys)):
             if i < len(colors):
                 color = colors[i]
-                if isinstance(color[0], list):
+                if color is None:
+                    theme_rgbs.append(region_keys[i])
+                elif (
+                    isinstance(color, list)
+                    and len(color) > 0
+                    and isinstance(color[0], list)
+                ):
                     theme_rgbs.append((tuple(color[0]), tuple(color[1])))
                 else:
                     theme_rgbs.append(tuple(color))
             else:
-                theme_rgbs.append((0, 0, 0))
+                theme_rgbs.append(region_keys[i])
 
         # Inject theme
         original_img = Image.open(image_path)
+        original_img = ImageOps.exif_transpose(original_img)
         processed_img = np_inject_theme_image(
             regions,
             theme_rgbs,

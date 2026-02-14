@@ -296,14 +296,23 @@
                 const origRGB = currentOriginalColors[i] || [200, 200, 200];
                 const origHex = "#" + origRGB.map(x => x.toString(16).padStart(2, '0')).join('');
                 
-                if (!grad.paletteColor) grad.paletteColor = origHex;
+                // If it's a newly added region or it was using the default gray placeholder, update it with the actual detected color
+                // Also update if we just got real colors from backend
+                if (currentOriginalColors[i] && (!grad.paletteColor || grad.paletteColor === '#c8c8c8')) {
+                    grad.paletteColor = origHex;
+                }
 
                 const origBox = document.createElement('div');
-                origBox.className = 'flex-shrink-0 flex flex-col items-center';
+                origBox.className = 'flex-shrink-0 flex flex-col items-center cursor-pointer hover:opacity-80';
                 origBox.innerHTML = `
-                    <div class="w-8 h-8 rounded border" style="background-color: ${origHex}"></div>
+                    <div class="w-8 h-8 rounded border shadow-sm" style="background-color: ${origHex}"></div>
                     <div class="text-[6px] text-gray-400 font-bold uppercase mt-1">Orig</div>
                 `;
+                origBox.onclick = () => {
+                    grad.paletteColor = origHex;
+                    updateColorPickers();
+                    triggerProcess();
+                };
                 topRow.appendChild(origBox);
 
                 // Arrow
@@ -423,38 +432,45 @@
             const formData = new FormData();
             formData.append('file', file);
 
-            const resp = await fetch('/upload', { method: 'POST', body: formData });
-            const data = await resp.json();
-            
-            if (data.filename) {
-                currentImageName = data.filename;
-                currentOriginalColors = []; // Reset colors for new image
-                regionGradients = []; // Reset gradients and palette selection
-                
-                if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
-                currentObjectUrl = URL.createObjectURL(file);
-                
-                // Show in original preview
-                document.getElementById('originalPreview').src = currentObjectUrl;
-                document.getElementById('originalPreview').classList.remove('hidden');
-                document.getElementById('originalPlaceholder').classList.add('hidden');
-                
-                // Also show in processed preview immediately (as is)
-                const processedPreview = document.getElementById('processedPreview');
-                processedPreview.src = currentObjectUrl;
-                processedPreview.classList.remove('hidden');
-                document.getElementById('processedPlaceholder').classList.add('hidden');
-                document.getElementById('downloadImageBtn').classList.remove('hidden');
+            // Show placeholders/loading state
+            document.getElementById('loadingOverlay').classList.remove('hidden');
 
-                processImage();
+            try {
+                const resp = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await resp.json();
+                
+                if (data.filename) {
+                    currentImageName = data.filename;
+                    currentOriginalColors = []; // Reset colors for new image
+                    regionGradients = []; // Reset gradients and palette selection
+                    
+                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+                    currentObjectUrl = URL.createObjectURL(file);
+                    
+                    // Show in original preview
+                    document.getElementById('originalPreview').src = currentObjectUrl;
+                    document.getElementById('originalPreview').classList.remove('hidden');
+                    document.getElementById('originalPlaceholder').classList.add('hidden');
+                    
+                    // Also show in processed preview immediately (as is)
+                    const processedPreview = document.getElementById('processedPreview');
+                    processedPreview.src = currentObjectUrl;
+                    processedPreview.classList.remove('hidden');
+                    document.getElementById('processedPlaceholder').classList.add('hidden');
+                    document.getElementById('downloadImageBtn').classList.remove('hidden');
+
+                    updateColorPickers(); // Show gray boxes while processing
+                    await processImage();
+                }
+            } catch (err) {
+                console.error("Upload failed", err);
+            } finally {
+                document.getElementById('loadingOverlay').classList.add('hidden');
             }
         }
 
         async function processImage() {
-            if (!currentImageName) {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-                return;
-            }
+            if (!currentImageName) return;
             if (isProcessing) return;
             
             const k = parseInt(kSlider.value);
@@ -462,38 +478,41 @@
             const flood = floodCheckbox.checked;
             const applyPalette = paletteCheckbox.checked;
 
-            if (!applyPalette) {
-                const preview = document.getElementById('processedPreview');
-                preview.src = currentObjectUrl;
-                document.getElementById('loadingOverlay').classList.add('hidden');
-                return;
-            }
-
             const colors = [];
             const gradientStyles = [];
             const gradientIntensities = [];
 
             function hexToRgb(hex) {
+                if (!hex || typeof hex !== 'string') return [0,0,0];
                 const r = parseInt(hex.slice(1, 3), 16);
                 const g = parseInt(hex.slice(3, 5), 16);
                 const b = parseInt(hex.slice(5, 7), 16);
-                return [r, g, b];
+                return [isNaN(r) ? 0 : r, isNaN(g) ? 0 : g, isNaN(b) ? 0 : b];
             }
 
-            regionGradients.forEach(grad => {
-                const c1 = hexToRgb(grad.paletteColor || "#000000");
-                if (grad.style !== 'none' && grad.color2) {
-                    const c2 = hexToRgb(grad.color2);
-                    colors.push([c1, c2]);
-                    gradientStyles.push(grad.style);
-                } else {
-                    colors.push(c1);
+            if (applyPalette) {
+                regionGradients.forEach(grad => {
+                    const c1 = hexToRgb(grad.paletteColor || "#000000");
+                    if (grad.style !== 'none' && grad.color2) {
+                        const c2 = hexToRgb(grad.color2);
+                        colors.push([c1, c2]);
+                        gradientStyles.push(grad.style);
+                    } else {
+                        colors.push(c1);
+                        gradientStyles.push('none');
+                    }
+                    gradientIntensities.push(grad.intensity);
+                });
+            } else {
+                for (let i = 0; i < k; i++) {
                     gradientStyles.push('none');
+                    gradientIntensities.push(0.2);
                 }
-                gradientIntensities.push(grad.intensity);
-            });
+            }
 
             isProcessing = true;
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
             try {
                 const resp = await fetch('/process', {
                     method: 'POST',
@@ -508,21 +527,27 @@
                         colors: colors
                     })
                 });
+                
+                if (!resp.ok) throw new Error("Backend processing failed");
+                
                 const data = await resp.json();
+                
+                if (data.original_colors) {
+                    currentOriginalColors = data.original_colors;
+                }
+
                 if (data.image) {
                     const preview = document.getElementById('processedPreview');
                     preview.src = 'data:image/png;base64,' + data.image;
                     preview.classList.remove('hidden');
                     document.getElementById('processedPlaceholder').classList.add('hidden');
                     document.getElementById('downloadImageBtn').classList.remove('hidden');
-
-                    if (data.original_colors) {
-                        currentOriginalColors = data.original_colors;
-                        updateColorPickers();
-                    }
                 }
+                
+                updateColorPickers();
+                
             } catch (err) {
-                console.error(err);
+                console.error("Processing failed", err);
             } finally {
                 isProcessing = false;
                 document.getElementById('loadingOverlay').classList.add('hidden');
@@ -533,6 +558,7 @@
             const presetK = colors.length;
             kSlider.value = Math.min(Math.max(presetK, 2), 16);
             kValue.innerText = kSlider.value;
+            paletteCheckbox.checked = true;
             
             while (regionGradients.length < presetK) {
                 regionGradients.push({ style: 'none', color2: null, intensity: 0.2, paletteColor: null });
