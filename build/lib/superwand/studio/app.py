@@ -105,7 +105,7 @@ def process_image():
     flood = data.get("flood", False)
     apply_palette = data.get("apply_palette", False)
     gradient_styles = data.get("gradient_styles")
-    gradient_intensities = data.get("gradient_intensities")
+    gradient_polarities = data.get("gradient_polarities")
     colors = data.get("colors", [])  # List of [r, g, b] or [[r, g, b], [r, g, b]]
 
     # Process
@@ -165,7 +165,7 @@ def process_image():
             original_img,
             flood=flood,
             gradient_styles=gradient_styles,
-            gradient_intensities=gradient_intensities,
+            gradient_polarities=gradient_polarities,
         )
 
         # Convert to base64 for live display

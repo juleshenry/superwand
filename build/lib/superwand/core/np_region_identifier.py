@@ -1,60 +1,60 @@
 r"""
-                                       ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
-                                       ███████▇▃ ▅██▆                                               
-                                       ▅██████▇▅▁███▃                                               
-                                       ▄██████▇▃▁██▆▁                                               
-                                       ▁▇██████▅▃██▅                                                
-                                    ▁▃  ▇█████▆ ▁██▅ ▁▃▁                                            
-                                    ███▆▇█████▆▁▁▇█▇▅██▇                                            
-                                    ▇█████▇▇▇█▇▄▄▇▇▆███▅                                            
-                                    ▁▃▇██████████████▆▂                                             
-                                      ▁▁▅██▇▆▇▁▆▇▅█▆▁                                               
-                                        ▁▆█▂ ▇▁▁ ▁▆▁                                                
-                                         ▃█▇▆▆▇▅▅▇█▃                                                
-                                      ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁                                             
-                                  ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁                                        
-                                 ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄                                       
-                                ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁                                     
-                                ▄████▅▁  ▃▁       ▅   ▂███████▂                                     
-                                ██████▄  ▄▁       ▅  ▂████████▇▁                                    
-                               ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄                                    
-                              ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁                                   
-                              ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆                                   
-                             ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃                                  
-                            ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁                                 
-                           ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁                                
-                           ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁                               
-                           ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅                               
-                           ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂                               
-                          ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁                               
-                          █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄                               
-                        ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅                               
-                      ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄                               
-                   ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂                                
-                 ▂▄▇▅▁             ▁██████████████████████▁                                         
-               ▁▂▆▃▁               ▁██████████▇███████████▁                                         
-            ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁                                         
-          ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁                                         
-       ▂▁▂▂▁                        ▃█████████▁ ▄█████████                                          
-       ▁▂▁                          ▁▅███████▆  ▃████████▃                                          
-                                     ▃██████▇▁   ▇███████▂                                          
-                                      ██████▇    ▁██████▇▂                                          
-                                      ▂█████▃     ▇█████▁                                           
-                                      ▂█████▂     ▄█████▁                                           
-                                     ▂██████▄     ▄█████▆▁                                          
-                                   ▁▄██████▆▃     ▃██████▇▂                                         
-                                  ▁█████▆▂▁        ▁▂▅█████▅▁                                       
-                                   ▂▂▂▂▁              ▁▄▅▇▇▇▂                                       
-                                                                                                    
+                                ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
+                                ███████▇▃ ▅██▆
+                                ▅██████▇▅▁███▃
+                                ▄██████▇▃▁██▆▁
+                                ▁▇██████▅▃██▅
+                             ▁▃  ▇█████▆ ▁██▅ ▁▃▁
+                             ███▆▇█████▆▁▁▇█▇▅██▇
+                             ▇█████▇▇▇█▇▄▄▇▇▆███▅
+                             ▁▃▇██████████████▆▂
+                               ▁▁▅██▇▆▇▁▆▇▅█▆▁
+                                 ▁▆█▂ ▇▁▁ ▁▆▁
+                                  ▃█▇▆▆▇▅▅▇█▃
+                               ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁
+                           ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁
+                          ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄
+                         ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁
+                         ▄████▅▁  ▃▁       ▅   ▂███████▂
+                         ██████▄  ▄▁       ▅  ▂████████▇▁
+                        ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄
+                       ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁
+                       ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆
+                      ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃
+                     ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁
+                    ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁
+                    ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁
+                    ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅
+                    ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂
+                   ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁
+                   █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄
+                 ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅
+               ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄
+            ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂
+          ▂▄▇▅▁             ▁██████████████████████▁
+        ▁▂▆▃▁               ▁██████████▇███████████▁
+     ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁
+   ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁
+▂▁▂▂▁                        ▃█████████▁ ▄█████████
+▁▂▁                          ▁▅███████▆  ▃████████▃
+                              ▃██████▇▁   ▇███████▂
+                               ██████▇    ▁██████▇▂
+                               ▂█████▃     ▇█████▁
+                               ▂█████▂     ▄█████▁
+                              ▂██████▄     ▄█████▆▁
+                            ▁▄██████▆▃     ▃██████▇▂
+                           ▁█████▆▂▁        ▁▂▅█████▅▁
+                            ▂▂▂▂▁              ▁▄▅▇▇▇▂
 
-                                                                            ||` 
-                                                                            ||  
-       ('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||  
-        `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||  
-       `...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||. 
-                       ||                                                       
-                      .||                                                       
-                                  by Julian Henry 
+
+                                                                     ||`
+                                                                     ||
+('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||
+ `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+`...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||.
+                ||
+               .||
+                           by Julian Henry
 
 """
 
@@ -122,8 +122,14 @@ def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
 
 
 def np_inject_2(
-    image, pixel_arr, pixel, flood=False, gradient_style=None, gradient_intensity=0.2
+    image,
+    pixel_arr,
+    pixel,
+    flood=False,
+    gradient_style=None,
+    gradient_polarity=0.5,
 ):
+    gradient_intensity = 0.2
     if pixel is None:
         return image
 
@@ -178,6 +184,7 @@ def np_inject_2(
     if gradient_style and gradient_style != "none":
         # Apply gradient logic
         from ..utils.gradients import twod_dist, calc_gradient_poles, adjust_color
+        import math
 
         # Map UI styles to internal styles
         style_map = {
@@ -186,6 +193,11 @@ def np_inject_2(
             "auto": "top-down",
         }
         style = style_map.get(gradient_style, gradient_style)
+
+        # Midpoint/Bias logic
+        p = 1.0
+        if gradient_polarity != 0.5 and gradient_polarity > 0 and gradient_polarity < 1:
+            p = math.log(0.5) / math.log(gradient_polarity)
 
         if len(rows) > 0:
             try:
@@ -211,7 +223,10 @@ def np_inject_2(
                                 arr[rows, cols, :] = target_pixel_rgba
                             else:
                                 factor = (cols.astype(np.float64) - spx) / (epx - spx)
-                                factor = np.clip(factor, 0, 1)[:, np.newaxis]
+                                factor = np.clip(factor, 0, 1)
+                                if p != 1.0:
+                                    factor = factor**p
+                                factor = factor[:, np.newaxis]
                                 sc = np.array(start_color, dtype=np.float64)
                                 ec = np.array(end_color, dtype=np.float64)
                                 colors = sc + (ec - sc) * factor
@@ -224,7 +239,10 @@ def np_inject_2(
                                 arr[rows, cols, :] = target_pixel_rgba
                             else:
                                 factor = (rows.astype(np.float64) - spy) / (epy - spy)
-                                factor = np.clip(factor, 0, 1)[:, np.newaxis]
+                                factor = np.clip(factor, 0, 1)
+                                if p != 1.0:
+                                    factor = factor**p
+                                factor = factor[:, np.newaxis]
                                 sc = np.array(start_color, dtype=np.float64)
                                 ec = np.array(end_color, dtype=np.float64)
                                 colors = sc + (ec - sc) * factor
@@ -239,8 +257,11 @@ def np_inject_2(
                             else:
                                 pts = np.column_stack((cols, rows)).astype(np.float64)
                                 dists = np.sqrt(np.sum((pts - center) ** 2, axis=1))
-                                factor = (dists / max_dist)[:, np.newaxis]
+                                factor = dists / max_dist
                                 factor = np.clip(factor, 0, 1)
+                                if p != 1.0:
+                                    factor = factor**p
+                                factor = factor[:, np.newaxis]
                                 sc = np.array(start_color, dtype=np.float64)
                                 ec = np.array(end_color, dtype=np.float64)
                                 colors = sc + (ec - sc) * factor
@@ -264,11 +285,11 @@ def np_inject_theme_image(
     image,
     flood=False,
     gradient_styles=None,
-    gradient_intensities=None,
+    gradient_polarities=None,
 ):
     """Returns a PIL Image instead of saving to disk"""
     image = image.convert("RGB")
-    for i, (color_key, target_pixel) in enumerate(zip(cpd.keys(), theme_rgbs)):
+    for i, (color_key, target_color) in enumerate(zip(cpd.keys(), theme_rgbs)):
         # Handle cases where gradient_styles might be a single string or a list
         style = None
         if isinstance(gradient_styles, (list, tuple)):
@@ -277,23 +298,30 @@ def np_inject_theme_image(
         else:
             style = gradient_styles
 
-        intensity = 0.2
-        if isinstance(gradient_intensities, (list, tuple)):
-            if i < len(gradient_intensities):
-                intensity = gradient_intensities[i]
-        elif gradient_intensities is not None:
-            intensity = gradient_intensities
+        polarity = 0.5
+        if isinstance(gradient_polarities, (list, tuple)):
+            if i < len(gradient_polarities):
+                polarity = gradient_polarities[i]
+        elif gradient_polarities is not None:
+            polarity = gradient_polarities
 
-        if intensity is None:
-            intensity = 0.2
+        if polarity is None:
+            polarity = 0.5
+
+        # If a gradient is requested and we have multiple colors in the theme,
+        # use the current color and the next color as start and end points.
+        pixel_to_inject = target_color
+        if style and style != "none" and len(theme_rgbs) > 1:
+            next_color = theme_rgbs[(i + 1) % len(theme_rgbs)]
+            pixel_to_inject = (target_color, next_color)
 
         image = np_inject_2(
             image,
             cpd[color_key],
-            target_pixel,
+            pixel_to_inject,
             flood=flood,
             gradient_style=style,
-            gradient_intensity=intensity,
+            gradient_polarity=polarity,
         )
     return image
 
@@ -305,7 +333,7 @@ def np_inject_theme(
     number=4,
     flood=False,
     gradient_styles=None,
-    gradient_intensities=None,
+    gradient_polarities=None,
 ):
     # fmt : off
     theme_rgbs = (c := CORES[theme_name])[: min(number, len(c))] + [
@@ -319,7 +347,7 @@ def np_inject_theme(
         image,
         flood=flood,
         gradient_styles=gradient_styles,
-        gradient_intensities=gradient_intensities,
+        gradient_polarities=gradient_polarities,
     )
     image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
 
@@ -335,7 +363,7 @@ class JHsuperwand:
         ip,
         flood=False,
         gradient_styles=None,
-        gradient_intensities=None,
+        gradient_polarities=None,
     ):
         np_inject_theme(
             _s.np_color_pix_dict,
@@ -344,5 +372,5 @@ class JHsuperwand:
             number=_s.slowww,
             flood=flood,
             gradient_styles=gradient_styles,
-            gradient_intensities=gradient_intensities,
+            gradient_polarities=gradient_polarities,
         )

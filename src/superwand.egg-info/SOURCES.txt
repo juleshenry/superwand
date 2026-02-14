@@ -41,6 +41,7 @@ src/superwand/utils/prompt_input.py
 tests/test_bug.py
 tests/test_extract.py
 tests/test_gradients.py
+tests/test_polarity.py
 tests/test_process.py
 tests/test_regions.py
 tests/test_superwand.py
