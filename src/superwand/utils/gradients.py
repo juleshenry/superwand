@@ -144,65 +144,58 @@ def calc_gradient_poles(grad_kw, pixel_arr, img_size=None):
 
 
 def paste_gradient(
-    img_class, pixel_arr, start_pole, end_pole, start_color, end_color, grad_kw
+    img_class,
+    pixel_arr,
+    start_pole,
+    end_pole,
+    start_color,
+    end_color,
+    grad_kw,
+    polarity=0.5,
 ):
     draw = ImageDraw.Draw(img_class)
     spx, spy = start_pole
     epx, epy = end_pole
     s_r, s_g, s_b = start_color
     e_r, e_g, e_b = end_color
+
+    # Midpoint/Bias logic
+    # factor = factor ** p where p = log(0.5) / log(polarity)
+    p = 1.0
+    if polarity != 0.5 and polarity > 0 and polarity < 1:
+        p = math.log(0.5) / math.log(polarity)
+
     match grad_kw:
         case "left-right" | "right-left":
             for x, y in pixel_arr:
-                r = int(s_r + (e_r - s_r) * ((x - spx) / (epx - spx)))
-                g = int(s_g + (e_g - s_g) * ((x - spx) / (epx - spx)))
-                b = int(s_b + (e_b - s_b) * ((x - spx) / (epx - spx)))
+                factor = (x - spx) / (epx - spx)
+                factor = max(0, min(1, factor))
+                if p != 1.0:
+                    factor = factor**p
+                r = int(s_r + (e_r - s_r) * factor)
+                g = int(s_g + (e_g - s_g) * factor)
+                b = int(s_b + (e_b - s_b) * factor)
                 draw.point((x, y), fill=(r, g, b))
         case "bottom-up" | "top-down":
             for x, y in pixel_arr:
-                r = int(s_r + (e_r - s_r) * ((y - spy) / (epy - spy)))
-                g = int(s_g + (e_g - s_g) * ((y - spy) / (epy - spy)))
-                b = int(s_b + (e_b - s_b) * ((y - spy) / (epy - spy)))
+                factor = (y - spy) / (epy - spy)
+                factor = max(0, min(1, factor))
+                if p != 1.0:
+                    factor = factor**p
+                r = int(s_r + (e_r - s_r) * factor)
+                g = int(s_g + (e_g - s_g) * factor)
+                b = int(s_b + (e_b - s_b) * factor)
                 draw.point((x, y), fill=(r, g, b))
         case "radial":
             max_radius = twod_dist(start_pole, end_pole)
             for x, y in pixel_arr:
-                r = int(
-                    s_r
-                    + (e_r - s_r)
-                    * twod_dist(
-                        (
-                            x,
-                            y,
-                        ),
-                        start_pole,
-                    )
-                    / max_radius
-                )
-                g = int(
-                    s_g
-                    + (e_g - s_g)
-                    * twod_dist(
-                        (
-                            x,
-                            y,
-                        ),
-                        start_pole,
-                    )
-                    / max_radius
-                )
-                b = int(
-                    s_b
-                    + (e_b - s_b)
-                    * twod_dist(
-                        (
-                            x,
-                            y,
-                        ),
-                        start_pole,
-                    )
-                    / max_radius
-                )
+                factor = twod_dist((x, y), start_pole) / max_radius
+                factor = max(0, min(1, factor))
+                if p != 1.0:
+                    factor = factor**p
+                r = int(s_r + (e_r - s_r) * factor)
+                g = int(s_g + (e_g - s_g) * factor)
+                b = int(s_b + (e_b - s_b) * factor)
                 draw.point((x, y), fill=(r, g, b))
     return img_class
 
@@ -225,11 +218,14 @@ def gradient_enforce(
     style="auto",
     completeness="auto",
     opacity="auto",
-    intensity=0.2,
+    color1=None,
+    color2=None,
+    polarity=0.5,
 ) -> Image.Image:
     """
     Converts monocolor regions with directional gradient
     """
+    intensity = 0.2
     if isinstance(img, str):
         img = Image.open(img).convert("RGB")
 
@@ -246,19 +242,32 @@ def gradient_enforce(
             os.remove(img_path)
 
     grad_kw = style
-    if style == "auto":
+    if style == "auto" or style == "vertical":
         grad_kw = "top-down"
+    elif style == "horizontal":
+        grad_kw = "left-right"
 
     for color, pixels in regions.items():
         pixel_tuples = [[p[1], p[0]] for p in pixels]
 
-        start_color = adjust_color(color, 1 + intensity)
-        end_color = adjust_color(color, 1 - intensity)
+        if color1 and color2:
+            start_color = color1
+            end_color = color2
+        else:
+            start_color = adjust_color(color, 1 + intensity)
+            end_color = adjust_color(color, 1 - intensity)
 
         try:
             p1, p2 = calc_gradient_poles(grad_kw, pixel_tuples, img_size=img_size)
             img = paste_gradient(
-                img, pixel_tuples, p1, p2, start_color, end_color, grad_kw
+                img,
+                pixel_tuples,
+                p1,
+                p2,
+                start_color,
+                end_color,
+                grad_kw,
+                polarity=polarity,
             )
         except Exception as e:
             print(f"Failed to apply gradient to region {color}: {e}")

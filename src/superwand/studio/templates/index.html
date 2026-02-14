@@ -59,8 +59,8 @@
                         <button class="gradient-type-btn p-2 text-xs border rounded hover:bg-gray-50" data-style="horizontal">Horizontal</button>
                         <button class="gradient-type-btn p-2 text-xs border rounded hover:bg-gray-50" data-style="radial">Radial</button>
                     </div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Gradient Intensity: <span id="intensityValue">20</span>%</label>
-                    <input type="range" id="intensitySlider" min="0" max="100" value="20" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gradient Polarity: <span id="polarityValue">50</span>%</label>
+                    <input type="range" id="polaritySlider" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                 </div>
             </div>
 
@@ -149,7 +149,7 @@
         let debounceTimer = null;
         let currentActiveTab = 'image';
         let currentOriginalColors = [];
-        let regionGradients = []; // Array of { style: 'none', color2: null, intensity: 0.2, paletteColor: null }
+        let regionGradients = []; // Array of { style: 'none', color2: null, polarity: 0.5, paletteColor: null }
         let currentObjectUrl = null;
 
         const kSlider = document.getElementById('kSlider');
@@ -285,7 +285,7 @@
             
             // Adjust regionGradients size
             while (regionGradients.length < k) {
-                regionGradients.push({ style: 'none', color2: null, intensity: 0.2, paletteColor: null });
+                regionGradients.push({ style: 'none', color2: null, polarity: 0.5, paletteColor: null });
             }
             if (regionGradients.length > k) {
                 regionGradients = regionGradients.slice(0, k);
@@ -396,18 +396,18 @@
                     styleSelect.onchange = (e) => { grad.style = e.target.value; updateColorPickers(); triggerProcess(); };
                     topRow.appendChild(styleSelect);
 
-                    // Intensity slider in a second row
-                    const intensityRow = document.createElement('div');
-                    intensityRow.className = 'flex items-center space-x-2 px-2';
-                    intensityRow.innerHTML = `<span class="text-[8px] font-bold text-gray-400 uppercase w-12">Intensity</span>`;
-                    const intensityInput = document.createElement('input');
-                    intensityInput.type = 'range';
-                    intensityInput.min = '0';
-                    intensityInput.max = '100';
-                    intensityInput.value = grad.intensity * 100;
-                    intensityInput.className = 'flex-1 max-w-[140px] h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer';
-                    intensityInput.oninput = (e) => { grad.intensity = e.target.value / 100.0; triggerProcess(); };
-                    intensityRow.appendChild(intensityInput);
+                    // Polarity slider in a second row
+                    const polarityRow = document.createElement('div');
+                    polarityRow.className = 'flex items-center space-x-2 px-2';
+                    polarityRow.innerHTML = `<span class="text-[8px] font-bold text-gray-400 uppercase w-12">Polarity</span>`;
+                    const polarityInput = document.createElement('input');
+                    polarityInput.type = 'range';
+                    polarityInput.min = '0';
+                    polarityInput.max = '100';
+                    polarityInput.value = grad.polarity * 100;
+                    polarityInput.className = 'flex-1 max-w-[140px] h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer';
+                    polarityInput.oninput = (e) => { grad.polarity = e.target.value / 100.0; triggerProcess(); };
+                    polarityRow.appendChild(polarityInput);
 
                     const removeLink = document.createElement('button');
                     removeLink.className = 'text-[8px] text-red-400 hover:text-red-600 font-bold uppercase ml-auto transition-colors';
@@ -417,9 +417,9 @@
                         updateColorPickers();
                         triggerProcess();
                     };
-                    intensityRow.appendChild(removeLink);
+                    polarityRow.appendChild(removeLink);
                     
-                    container.appendChild(intensityRow);
+                    container.appendChild(polarityRow);
                 }
 
                 container.insertBefore(topRow, container.firstChild);
@@ -496,7 +496,7 @@
 
             const colors = [];
             const gradientStyles = [];
-            const gradientIntensities = [];
+            const gradientPolarities = [];
 
             regionGradients.forEach(grad => {
                 const c1 = hexToRgb(grad.paletteColor || "#000000");
@@ -512,7 +512,7 @@
                     colors.push(c1);
                     gradientStyles.push('none');
                 }
-                gradientIntensities.push(grad.intensity);
+                gradientPolarities.push(grad.polarity);
             });
 
             isProcessing = true;
@@ -528,7 +528,7 @@
                         threshold: threshold,
                         flood: flood,
                         gradient_styles: gradientStyles,
-                        gradient_intensities: gradientIntensities,
+                        gradient_polarities: gradientPolarities,
                         colors: colors,
                         apply_palette: applyPalette
                     })
@@ -567,7 +567,7 @@
             paletteCheckbox.checked = true;
             
             while (regionGradients.length < presetK) {
-                regionGradients.push({ style: 'none', color2: null, intensity: 0.2, paletteColor: null });
+                regionGradients.push({ style: 'none', color2: null, polarity: 0.5, paletteColor: null });
             }
 
             colors.forEach((rgb, i) => {

@@ -79,7 +79,7 @@ class SuperWand:
         theme_name,
         flood=False,
         gradient_style=None,
-        gradient_intensity=0.2,
+        gradient_polarity=0.5,
     ):
         regs = np_get_prominent_regions(
             img_path, number=self.number, tolerance=self.tolerance
@@ -93,7 +93,7 @@ class SuperWand:
                 number=self.number,
                 flood=flood,
                 gradient_styles=gradient_style,
-                gradient_intensities=gradient_intensity,
+                gradient_polarities=gradient_polarity,
             )
 
     def apply_all_themes_to_image(self, img_path):
@@ -132,15 +132,25 @@ def main():
     parser.add_argument(
         "-gradient",
         type=str,
-        choices=["none", "auto", "vertical", "horizontal", "radial"],
+        choices=[
+            "none",
+            "auto",
+            "vertical",
+            "horizontal",
+            "radial",
+            "bottom-up",
+            "top-down",
+            "left-right",
+            "right-left",
+        ],
         default="none",
         help="Gradient style to apply.",
     )
     parser.add_argument(
-        "-intensity",
+        "-polarity",
         type=float,
-        default=0.2,
-        help="Gradient intensity (0.0 to 1.0, default 0.2).",
+        default=0.5,
+        help="Gradient midpoint bias (0.0 to 1.0, default 0.5). 0.5 is linear.",
     )
     parser.add_argument(
         "--headless",
@@ -167,7 +177,7 @@ def main():
         args.theme,
         flood=args.flood,
         gradient_style=args.gradient if args.gradient != "none" else None,
-        gradient_intensity=args.intensity,
+        gradient_polarity=args.polarity,
     )
 
 
