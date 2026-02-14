@@ -115,9 +115,6 @@ def main():
         "python3 -m build", "Build failed. Check your pyproject.toml and dependencies."
     )
 
-    print("Checking build distribution with twine...")
-    run_command("twine check dist/*", "Twine check failed. Metadata might be invalid.")
-
     # 4. Git Operations
     print("Committing and tagging in git...")
     tag_version = new_version if new_version.startswith("v") else f"v{new_version}"
@@ -139,18 +136,11 @@ def main():
     else:
         run_command(f"git tag {tag_version}")
 
-    # 5. Publication choice
-    publish_local = input(
-        "\nDo you want to upload to PyPI now using twine? (y/N): "
-    ).lower()
-    if publish_local == "y":
-        print("Uploading to PyPI...")
-        run_command("twine upload dist/*")
-    else:
-        print("\nSkipping local upload. pushing to git to trigger CI/CD...")
-        run_command(f"git push origin main")
-        run_command(f"git push origin --tags")
-        print("\nDone! Push complete. GitHub Actions should handle the publication.")
+    # 5. Push to git to trigger CI/CD
+    print("\nPushing to git to trigger CI/CD...")
+    run_command(f"git push origin main")
+    run_command(f"git push origin --tags")
+    print("\nDone! Push complete. GitHub Actions should handle the publication.")
 
     print(f"\nSuccessfully processed {tag_version}.")
 
