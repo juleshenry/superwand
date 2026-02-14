@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.1.11 (2026-02-14)
+
+* Automated release update
+
+## v0.1.10 (2026-02-14)
+
+* Update README image links to use blob ?raw=1 style for better PyPI compatibility.
+* Replace 'intensity' with 'polarity' in core retheming logic and Studio UI.
+* Make gradient instructions more explicit in CLI and README.
+* Add support for explicit start and end colors in `gradient-enforce`.
+
 ## v0.1.9 (2026-02-14)
 
 * Automated release update
