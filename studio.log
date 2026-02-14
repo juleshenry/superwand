@@ -579,3 +579,92 @@ extracting 8colorz
   `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
  * Debugger is active!
  * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 22:41:15] "GET / HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:16:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:17:43] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:17:44] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:17:49] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:17:51] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:17:59] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:18:05] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:18:06] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:18:09] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:18:14] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:19:37] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:19:38] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:19:42] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:19:49] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:19:51] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:19:55] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:19:59] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:24:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:24:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:24:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:26:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:26:21] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:26:22] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:25] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:29] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:33] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:37] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:39] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:43] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 23:26:45] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:29:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:29:54] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:29:56] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:29:58] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:03] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:06] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:14] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:19] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:22] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:26] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:33] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:30:37] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:31:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:38] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:40] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:43] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:47] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:51] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:31:56] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:01] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:04] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:13] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:16] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:23] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:32:26] "POST /process HTTP/1.1" 200 -

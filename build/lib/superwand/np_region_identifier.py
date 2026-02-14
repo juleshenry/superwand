@@ -27,10 +27,7 @@ def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
     Returns an OrderedDict mapping cluster center RGB tuples to pixel indices.
     Every pixel is assigned to one of the k clusters.
     """
-    img = Image.open(ip)
-    from PIL import ImageOps
-
-    img = ImageOps.exif_transpose(img).convert("RGB")
+    img = Image.open(ip).convert("RGB")
     img_array = np.array(img)
     h, w, _ = img_array.shape
     pixels = img_array.reshape(-1, 3)
@@ -45,7 +42,8 @@ def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
         sample_pixels
     )
     labels = kmeans.predict(pixels)
-    centers = kmeans.cluster_centers_.astype(int)
+    centers = kmeans.cluster_centers_.astype(np.uint8)
+
     # Sort clusters by size to maintain prominence order
     counts = np.bincount(labels, minlength=number)
     sorted_indices = np.argsort(-counts)
@@ -54,7 +52,7 @@ def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
     labels_reshaped = labels.reshape(h, w)
 
     for i in sorted_indices:
-        color_tuple = tuple(centers[i].tolist())
+        color_tuple = tuple(centers[i])
         region_indices = np.argwhere(labels_reshaped == i)
         color_regions[color_tuple] = region_indices
 
@@ -214,20 +212,16 @@ def np_inject_theme_image(
     image = image.convert("RGB")
     for i, (color_key, target_pixel) in enumerate(zip(cpd.keys(), theme_rgbs)):
         # Handle cases where gradient_styles might be a single string or a list
-        style = None
-        if isinstance(gradient_styles, (list, tuple)):
-            if i < len(gradient_styles):
-                style = gradient_styles[i]
-        else:
-            style = gradient_styles
-
-        intensity = 0.2
-        if isinstance(gradient_intensities, (list, tuple)):
-            if i < len(gradient_intensities):
-                intensity = gradient_intensities[i]
-        elif gradient_intensities is not None:
-            intensity = gradient_intensities
-
+        style = (
+            gradient_styles[i]
+            if isinstance(gradient_styles, (list, tuple))
+            else gradient_styles
+        )
+        intensity = (
+            gradient_intensities[i]
+            if isinstance(gradient_intensities, (list, tuple))
+            else gradient_intensities
+        )
         if intensity is None:
             intensity = 0.2
 
