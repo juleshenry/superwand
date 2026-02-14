@@ -2,6 +2,7 @@ Metadata-Version: 2.4
 Name: superwand
 Version: 0.1.0
 Summary: A tool for retheming images and CSS using color palettes and gradients.
+Home-page: https://github.com/juleshenry/superwand
 Author: Julian Henry
 License:                                  Apache License
                                    Version 2.0, January 2004
@@ -215,7 +216,12 @@ Requires-Dist: matplotlib
 Requires-Dist: scikit-learn
 Requires-Dist: flask
 Requires-Dist: werkzeug
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-cov; extra == "test"
+Dynamic: home-page
 Dynamic: license-file
+Dynamic: requires-python
 
 # superwand
 Leverage magic wand to breath life to images, especially posterized and vector art images.
@@ -302,18 +308,18 @@ Themes included:
 
 <table>
   <tr>
-    <td><img src="src/superwand/themes_jpgs/SpringTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/SummerTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/WinterTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/FallTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/ArcticTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SpringTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SummerTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/WinterTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/FallTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/ArcticTheme.jpg" width="100"></td>
   </tr>
   <tr>
-    <td><img src="src/superwand/themes_jpgs/SafariTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/UrbanTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/NeonTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/TropicalTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SafariTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/UrbanTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/NeonTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/TropicalTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
   </tr>
 </table>
 
@@ -338,7 +344,7 @@ Themes included:
 
 ## Gallery
 
-### Erro Xota
+### Rio De Janeiro Skyline
 <table>
   <tr>
     <td><img src="examples/gallery/erro_xota.jpg" width="150"></td>
@@ -349,7 +355,7 @@ Themes included:
   </tr>
 </table>
 
-### Plankt
+### Austin Ladybird Lake Plankton rendered in [ZIT](https://github.com/juleshenry/zooplankton-image-tool)
 <table>
   <tr>
     <td><img src="examples/gallery/plankt_oct19.jpg" width="150"></td>
@@ -360,7 +366,7 @@ Themes included:
   </tr>
 </table>
 
-### Rio 07
+### Me in Rio de Janeiro
 <table>
   <tr>
     <td><img src="examples/gallery/rio07.jpg" width="150"></td>

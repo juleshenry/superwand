@@ -1,6 +1,7 @@
 LICENSE
 README.md
 pyproject.toml
+setup.py
 src/superwand/__init__.py
 src/superwand.egg-info/PKG-INFO
 src/superwand.egg-info/SOURCES.txt
@@ -9,6 +10,17 @@ src/superwand.egg-info/entry_points.txt
 src/superwand.egg-info/requires.txt
 src/superwand.egg-info/top_level.txt
 src/superwand/assets/__init__.py
+src/superwand/assets/fonts/arial.ttf
+src/superwand/assets/themes_jpgs/ArcticTheme.jpg
+src/superwand/assets/themes_jpgs/FallTheme.jpg
+src/superwand/assets/themes_jpgs/NeonTheme.jpg
+src/superwand/assets/themes_jpgs/PaixãoTheme.jpg
+src/superwand/assets/themes_jpgs/SafariTheme.jpg
+src/superwand/assets/themes_jpgs/SpringTheme.jpg
+src/superwand/assets/themes_jpgs/SummerTheme.jpg
+src/superwand/assets/themes_jpgs/TropicalTheme.jpg
+src/superwand/assets/themes_jpgs/UrbanTheme.jpg
+src/superwand/assets/themes_jpgs/WinterTheme.jpg
 src/superwand/core/__init__.py
 src/superwand/core/np_colorgram.py
 src/superwand/core/np_region_identifier.py

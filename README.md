@@ -119,7 +119,7 @@ Themes included:
 
 ## Gallery
 
-### Erro Xota
+### Rio De Janeiro Skyline
 <table>
   <tr>
     <td><img src="examples/gallery/erro_xota.jpg" width="150"></td>
@@ -130,7 +130,7 @@ Themes included:
   </tr>
 </table>
 
-### Plankt
+### Austin Ladybird Lake Plankton rendered in [ZIT](https://github.com/juleshenry/zooplankton-image-tool)
 <table>
   <tr>
     <td><img src="examples/gallery/plankt_oct19.jpg" width="150"></td>
@@ -141,7 +141,7 @@ Themes included:
   </tr>
 </table>
 
-### Rio 07
+### Me in Rio de Janeiro
 <table>
   <tr>
     <td><img src="examples/gallery/rio07.jpg" width="150"></td>

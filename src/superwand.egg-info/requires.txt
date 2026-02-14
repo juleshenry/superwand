@@ -5,3 +5,7 @@ matplotlib
 scikit-learn
 flask
 werkzeug
+
+[test]
+pytest
+pytest-cov
