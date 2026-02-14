@@ -3,3 +3,5 @@ pillow
 scipy
 matplotlib
 scikit-learn
+flask
+werkzeug

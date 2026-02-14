@@ -26,8 +26,8 @@ dependencies = [
 superwand = ["fonts/*.ttf", "themes_jpgs/*.jpg", "studio/templates/*.html", "studio/static/**/*"]
 
 [project.scripts]
-superwand = "superwand.superwand:main"
-gradient-enforce = "superwand.gradient_enforce:main"
+superwand = "superwand.core.superwand:main"
+gradient-enforce = "superwand.utils.gradient_enforce:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

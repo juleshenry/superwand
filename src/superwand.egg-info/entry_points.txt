@@ -1,3 +1,3 @@
 [console_scripts]
-gradient-enforce = superwand.gradient_enforce:main
-superwand = superwand.superwand:main
+gradient-enforce = superwand.utils.gradient_enforce:main
+superwand = superwand.core.superwand:main
