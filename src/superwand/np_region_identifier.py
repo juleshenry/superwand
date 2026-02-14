@@ -44,14 +44,14 @@ def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
     kmeans = KMeans(n_clusters=number, random_state=42, n_init="auto").fit(
         sample_pixels
     )
-    labels = kmeans.predict(pixels)
-    centers = kmeans.cluster_centers_.astype(int)
+    labels = np.array(kmeans.predict(pixels), dtype=int)
+    centers = np.array(kmeans.cluster_centers_, dtype=int)
     # Sort clusters by size to maintain prominence order
     counts = np.bincount(labels, minlength=number)
     sorted_indices = np.argsort(-counts)
 
     color_regions = OrderedDict()
-    labels_reshaped = labels.reshape(h, w)
+    labels_reshaped = labels.reshape((h, w))
 
     for i in sorted_indices:
         color_tuple = tuple(centers[i].tolist())
@@ -128,13 +128,9 @@ def np_inject_2(
         style = style_map.get(gradient_style, gradient_style)
 
         if len(rows) > 0:
-            # Convert to (x, y) for calc_gradient_poles compatibility
-            pixel_tuples = np.column_stack((cols, rows)).tolist()
-
             try:
-                poles = calc_gradient_poles(
-                    style, pixel_tuples, img_size=(width, height)
-                )
+                # Use global image boundaries for poles if style is provided
+                poles = calc_gradient_poles(style, None, img_size=(width, height))
                 if poles is None:
                     arr[rows, cols, :] = target_pixel_rgba
                 else:
@@ -142,9 +138,9 @@ def np_inject_2(
                     if p1 is None or p2 is None:
                         arr[rows, cols, :] = target_pixel_rgba
                     else:
-                        if start_rgb is not None and end_rgb is not None:
-                            start_color = start_rgb
-                            end_color = end_rgb
+                        if isinstance(pixel[0], (list, tuple, np.ndarray)):
+                            start_color = pixel[0]
+                            end_color = pixel[1]
                         else:
                             start_color = adjust_color(base_rgb, 1 + gradient_intensity)
                             end_color = adjust_color(base_rgb, 1 - gradient_intensity)
