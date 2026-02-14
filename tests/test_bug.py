@@ -1,4 +1,4 @@
-"""
+r"""
                                        ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
                                        ███████▇▃ ▅██▆                                               
                                        ▅██████▇▅▁███▃                                               
@@ -61,7 +61,7 @@
 import numpy as np
 from PIL import Image
 import os
-from superwand.np_region_identifier import np_id_regiones
+from superwand.core.np_region_identifier import np_id_regiones
 
 
 def test_id_regiones():

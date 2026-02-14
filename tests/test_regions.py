@@ -1,4 +1,4 @@
-"""
+r"""
                                        ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
                                        ███████▇▃ ▅██▆                                               
                                        ▅██████▇▅▁███▃                                               
@@ -60,7 +60,7 @@
 
 import numpy as np
 from PIL import Image
-from src.superwand.np_region_identifier import np_get_prominent_regions
+from superwand.core.np_region_identifier import np_get_prominent_regions
 
 
 def test():

@@ -1,4 +1,4 @@
-"""
+r"""
                                 ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
                                 ███████▇▃ ▅██▆
                                 ▅██████▇▅▁███▃
@@ -59,9 +59,9 @@
 
 import pytest
 from unittest.mock import patch, MagicMock
-from superwand.superwand import SuperWand
-from superwand import __color_themes__
-from superwand.gradients import clamp
+from superwand.core.superwand import SuperWand
+from superwand.core.themes import color_themes
+from superwand.utils.gradients import clamp
 
 
 def test_clamp():
@@ -71,15 +71,15 @@ def test_clamp():
 
 
 def test_superwand_init():
-    sw = SuperWand(__color_themes__.color_themes, 8)
-    assert sw.color_themes == __color_themes__.color_themes
+    sw = SuperWand(color_themes, 8)
+    assert sw.color_themes == color_themes
     assert sw.number == 8
 
 
-@patch("superwand.superwand.np_get_prominent_regions")
-@patch("superwand.superwand.np_inject_theme")
+@patch("superwand.core.superwand.np_get_prominent_regions")
+@patch("superwand.core.superwand.np_inject_theme")
 def test_apply_theme_to_image(mock_inject, mock_get_regions):
-    sw = SuperWand(__color_themes__.color_themes, 8)
+    sw = SuperWand(color_themes, 8)
     mock_get_regions.return_value = {"region1": "data"}
 
     # Test with specific theme
@@ -94,8 +94,8 @@ def test_apply_theme_to_image(mock_inject, mock_get_regions):
     assert kwargs["number"] == 8
 
 
-@patch("superwand.superwand.np_get_prominent_regions")
-@patch("superwand.superwand.np_inject_theme")
+@patch("superwand.core.superwand.np_get_prominent_regions")
+@patch("superwand.core.superwand.np_inject_theme")
 def test_apply_theme_to_image_all_themes(mock_inject, mock_get_regions):
     sw = SuperWand({"Theme1": [], "Theme2": []}, 8)
     mock_get_regions.return_value = {"region1": "data"}
@@ -111,8 +111,8 @@ def test_apply_theme_to_image_all_themes(mock_inject, mock_get_regions):
     assert "Theme2" in themes_called
 
 
-@patch("superwand.superwand.np_get_prominent_regions")
-@patch("superwand.superwand.np_inject_theme")
+@patch("superwand.core.superwand.np_get_prominent_regions")
+@patch("superwand.core.superwand.np_inject_theme")
 def test_apply_all_themes_to_image(mock_inject, mock_get_regions):
     # This method in SuperWand seems to iterate themes and call get_regions inside the loop?
     # Let's check the implementation of apply_all_themes_to_image in superwand.py
@@ -130,10 +130,10 @@ def test_apply_all_themes_to_image(mock_inject, mock_get_regions):
     assert mock_inject.call_count == 2
 
 
-@patch("superwand.superwand.SuperWand")
+@patch("superwand.core.superwand.SuperWand")
 @patch("argparse.ArgumentParser.parse_args")
 def test_main(mock_parse_args, mock_superwand_class):
-    from superwand.superwand import main
+    from superwand.core.superwand import main
 
     # Setup mocks
     mock_args = MagicMock()
