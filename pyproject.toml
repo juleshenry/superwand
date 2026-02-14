@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "superwand"
-version = "0.1.14"
+version = "0.1.15"
 description = "A tool for retheming images and CSS using color palettes and gradients."
 readme = "README.md"
 requires-python = ">=3.8"
