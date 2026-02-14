@@ -1,60 +1,60 @@
 """
-                                       ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
-                                       ███████▇▃ ▅██▆                                               
-                                       ▅██████▇▅▁███▃                                               
-                                       ▄██████▇▃▁██▆▁                                               
-                                       ▁▇██████▅▃██▅                                                
-                                    ▁▃  ▇█████▆ ▁██▅ ▁▃▁                                            
-                                    ███▆▇█████▆▁▁▇█▇▅██▇                                            
-                                    ▇█████▇▇▇█▇▄▄▇▇▆███▅                                            
-                                    ▁▃▇██████████████▆▂                                             
-                                      ▁▁▅██▇▆▇▁▆▇▅█▆▁                                               
-                                        ▁▆█▂ ▇▁▁ ▁▆▁                                                
-                                         ▃█▇▆▆▇▅▅▇█▃                                                
-                                      ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁                                             
-                                  ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁                                        
-                                 ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄                                       
-                                ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁                                     
-                                ▄████▅▁  ▃▁       ▅   ▂███████▂                                     
-                                ██████▄  ▄▁       ▅  ▂████████▇▁                                    
-                               ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄                                    
-                              ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁                                   
-                              ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆                                   
-                             ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃                                  
-                            ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁                                 
-                           ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁                                
-                           ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁                               
-                           ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅                               
-                           ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂                               
-                          ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁                               
-                          █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄                               
-                        ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅                               
-                      ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄                               
-                   ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂                                
-                 ▂▄▇▅▁             ▁██████████████████████▁                                         
-               ▁▂▆▃▁               ▁██████████▇███████████▁                                         
-            ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁                                         
-          ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁                                         
-       ▂▁▂▂▁                        ▃█████████▁ ▄█████████                                          
-       ▁▂▁                          ▁▅███████▆  ▃████████▃                                          
-                                     ▃██████▇▁   ▇███████▂                                          
-                                      ██████▇    ▁██████▇▂                                          
-                                      ▂█████▃     ▇█████▁                                           
-                                      ▂█████▂     ▄█████▁                                           
-                                     ▂██████▄     ▄█████▆▁                                          
-                                   ▁▄██████▆▃     ▃██████▇▂                                         
-                                  ▁█████▆▂▁        ▁▂▅█████▅▁                                       
-                                   ▂▂▂▂▁              ▁▄▅▇▇▇▂                                       
-                                                                                                    
+                                ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
+                                ███████▇▃ ▅██▆
+                                ▅██████▇▅▁███▃
+                                ▄██████▇▃▁██▆▁
+                                ▁▇██████▅▃██▅
+                             ▁▃  ▇█████▆ ▁██▅ ▁▃▁
+                             ███▆▇█████▆▁▁▇█▇▅██▇
+                             ▇█████▇▇▇█▇▄▄▇▇▆███▅
+                             ▁▃▇██████████████▆▂
+                               ▁▁▅██▇▆▇▁▆▇▅█▆▁
+                                 ▁▆█▂ ▇▁▁ ▁▆▁
+                                  ▃█▇▆▆▇▅▅▇█▃
+                               ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁
+                           ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁
+                          ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄
+                         ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁
+                         ▄████▅▁  ▃▁       ▅   ▂███████▂
+                         ██████▄  ▄▁       ▅  ▂████████▇▁
+                        ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄
+                       ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁
+                       ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆
+                      ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃
+                     ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁
+                    ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁
+                    ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁
+                    ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅
+                    ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂
+                   ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁
+                   █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄
+                 ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅
+               ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄
+            ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂
+          ▂▄▇▅▁             ▁██████████████████████▁
+        ▁▂▆▃▁               ▁██████████▇███████████▁
+     ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁
+   ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁
+▂▁▂▂▁                        ▃█████████▁ ▄█████████
+▁▂▁                          ▁▅███████▆  ▃████████▃
+                              ▃██████▇▁   ▇███████▂
+                               ██████▇    ▁██████▇▂
+                               ▂█████▃     ▇█████▁
+                               ▂█████▂     ▄█████▁
+                              ▂██████▄     ▄█████▆▁
+                            ▁▄██████▆▃     ▃██████▇▂
+                           ▁█████▆▂▁        ▁▂▅█████▅▁
+                            ▂▂▂▂▁              ▁▄▅▇▇▇▂
 
-                                                                            ||` 
-                                                                            ||  
-       ('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||  
-        `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||  
-       `...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||. 
-                       ||                                                       
-                      .||                                                       
-                                  by Julian Henry 
+
+                                                                     ||`
+                                                                     ||
+('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||
+ `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+`...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||.
+                ||
+               .||
+                           by Julian Henry
 """
 
 import matplotlib.pyplot as plt
@@ -65,10 +65,12 @@ from .np_region_identifier import np_get_prominent_regions
 import tempfile
 import os
 
+
 def twod_dist(p1, p2):
     spx, spy = p1
     epx, epy = p2
     return ((spx - epx) ** 2 + (spy - epy) ** 2) ** 0.5
+
 
 def calc_gradient_poles(grad_kw, pixel_arr):
     print("processing", grad_kw)
@@ -93,14 +95,14 @@ def calc_gradient_poles(grad_kw, pixel_arr):
             ) / 2
             min_y = min([xy[1] for xy in pixel_arr])
             max_y = max([xy[1] for xy in pixel_arr])
-            return (mid_x, min_y), (mid_x, max_y)
+            return (mid_x, max_y), (mid_x, min_y)
         case "top-down":
             mid_x = (
                 min([xy[0] for xy in pixel_arr]) + max([xy[0] for xy in pixel_arr])
             ) / 2
             min_y = min([xy[1] for xy in pixel_arr])
             max_y = max([xy[1] for xy in pixel_arr])
-            return (mid_x, max_y), (mid_x, min_y)
+            return (mid_x, min_y), (mid_x, max_y)
         case "left-right":
             mid_y = (
                 min([xy[1] for xy in pixel_arr]) + max([xy[1] for xy in pixel_arr])
@@ -194,6 +196,7 @@ def paste_gradient(
 def clamp(n, smallest, largest):
     return max(smallest, min(n, largest))
 
+
 def adjust_color(color, factor):
     r, g, b = color
     return (
@@ -202,8 +205,13 @@ def adjust_color(color, factor):
         clamp(int(b * factor), 0, 255),
     )
 
+
 def gradient_enforce(
-    img: Image.Image, style="auto", completeness="auto", opacity="auto"
+    img: Image.Image,
+    style="auto",
+    completeness="auto",
+    opacity="auto",
+    intensity=0.2,
 ) -> Image.Image:
     """
     Converts monocolor regionswith directional gradient
@@ -224,60 +232,27 @@ def gradient_enforce(
     ~makes achieve minimum opacity value in region
             -> clamp {0, 1}
             -> failsafe rounds
+
+    intensity :
+    ~dramaticism of the gradient (0.0 to 1.0)
     """
-    # Handle image input
-    if isinstance(img, str):
-        img_path = img
-        img = Image.open(img_path).convert("RGB")
-        temp_path = img_path
-    else:
-        # Save to temp file for region identification
-        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-            img.save(tmp.name)
-            temp_path = tmp.name
-    
-    # Determine number of regions
-    if completeness == "aggressive":
-        number = 16
-    else:
-        number = 4
-
-    # Get regions
-    regions = np_get_prominent_regions(temp_path, number=number)
-
-    # Clean up temp file if created
-    if not isinstance(img, str) and os.path.exists(temp_path) and temp_path != img:
-         # Check if temp_path is actually a temp file we created
-         if temp_path.startswith(tempfile.gettempdir()):
-            os.remove(temp_path)
-
-    # Determine gradient style
-    grad_kw = "bottom-up" # Default
-    if style == "vertical":
-        grad_kw = "top-down"
-    elif style == "horizontal":
-        grad_kw = "left-right"
-    
+    # ...
     # Apply gradients
     for color, pixels in regions.items():
-        # Convert pixels to list of tuples if they are not already
-        # np_get_prominent_regions returns list of [x, y] lists
-        pixel_tuples = [tuple(p) for p in pixels]
-        
-        if not pixel_tuples:
-            continue
-
+        # ...
         # Create gradient colors based on original color
         # Make one end lighter and one end darker
-        start_color = adjust_color(color, 1.2)
-        end_color = adjust_color(color, 0.8)
+        start_color = adjust_color(color, 1 + intensity)
+        end_color = adjust_color(color, 1 - intensity)
 
         # Calculate poles
         try:
             p1, p2 = calc_gradient_poles(grad_kw, pixel_tuples)
-            
+
             # Apply gradient
-            img = paste_gradient(img, pixel_tuples, p1, p2, start_color, end_color, grad_kw)
+            img = paste_gradient(
+                img, pixel_tuples, p1, p2, start_color, end_color, grad_kw
+            )
         except Exception as e:
             print(f"Failed to apply gradient to region {color}: {e}")
             continue

@@ -1,0 +1,378 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:14:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:14:41] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:14:48] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:14:59] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:15:17] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:16:07] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+extracting 5colorz
+30 30
+9999999 30
+##### 5
+5 !@#$!@#@$#!
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:19:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:19:34] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:19:45] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:20:01] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:20:27] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:20:53] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:21:20] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+processing bottom-up
+extracting 4colorz
+30 30
+9999999 30
+##### 4
+4 !@#$!@#@$#!
+processing radial
+processing radial
+processing radial
+processing radial
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradient_enforce.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:30:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:30:57] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:31:04] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:31:19] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:31:47] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:32:05] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:32:25] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:32:44] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:33:01] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+extracting 4colorz
+30 30
+9999999 30
+##### 4
+4 !@#$!@#@$#!
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+processing radial
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:36:27] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:36:43] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:36:52] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:37:30] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:37:56] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:38:14] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:40:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:40:53] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:41:00] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:41:09] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:41:27] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:41:38] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:41:54] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:42:13] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+extracting 7colorz
+30 30
+9999999 30
+##### 7
+7 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:47:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:47:35] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:47:44] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:47:55] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:48:59] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:48:59] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:49:18] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:49:44] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 21:53:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:53:26] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:53:54] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:54:19] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:54:36] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:56:06] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:56:11] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:56:33] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:56:50] "POST /process HTTP/1.1" 200 -

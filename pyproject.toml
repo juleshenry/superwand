@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "superwand"
+version = "0.1.0"
+description = "A tool for retheming images and CSS using color palettes and gradients."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Julian Henry"}
+]
+dependencies = [
+    "numpy",
+    "pillow",
+    "scipy",
+    "matplotlib",
+]
+
+[project.scripts]
+superwand = "superwand.superwand:main"
+gradient-enforce = "superwand.gradient_enforce:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
