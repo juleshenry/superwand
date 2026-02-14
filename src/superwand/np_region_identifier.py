@@ -2,6 +2,7 @@ from .__np_color_themes__ import np_get_prominent_colors, CORES_DOIS as CORES
 from PIL import Image
 import secrets
 import numpy as np
+from sklearn.cluster import KMeans
 from scipy.ndimage import binary_dilation, binary_closing
 from collections import OrderedDict
 
@@ -22,24 +23,48 @@ def np_id_regiones(img_path, target_color, tolerance=20, debug=False, img_array=
 
 def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
     """
-    image path
-    custom color
+    Identifies prominent color regions using KMeans clustering.
+    Returns an OrderedDict mapping cluster center RGB tuples to pixel indices.
+    Every pixel is assigned to one of the k clusters.
     """
-    target_colors = np_get_prominent_colors(ip, number=number)
+    img = Image.open(ip).convert("RGB")
+    img_array = np.array(img)
+    h, w, _ = img_array.shape
+    pixels = img_array.reshape(-1, 3)
+
+    # Use KMeans to find 'number' clusters as original values
+    # Downsample for speed if image is large
+    num_samples = min(len(pixels), 100000)
+    indices = np.random.choice(len(pixels), num_samples, replace=False)
+    sample_pixels = pixels[indices]
+
+    kmeans = KMeans(n_clusters=number, random_state=42, n_init="auto").fit(
+        sample_pixels
+    )
+    labels = kmeans.predict(pixels)
+    centers = kmeans.cluster_centers_.astype(np.uint8)
+
+    # Sort clusters by size to maintain prominence order
+    counts = np.bincount(labels, minlength=number)
+    sorted_indices = np.argsort(-counts)
+
     color_regions = OrderedDict()
-    img_array = np.array(Image.open(ip).convert("RGB"))
-    for color in target_colors:
-        # Convert color to tuple before using as a dictionary key
-        color_tuple = tuple(color)
-        color_regions[color_tuple] = np_id_regiones(
-            ip, color, tolerance=tolerance, img_array=img_array
-        )
+    labels_reshaped = labels.reshape(h, w)
+
+    for i in sorted_indices:
+        color_tuple = tuple(centers[i])
+        region_indices = np.argwhere(labels_reshaped == i)
+        color_regions[color_tuple] = region_indices
+
     return color_regions
 
 
 def np_inject_2(
     image, pixel_arr, pixel, flood=False, gradient_style=None, gradient_intensity=0.2
 ):
+    if pixel is None:
+        return image
+
     # Convert the image to a NumPy array
     arr = np.array(image)
     if arr.shape[-1] == 3:  # If the image is RGB, add an alpha channel
@@ -105,7 +130,9 @@ def np_inject_2(
             pixel_tuples = np.column_stack((cols, rows)).tolist()
 
             try:
-                poles = calc_gradient_poles(style, pixel_tuples)
+                poles = calc_gradient_poles(
+                    style, pixel_tuples, img_size=(width, height)
+                )
                 if poles is None:
                     arr[rows, cols, :] = target_pixel_rgba
                 else:

@@ -72,7 +72,7 @@ def twod_dist(p1, p2):
     return ((spx - epx) ** 2 + (spy - epy) ** 2) ** 0.5
 
 
-def calc_gradient_poles(grad_kw, pixel_arr):
+def calc_gradient_poles(grad_kw, pixel_arr, img_size=None):
     print("processing", grad_kw)
 
     def calculate_distance(point1, point2):
@@ -87,6 +87,20 @@ def calc_gradient_poles(grad_kw, pixel_arr):
                 max_distance = distance
                 farthest_point = point
         return farthest_point
+
+    if img_size:
+        w, h = img_size
+        match grad_kw:
+            case "bottom-up":
+                return (w / 2, h - 1), (w / 2, 0)
+            case "top-down":
+                return (w / 2, 0), (w / 2, h - 1)
+            case "left-right":
+                return (0, h / 2), (w - 1, h / 2)
+            case "right-left":
+                return (w - 1, h / 2), (0, h / 2)
+            case "radial":
+                return (w / 2, h / 2), (w - 1, h - 1)
 
     match grad_kw:
         case "bottom-up":
@@ -146,9 +160,9 @@ def paste_gradient(
                 draw.point((x, y), fill=(r, g, b))
         case "bottom-up" | "top-down":
             for x, y in pixel_arr:
-                r = int(e_r + (s_r - e_r) * ((y - spy) / (epy - spy)))
-                g = int(e_g + (s_g - e_g) * ((y - spy) / (epy - spy)))
-                b = int(e_b + (s_b - e_b) * ((y - spy) / (epy - spy)))
+                r = int(s_r + (e_r - s_r) * ((y - spy) / (epy - spy)))
+                g = int(s_g + (e_g - s_g) * ((y - spy) / (epy - spy)))
+                b = int(s_b + (e_b - s_b) * ((y - spy) / (epy - spy)))
                 draw.point((x, y), fill=(r, g, b))
         case "radial":
             max_radius = twod_dist(start_pole, end_pole)
@@ -214,42 +228,35 @@ def gradient_enforce(
     intensity=0.2,
 ) -> Image.Image:
     """
-    Converts monocolor regionswith directional gradient
-
-    style :
-    ~ direction of gradients
-            -> auto, best guess based on boosting
-            -> vertical
-            -> horizontal
-
-    completeness :
-    ~impacted regions
-            -> aggressive, all colors
-            -> auto, most impact
-            -> filter, color or set of colors
-
-    opacity :
-    ~makes achieve minimum opacity value in region
-            -> clamp {0, 1}
-            -> failsafe rounds
-
-    intensity :
-    ~dramaticism of the gradient (0.0 to 1.0)
+    Converts monocolor regions with directional gradient
     """
-    # ...
-    # Apply gradients
+    if isinstance(img, str):
+        img = Image.open(img).convert("RGB")
+
+    img_size = img.size
+
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+        img.save(tmp.name)
+        img_path = tmp.name
+
+    try:
+        regions = np_get_prominent_regions(img_path)
+    finally:
+        if os.path.exists(img_path):
+            os.remove(img_path)
+
+    grad_kw = style
+    if style == "auto":
+        grad_kw = "top-down"
+
     for color, pixels in regions.items():
-        # ...
-        # Create gradient colors based on original color
-        # Make one end lighter and one end darker
+        pixel_tuples = [[p[1], p[0]] for p in pixels]
+
         start_color = adjust_color(color, 1 + intensity)
         end_color = adjust_color(color, 1 - intensity)
 
-        # Calculate poles
         try:
-            p1, p2 = calc_gradient_poles(grad_kw, pixel_tuples)
-
-            # Apply gradient
+            p1, p2 = calc_gradient_poles(grad_kw, pixel_tuples, img_size=img_size)
             img = paste_gradient(
                 img, pixel_tuples, p1, p2, start_color, end_color, grad_kw
             )
