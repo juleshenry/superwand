@@ -376,3 +376,194 @@ extracting 8colorz
 127.0.0.1 - - [13/Feb/2026 21:56:11] "POST /upload HTTP/1.1" 200 -
 127.0.0.1 - - [13/Feb/2026 21:56:33] "POST /process HTTP/1.1" 200 -
 127.0.0.1 - - [13/Feb/2026 21:56:50] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:57:24] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:57:46] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:58:00] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:58:08] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:58:16] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:58:37] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 21:59:26] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+extracting 5colorz
+30 30
+9999999 30
+##### 5
+5 !@#$!@#@$#!
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing radial
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/gradients.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 22:01:48] "GET / HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/tests/test_gradients.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 22:02:49] "[31m[1mPOST /upload HTTP/1.1[0m" 400 -
+127.0.0.1 - - [13/Feb/2026 22:02:49] "[31m[1mPOST /upload HTTP/1.1[0m" 400 -
+127.0.0.1 - - [13/Feb/2026 22:02:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:03:04] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:03:27] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:06:06] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:06:26] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:06:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:06:46] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:06:58] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+processing top-down
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 22:08:06] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:12] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:21] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:27] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:51] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:08:55] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:09:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:09:36] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:09:42] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:10:00] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:07] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:10:26] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:10:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:46] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:53] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:10:56] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:11:06] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:12:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:12:28] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:13:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:16:27] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:16:36] "POST /upload HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+extracting 8colorz
+30 30
+9999999 30
+##### 8
+8 !@#$!@#@$#!
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 22:20:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:20:58] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 22:20:59] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+127.0.0.1 - - [13/Feb/2026 22:21:36] "GET / HTTP/1.1" 200 -
