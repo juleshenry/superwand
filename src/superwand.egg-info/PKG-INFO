@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: superwand
-Version: 0.1.11
+Version: 0.1.13
 Summary: A tool for retheming images and CSS using color palettes and gradients.
 Author: Julian Henry
 License-Expression: MIT
@@ -31,7 +31,7 @@ Leverage magic wand to breath life to images, especially posterized and vector a
 
 ## Setup
 ```bash
-pip install .
+uv sync
 ```
 
 ## SuperWand Studio
@@ -102,10 +102,11 @@ Identify color schemes in CSS and replace with a theme.
 ## Color Themes
 Themes included:
 
-| Spring | Summer | Winter | Fall | Arctic |
+| | | | | |
 | :---: | :---: | :---: | :---: | :---: |
 | ![Spring](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/SpringTheme.jpg?raw=1) | ![Summer](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/SummerTheme.jpg?raw=1) | ![Winter](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/WinterTheme.jpg?raw=1) | ![Fall](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/FallTheme.jpg?raw=1) | ![Arctic](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/ArcticTheme.jpg?raw=1) |
 | ![Safari](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/SafariTheme.jpg?raw=1) | ![Urban](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/UrbanTheme.jpg?raw=1) | ![Neon](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/NeonTheme.jpg?raw=1) | ![Tropical](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/TropicalTheme.jpg?raw=1) | ![Paixão](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/Paix%C3%A3oTheme.jpg?raw=1) |
+| ![Vaporwave](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/VaporwaveTheme.jpg?raw=1) | ![Cyberpunk](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/CyberpunkTheme.jpg?raw=1) | ![Retro80s](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/Retro80sTheme.jpg?raw=1) | ![Sunset](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/SunsetTheme.jpg?raw=1) | ![Midnight](https://github.com/juleshenry/superwand/blob/main/src/superwand/assets/themes_jpgs/MidnightTheme.jpg?raw=1) |
 
 ### Example: Charizard
 
@@ -113,6 +114,7 @@ Themes included:
 | :---: | :---: | :---: | :---: | :---: |
 | ![Spring](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Spring_charizard.png?raw=1) | ![Summer](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Summer_charizard.png?raw=1) | ![Fall](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Fall_charizard.png?raw=1) | ![Winter](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Winter_charizard.png?raw=1) | ![Arctic](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Arctic_charizard.png?raw=1) |
 | ![Safari](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Safari_charizard.png?raw=1) | ![Urban](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Urban_charizard.png?raw=1) | ![Neon](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Neon_charizard.png?raw=1) | ![Tropical](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Tropical_charizard.png?raw=1) | ![Paixão](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Paix%C3%A3o_charizard.png?raw=1) |
+| ![Vaporwave](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Vaporwave_charizard.png?raw=1) | ![Cyberpunk](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Cyberpunk_charizard.png?raw=1) | ![Retro80s](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Retro80s_charizard.png?raw=1) | ![Sunset](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Sunset_charizard.png?raw=1) | ![Midnight](https://github.com/juleshenry/superwand/blob/main/examples/charizards/Midnight_charizard.png?raw=1) |
 
 ## Gallery
 
