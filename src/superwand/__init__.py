@@ -57,9 +57,16 @@
                            by Julian Henry
 """
 
-from .superwand import SuperWand
-from .gradients import gradient_enforce
-from .np_region_identifier import np_get_prominent_regions, np_inject_theme
-from .__color_themes__ import color_themes
+from .core.superwand import SuperWand
+from .utils.gradients import gradient_enforce
+from .core.np_region_identifier import np_get_prominent_regions, np_inject_theme
+from .core.themes import color_themes
 
+__all__ = [
+    "SuperWand",
+    "gradient_enforce",
+    "np_get_prominent_regions",
+    "np_inject_theme",
+    "color_themes",
+]
 __version__ = "0.1.0"
