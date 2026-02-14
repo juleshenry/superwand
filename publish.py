@@ -107,17 +107,12 @@ def main():
         run_command("rm -rf src/superwand.egg-info")
 
     print("Installing/Updating build tools...")
-    run_command("python3 -m pip install --upgrade --break-system-packages build twine")
+    run_command("python3 -m pip install --upgrade --break-system-packages build")
 
     print("Building package...")
     run_command("python3 -m build")
 
-    # 4. Twine Upload
-    print("Uploading to PyPI...")
-    # Note: Twine will prompt for credentials unless configured in ~/.pypirc or env vars
-    run_command("python3 -m twine upload dist/*")
-
-    # 5. Git Tag and Push
+    # 4. Git Tag and Push
     print("Tagging and pushing to git...")
     tag_version = new_version if new_version.startswith("v") else f"v{new_version}"
     run_command(
@@ -128,7 +123,8 @@ def main():
     run_command(f"git push origin main")
     run_command(f"git push origin --tags")
 
-    print(f"\nDone! {tag_version} has been built, uploaded, and tagged.")
+    print(f"\nDone! {tag_version} has been built, committed, and tagged.")
+    print("GitHub Actions will handle the PyPI publication via Trusted Publishing.")
 
 
 if __name__ == "__main__":

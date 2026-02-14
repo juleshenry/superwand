@@ -1,4 +1,7 @@
 # superwand
+
+![SuperWand Studio](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/studio-preview.png)
+
 Leverage magic wand to breath life to images, especially posterized and vector art images.
 
 ## Setup
@@ -56,11 +59,11 @@ Included: `bottom-up`, `top-down`, `left-right`, `right-left`, `radial`
 
 <table>
   <tr>
-    <td><img src="examples/charizards/gradient_bottom-up_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/gradient_top-down_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/gradient_left-right_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/gradient_right-left_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/gradient_radial_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_bottom-up_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_top-down_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_left-right_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_right-left_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_radial_charizard.png" width="150"></td>
   </tr>
 </table>
 
@@ -69,12 +72,12 @@ Identify color schemes in CSS and replace with a theme.
 
 <table>
   <tr>
-    <td><img src="examples/css/before.png" width="200"></td>
-    <td><img src="examples/css/after_tropical.png" width="200"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/before.png" width="200"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/after_tropical.png" width="200"></td>
   </tr>
   <tr>
-    <td><img src="examples/css/menu.png" width="200"></td>
-    <td><img src="examples/css/menu_tropical.png" width="200"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu.png" width="200"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu_tropical.png" width="200"></td>
   </tr>
 </table>
 
@@ -83,18 +86,18 @@ Themes included:
 
 <table>
   <tr>
-    <td><img src="src/superwand/assets/themes_jpgs/SpringTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/SummerTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/WinterTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/FallTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/ArcticTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SpringTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SummerTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/WinterTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/FallTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/ArcticTheme.jpg" width="100"></td>
   </tr>
   <tr>
-    <td><img src="src/superwand/assets/themes_jpgs/SafariTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/UrbanTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/NeonTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/TropicalTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/assets/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SafariTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/UrbanTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/NeonTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/TropicalTheme.jpg" width="100"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
   </tr>
 </table>
 
@@ -102,18 +105,18 @@ Themes included:
 
 <table>
   <tr>
-    <td><img src="examples/charizards/Spring_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Summer_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Fall_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Winter_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Arctic_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Spring_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Summer_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Fall_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Winter_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Arctic_charizard.png" width="150"></td>
   </tr>
   <tr>
-    <td><img src="examples/charizards/Safari_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Urban_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Neon_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Tropical_charizard.png" width="150"></td>
-    <td><img src="examples/charizards/Paixão_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Safari_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Urban_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Neon_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Tropical_charizard.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Paixão_charizard.png" width="150"></td>
   </tr>
 </table>
 
@@ -122,32 +125,32 @@ Themes included:
 ### Rio De Janeiro Skyline
 <table>
   <tr>
-    <td><img src="examples/gallery/erro_xota.jpg" width="150"></td>
-    <td><img src="examples/gallery/erro_xota_Arctic.png" width="150"></td>
-    <td><img src="examples/gallery/erro_xota_Fall.png" width="150"></td>
-    <td><img src="examples/gallery/erro_xota_Neon.png" width="150"></td>
-    <td><img src="examples/gallery/erro_xota_Tropical.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota.jpg" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Arctic.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Fall.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Neon.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Tropical.png" width="150"></td>
   </tr>
 </table>
 
 ### Austin Ladybird Lake Plankton rendered in [ZIT](https://github.com/juleshenry/zooplankton-image-tool)
 <table>
   <tr>
-    <td><img src="examples/gallery/plankt_oct19.jpg" width="150"></td>
-    <td><img src="examples/gallery/plankt_oct19_Spring.png" width="150"></td>
-    <td><img src="examples/gallery/plankt_oct19_Summer.png" width="150"></td>
-    <td><img src="examples/gallery/plankt_oct19_Winter.png" width="150"></td>
-    <td><img src="examples/gallery/plankt_oct19_Safari.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19.jpg" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Spring.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Summer.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Winter.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Safari.png" width="150"></td>
   </tr>
 </table>
 
 ### Me in Rio de Janeiro
 <table>
   <tr>
-    <td><img src="examples/gallery/rio07.jpg" width="150"></td>
-    <td><img src="examples/gallery/rio07_Paixão.png" width="150"></td>
-    <td><img src="examples/gallery/rio07_Urban.png" width="150"></td>
-    <td><img src="examples/gallery/rio07_Arctic.png" width="150"></td>
-    <td><img src="examples/gallery/rio07_Fall.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07.jpg" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Paixão.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Urban.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Arctic.png" width="150"></td>
+    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Fall.png" width="150"></td>
   </tr>
 </table>
