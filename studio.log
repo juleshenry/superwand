@@ -698,3 +698,123 @@ processing top-down
 127.0.0.1 - - [13/Feb/2026 23:39:08] "POST /process HTTP/1.1" 200 -
 127.0.0.1 - - [13/Feb/2026 23:39:12] "POST /process HTTP/1.1" 200 -
 127.0.0.1 - - [13/Feb/2026 23:39:17] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:48] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:49] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:53] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:54] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:40:57] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:01] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:05] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:06] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:10] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:12] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:17] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:21] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:24] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:29] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:41:33] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:42:05] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:43:33] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:43:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:43:45] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:43:48] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:43:57] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:00] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:06] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:09] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:12] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:16] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:20] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:26] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:44:33] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:45:31] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:45:47] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:45:51] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:45:55] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:45:59] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:05] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:13] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:21] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:25] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:27] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:35] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:46:45] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/studio/app.py', reloading
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing top-down
+processing radial
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+processing left-right
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:47:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:47:27] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:47:29] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:47:35] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:47:40] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:47:42] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+processing top-down
+processing top-down
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:48:11] "GET / HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:48:21] "POST /upload HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:22] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:26] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:29] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:32] "POST /process HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/np_region_identifier.py', reloading
+processing top-down
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+127.0.0.1 - - [13/Feb/2026 23:48:36] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:41] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:47] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:48] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:54] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:48:58] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:49:04] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:50:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:50:34] "POST /process HTTP/1.1" 200 -
+127.0.0.1 - - [13/Feb/2026 23:50:39] "GET / HTTP/1.1" 200 -

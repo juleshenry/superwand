@@ -354,14 +354,15 @@
                     addBtn.innerText = '+ ADD GRADIENT';
                     addBtn.onclick = () => {
                         grad.style = 'vertical';
+                        grad.paletteColor = origHex;
+                        
                         // Make color2 slightly different so the gradient is visible immediately
-                        const rgb = hexToRgb(grad.paletteColor);
-                        const r = Math.max(0, Math.min(255, rgb[0] > 128 ? rgb[0] - 40 : rgb[0] + 40));
-                        const g = Math.max(0, Math.min(255, rgb[1] > 128 ? rgb[1] - 40 : rgb[1] + 40));
-                        const b = Math.max(0, Math.min(255, rgb[2] > 128 ? rgb[2] - 40 : rgb[2] + 40));
+                        const rgb = hexToRgb(origHex);
+                        const r = Math.max(0, Math.min(255, rgb[0] > 128 ? rgb[0] - 50 : rgb[0] + 50));
+                        const g = Math.max(0, Math.min(255, rgb[1] > 128 ? rgb[1] - 50 : rgb[1] + 50));
+                        const b = Math.max(0, Math.min(255, rgb[2] > 128 ? rgb[2] - 50 : rgb[2] + 50));
                         grad.color2 = "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
                         
-                        paletteCheckbox.checked = true;
                         updateColorPickers();
                         triggerProcess();
                     };
@@ -395,17 +396,6 @@
                     styleSelect.onchange = (e) => { grad.style = e.target.value; updateColorPickers(); triggerProcess(); };
                     topRow.appendChild(styleSelect);
 
-                    // Remove button
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'text-gray-400 hover:text-red-500 ml-2';
-                    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
-                    removeBtn.onclick = () => {
-                        grad.style = 'none';
-                        updateColorPickers();
-                        triggerProcess();
-                    };
-                    topRow.appendChild(removeBtn);
-
                     // Intensity slider in a second row
                     const intensityRow = document.createElement('div');
                     intensityRow.className = 'flex items-center space-x-2 px-2';
@@ -418,6 +408,17 @@
                     intensityInput.className = 'flex-1 max-w-[140px] h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer';
                     intensityInput.oninput = (e) => { grad.intensity = e.target.value / 100.0; triggerProcess(); };
                     intensityRow.appendChild(intensityInput);
+
+                    const removeLink = document.createElement('button');
+                    removeLink.className = 'text-[8px] text-red-400 hover:text-red-600 font-bold uppercase ml-auto transition-colors';
+                    removeLink.innerText = 'Remove';
+                    removeLink.onclick = () => {
+                        grad.style = 'none';
+                        updateColorPickers();
+                        triggerProcess();
+                    };
+                    intensityRow.appendChild(removeLink);
+                    
                     container.appendChild(intensityRow);
                 }
 
@@ -497,25 +498,22 @@
             const gradientStyles = [];
             const gradientIntensities = [];
 
-            if (applyPalette) {
-                regionGradients.forEach(grad => {
-                    const c1 = hexToRgb(grad.paletteColor || "#000000");
-                    if (grad.style !== 'none' && grad.color2) {
+            regionGradients.forEach(grad => {
+                const c1 = hexToRgb(grad.paletteColor || "#000000");
+                if (grad.style !== 'none') {
+                    gradientStyles.push(grad.style);
+                    if (grad.color2) {
                         const c2 = hexToRgb(grad.color2);
                         colors.push([c1, c2]);
-                        gradientStyles.push(grad.style);
                     } else {
                         colors.push(c1);
-                        gradientStyles.push('none');
                     }
-                    gradientIntensities.push(grad.intensity);
-                });
-            } else {
-                for (let i = 0; i < k; i++) {
+                } else {
+                    colors.push(c1);
                     gradientStyles.push('none');
-                    gradientIntensities.push(0.2);
                 }
-            }
+                gradientIntensities.push(grad.intensity);
+            });
 
             isProcessing = true;
             document.getElementById('loadingOverlay').classList.remove('hidden');
@@ -531,7 +529,8 @@
                         flood: flood,
                         gradient_styles: gradientStyles,
                         gradient_intensities: gradientIntensities,
-                        colors: colors
+                        colors: colors,
+                        apply_palette: applyPalette
                     })
                 });
                 
@@ -545,14 +544,7 @@
 
                 if (data.image) {
                     const preview = document.getElementById('processedPreview');
-                    if (applyPalette) {
-                        preview.src = 'data:image/png;base64,' + data.image;
-                    } else {
-                        // Only update if current src is not already the original
-                        if (preview.src !== currentObjectUrl) {
-                            preview.src = currentObjectUrl;
-                        }
-                    }
+                    preview.src = 'data:image/png;base64,' + data.image;
                     preview.classList.remove('hidden');
                     document.getElementById('processedPlaceholder').classList.add('hidden');
                     document.getElementById('downloadImageBtn').classList.remove('hidden');

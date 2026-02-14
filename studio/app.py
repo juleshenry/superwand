@@ -41,6 +41,7 @@ def process_image():
     k = int(data.get("k", 4))
     threshold = int(data.get("threshold", 50))
     flood = data.get("flood", False)
+    apply_palette = data.get("apply_palette", False)
     gradient_styles = data.get("gradient_styles")
     gradient_intensities = data.get("gradient_intensities")
     colors = data.get("colors", [])  # List of [r, g, b] or [[r, g, b], [r, g, b]]
@@ -51,24 +52,47 @@ def process_image():
         regions = np_get_prominent_regions(image_path, number=k, tolerance=threshold)
 
         # Prepare theme colors
-        # If user provided colors, use them.
         theme_rgbs = []
         region_keys = list(regions.keys())
         for i in range(len(region_keys)):
             if i < len(colors):
                 color = colors[i]
-                if color is None:
-                    theme_rgbs.append(region_keys[i])
-                elif (
-                    isinstance(color, list)
-                    and len(color) > 0
-                    and isinstance(color[0], list)
-                ):
-                    theme_rgbs.append((tuple(color[0]), tuple(color[1])))
+                if not apply_palette:
+                    # If not applying palette, the "base" color is the original region color
+                    # But if there's a gradient style, we might want to use the color if provided
+                    # Actually, user said: "original photo stays in tact (when apply color palette is not selected, gradients should work!)"
+                    # This implies we use the original color as base for gradients if style is present.
+                    if (
+                        gradient_styles
+                        and i < len(gradient_styles)
+                        and gradient_styles[i] != "none"
+                    ):
+                        if (
+                            isinstance(color, list)
+                            and len(color) > 0
+                            and isinstance(color[0], list)
+                        ):
+                            theme_rgbs.append((tuple(color[0]), tuple(color[1])))
+                        else:
+                            # Use original color but allow gradient logic to adjust it
+                            theme_rgbs.append(region_keys[i])
+                    else:
+                        # No gradient, no palette -> just original
+                        theme_rgbs.append(None)
                 else:
-                    theme_rgbs.append(tuple(color))
+                    # Applying palette
+                    if color is None:
+                        theme_rgbs.append(region_keys[i])
+                    elif (
+                        isinstance(color, list)
+                        and len(color) > 0
+                        and isinstance(color[0], list)
+                    ):
+                        theme_rgbs.append((tuple(color[0]), tuple(color[1])))
+                    else:
+                        theme_rgbs.append(tuple(color))
             else:
-                theme_rgbs.append(region_keys[i])
+                theme_rgbs.append(region_keys[i] if apply_palette else None)
 
         # Inject theme
         original_img = Image.open(image_path)
