@@ -1,7 +1,6 @@
 LICENSE
 README.md
 pyproject.toml
-setup.py
 src/superwand/__init__.py
 src/superwand.egg-info/PKG-INFO
 src/superwand.egg-info/SOURCES.txt
