@@ -162,8 +162,10 @@ def paste_gradient(
     # Midpoint/Bias logic
     # factor = factor ** p where p = log(0.5) / log(polarity)
     p = 1.0
-    if polarity != 0.5 and polarity > 0 and polarity < 1:
-        p = math.log(0.5) / math.log(polarity)
+    # Fix: polarity should work even if very close to 0 or 1. Use an epsilon.
+    safe_polarity = max(0.001, min(0.999, polarity))
+    if safe_polarity != 0.5:
+        p = math.log(0.5) / math.log(safe_polarity)
 
     match grad_kw:
         case "left-right" | "right-left":

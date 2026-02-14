@@ -534,7 +534,10 @@
                     })
                 });
                 
-                if (!resp.ok) throw new Error("Backend processing failed");
+                if (!resp.ok) {
+                    const errorData = await resp.json();
+                    throw new Error(errorData.error || "Backend processing failed");
+                }
                 
                 const data = await resp.json();
                 
@@ -554,6 +557,7 @@
                 
             } catch (err) {
                 console.error("Processing failed", err);
+                alert("Studio Error: " + err.message);
             } finally {
                 isProcessing = false;
                 document.getElementById('loadingOverlay').classList.add('hidden');
@@ -566,6 +570,8 @@
             kValue.innerText = kSlider.value;
             paletteCheckbox.checked = true;
             
+            // Reset gradients when applying a preset
+            regionGradients = [];
             while (regionGradients.length < presetK) {
                 regionGradients.push({ style: 'none', color2: null, polarity: 0.5, paletteColor: null });
             }

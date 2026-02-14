@@ -196,8 +196,10 @@ def np_inject_2(
 
         # Midpoint/Bias logic
         p = 1.0
-        if gradient_polarity != 0.5 and gradient_polarity > 0 and gradient_polarity < 1:
-            p = math.log(0.5) / math.log(gradient_polarity)
+        # Fix: polarity should work even if very close to 0 or 1. Use an epsilon.
+        safe_polarity = max(0.001, min(0.999, gradient_polarity))
+        if safe_polarity != 0.5:
+            p = math.log(0.5) / math.log(safe_polarity)
 
         if len(rows) > 0:
             try:
@@ -312,8 +314,16 @@ def np_inject_theme_image(
         # use the current color and the next color as start and end points.
         pixel_to_inject = target_color
         if style and style != "none" and len(theme_rgbs) > 1:
-            next_color = theme_rgbs[(i + 1) % len(theme_rgbs)]
-            pixel_to_inject = (target_color, next_color)
+            # Only wrap if it's not already a gradient pair [c1, c2]
+            is_already_gradient = (
+                isinstance(target_color, (list, tuple))
+                and len(target_color) == 2
+                and isinstance(target_color[0], (list, tuple))
+            )
+            if not is_already_gradient and target_color is not None:
+                next_color = theme_rgbs[(i + 1) % len(theme_rgbs)]
+                if next_color is not None:
+                    pixel_to_inject = (target_color, next_color)
 
         image = np_inject_2(
             image,
