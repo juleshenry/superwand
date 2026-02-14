@@ -85,9 +85,6 @@ def main():
     print(f"Updating pyproject.toml to v{new_version}...")
     update_file("pyproject.toml", r'version = ".*"', f'version = "{new_version}"')
 
-    print(f"Updating setup.py to v{new_version}...")
-    update_file("setup.py", r'version=".*"', f'version="{new_version}"')
-
     print(f"Updating src/superwand/__init__.py to v{new_version}...")
     update_file(
         "src/superwand/__init__.py",
@@ -115,9 +112,7 @@ def main():
     # 4. Git Tag and Push
     print("Tagging and pushing to git...")
     tag_version = new_version if new_version.startswith("v") else f"v{new_version}"
-    run_command(
-        f"git add pyproject.toml setup.py src/superwand/__init__.py CHANGELOG.md"
-    )
+    run_command(f"git add pyproject.toml src/superwand/__init__.py CHANGELOG.md")
     run_command(f'git commit -m "Release {tag_version}"')
     run_command(f"git tag {tag_version}")
     run_command(f"git push origin main")
