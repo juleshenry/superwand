@@ -57,100 +57,46 @@ gradient-enforce examples/images/charizard.png --style radial
 ## Gradients
 Included: `bottom-up`, `top-down`, `left-right`, `right-left`, `radial`
 
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_bottom-up_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_top-down_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_left-right_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_right-left_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_radial_charizard.png" width="150"></td>
-  </tr>
-</table>
+| | | | | |
+| :---: | :---: | :---: | :---: | :---: |
+| ![bottom-up](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_bottom-up_charizard.png) | ![top-down](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_top-down_charizard.png) | ![left-right](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_left-right_charizard.png) | ![right-left](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_right-left_charizard.png) | ![radial](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/gradient_radial_charizard.png) |
 
 ## CSS Retheming
 Identify color schemes in CSS and replace with a theme.
 
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/before.png" width="200"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/after_tropical.png" width="200"></td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu.png" width="200"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu_tropical.png" width="200"></td>
-  </tr>
-</table>
+| Before | After |
+| :---: | :---: |
+| ![before](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/before.png) | ![after](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/after_tropical.png) |
+| ![menu](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu.png) | ![menu_tropical](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/css/menu_tropical.png) |
 
 ## Color Themes
 Themes included:
 
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SpringTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SummerTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/WinterTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/FallTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/ArcticTheme.jpg" width="100"></td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SafariTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/UrbanTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/NeonTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/TropicalTheme.jpg" width="100"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
-  </tr>
-</table>
+| Spring | Summer | Winter | Fall | Arctic |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Spring](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SpringTheme.jpg) | ![Summer](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SummerTheme.jpg) | ![Winter](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/WinterTheme.jpg) | ![Fall](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/FallTheme.jpg) | ![Arctic](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/ArcticTheme.jpg) |
+| ![Safari](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/SafariTheme.jpg) | ![Urban](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/UrbanTheme.jpg) | ![Neon](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/NeonTheme.jpg) | ![Tropical](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/TropicalTheme.jpg) | ![Paixão](https://raw.githubusercontent.com/juleshenry/superwand/main/src/superwand/assets/themes_jpgs/Paix%C3%A3oTheme.jpg) |
 
 ### Example: Charizard
 
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Spring_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Summer_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Fall_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Winter_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Arctic_charizard.png" width="150"></td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Safari_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Urban_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Neon_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Tropical_charizard.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Paixão_charizard.png" width="150"></td>
-  </tr>
-</table>
+| Spring | Summer | Fall | Winter | Arctic |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Spring](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Spring_charizard.png) | ![Summer](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Summer_charizard.png) | ![Fall](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Fall_charizard.png) | ![Winter](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Winter_charizard.png) | ![Arctic](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Arctic_charizard.png) |
+| ![Safari](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Safari_charizard.png) | ![Urban](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Urban_charizard.png) | ![Neon](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Neon_charizard.png) | ![Tropical](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Tropical_charizard.png) | ![Paixão](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/charizards/Paix%C3%A3o_charizard.png) |
 
 ## Gallery
 
 ### Rio De Janeiro Skyline
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota.jpg" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Arctic.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Fall.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Neon.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Tropical.png" width="150"></td>
-  </tr>
-</table>
+| Original | Arctic | Fall | Neon | Tropical |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Original](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota.jpg) | ![Arctic](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Arctic.png) | ![Fall](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Fall.png) | ![Neon](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Neon.png) | ![Tropical](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/erro_xota_Tropical.png) |
 
 ### Austin Ladybird Lake Plankton rendered in [ZIT](https://github.com/juleshenry/zooplankton-image-tool)
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19.jpg" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Spring.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Summer.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Winter.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Safari.png" width="150"></td>
-  </tr>
-</table>
+| Original | Spring | Summer | Winter | Safari |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Original](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19.jpg) | ![Spring](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Spring.png) | ![Summer](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Summer.png) | ![Winter](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Winter.png) | ![Safari](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/plankt_oct19_Safari.png) |
 
 ### Me in Rio de Janeiro
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07.jpg" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Paixão.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Urban.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Arctic.png" width="150"></td>
-    <td><img src="https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Fall.png" width="150"></td>
-  </tr>
-</table>
+| Original | Paixão | Urban | Arctic | Fall |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Original](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07.jpg) | ![Paixão](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Paix%C3%A3o.png) | ![Urban](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Urban.png) | ![Arctic](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Arctic.png) | ![Fall](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/gallery/rio07_Fall.png) |
