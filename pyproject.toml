@@ -4,13 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "superwand"
-version = "0.1.4"
+version = "0.1.7"
 description = "A tool for retheming images and CSS using color palettes and gradients."
 readme = "README.md"
 requires-python = ">=3.8"
-license = {file = "LICENSE"}
+license = "MIT"
 authors = [
     {name = "Julian Henry"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
 ]
 dependencies = [
     "numpy",
@@ -21,6 +25,10 @@ dependencies = [
     "flask",
     "werkzeug",
 ]
+
+[project.urls]
+Homepage = "https://github.com/juleshenry/superwand"
+"Bug Tracker" = "https://github.com/juleshenry/superwand/issues"
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov"]
