@@ -6,6 +6,20 @@ Leverage magic wand to breath life to images, especially posterized and vector a
 pip install .
 ```
 
+## SuperWand Studio
+
+The SuperWand Studio provides an interactive web interface for real-time image retheming, CSS retheming, and gradient application.
+
+### Running the Studio
+
+Simply run the `superwand` command without applying a theme:
+```bash
+superwand
+```
+
+### Access the UI
+Once the server is running, open your browser and navigate to `http://127.0.0.1:5001`.
+
 ## CLI Usage
 
 ### Apply a Theme
@@ -13,41 +27,29 @@ pip install .
 superwand examples/images/zebra.png -theme Urban
 ```
 
-## SuperWand Studio
-
-The SuperWand Studio provides an interactive web interface for real-time image retheming, CSS retheming, and gradient application.
-
-### Running the Studio
-
-1. **Setup Environment:**
-   It is recommended to use a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install . flask scikit-learn
-   ```
-
-2. **Start the Server:**
-   Run the studio application from the root directory:
-   ```bash
-   export PYTHONPATH=$(pwd)/src
-   python studio/app.py
-   ```
-
-3. **Access the UI:**
-   Open your browser and navigate to `http://127.0.0.1:5001`.
-
-### Features
-- **Real-time Image Processing:** Upload an image and adjust the number of regions ($k$) and color matching tolerance.
-- **Flood Logic:** Toggle "Aggressive" flooding to fill gaps in complex regions using morphological operations.
-- **Custom Palettes:** Use dynamic color pickers or select from creative presets like **Cyberpunk**, **Vaporwave**, or **Retro80s**.
-- **CSS Rethemer:** Upload a `.css` file and apply the active palette to it instantly.
-- **Gradient Overlay:** Apply directional (Vertical, Horizontal) or Radial gradients to identified color regions.
+#### Arguments
+- `image_path`: Path to the input image file (optional if starting studio).
+- `-theme`: Theme to apply (Tropical, Urban, Winter, etc.).
+- `-k`: Number of regions to identify (default 4).
+- `-tolerance`: Color matching tolerance (default 50).
+- `-flood`: Apply morphological flood filling.
+- `-gradient`: Gradient style (none, auto, vertical, horizontal, radial).
+- `-intensity`: Gradient intensity (0.0 to 1.0, default 0.2).
+- `--headless`: Run in headless mode without opening the studio.
 
 ### Enforce Gradients
 ```bash
 gradient-enforce examples/images/charizard.png --style radial
 ```
+
+#### Arguments
+- `image_path`: Path to the input image.
+- `--style`: Direction of gradients (auto, vertical, horizontal).
+- `--completeness`: Impacted regions (auto, aggressive, filter).
+- `--opacity`: Opacity handling.
+- `--intensity`: Gradient dramaticism (0.0 to 1.0, default 0.2).
+- `--output`: Path to the output image.
+
 
 ## Gradients
 Included: `bottom-up`, `top-down`, `left-right`, `right-left`, `radial`
@@ -81,18 +83,18 @@ Themes included:
 
 <table>
   <tr>
-    <td><img src="themes_jpgs/SpringTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/SummerTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/WinterTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/FallTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/ArcticTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/SpringTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/SummerTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/WinterTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/FallTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/ArcticTheme.jpg" width="100"></td>
   </tr>
   <tr>
-    <td><img src="themes_jpgs/SafariTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/UrbanTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/NeonTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/TropicalTheme.jpg" width="100"></td>
-    <td><img src="themes_jpgs/PaixãoTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/SafariTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/UrbanTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/NeonTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/TropicalTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
   </tr>
 </table>
 

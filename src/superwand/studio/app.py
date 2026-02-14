@@ -5,16 +5,18 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps
 import numpy as np
-from superwand.np_region_identifier import (
+from ..np_region_identifier import (
     np_get_prominent_regions,
     np_inject_theme_image,
 )
-from superwand.css_rethemer import css_retheme
-from superwand.gradients import gradient_enforce
-from superwand.__np_color_themes__ import CORES_DOIS as CORES
+from ..css_rethemer import css_retheme
+from ..gradients import gradient_enforce
+from ..__np_color_themes__ import CORES_DOIS as CORES
 
 app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "studio/static/uploads"
+app.config["UPLOAD_FOLDER"] = os.path.join(
+    os.path.dirname(__file__), "static", "uploads"
+)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB
 
 # Ensure upload folder exists
