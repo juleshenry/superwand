@@ -5,18 +5,14 @@ import re
 from datetime import datetime
 
 
-def run_command(command):
+def run_command(command, error_msg=None):
     print(f"Running: {command}")
-    # Using Popen to stream output in real-time for interactive commands like twine if needed
-    process = subprocess.Popen(
-        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
-    )
-    if process.stdout:
-        for line in process.stdout:
-            print(line, end="")
-    process.wait()
+    process = subprocess.run(command, shell=True, capture_output=False, text=True)
     if process.returncode != 0:
-        print(f"\nCommand failed with exit code {process.returncode}")
+        if error_msg:
+            print(f"ERROR: {error_msg}")
+        else:
+            print(f"\nCommand failed with exit code {process.returncode}")
         sys.exit(1)
 
 
@@ -48,10 +44,15 @@ def update_changelog(new_version):
         lines = f.readlines()
 
     # Insert after the header
+    inserted = False
     for i, line in enumerate(lines):
         if line.startswith("# Changelog"):
             lines.insert(i + 1, new_entry)
+            inserted = True
             break
+
+    if not inserted:
+        lines.insert(0, f"# Changelog\n{new_entry}")
 
     with open(file_path, "w") as f:
         f.writelines(lines)
@@ -68,14 +69,20 @@ def get_current_version():
 
 def main():
     current_version = get_current_version()
+
     if len(sys.argv) < 2:
-        print(f"Current version: {current_version}")
-        new_version = input(
-            f"Enter new version (suggested: {current_version[:-1]}{int(current_version[-1]) + 1 if current_version[-1].isdigit() else '?'}): "
-        )
+        print(f"Current local version (pyproject.toml): {current_version}")
+
+        # Smart version increment suggestion
+        parts = current_version.split(".")
+        if len(parts) == 3 and parts[2].isdigit():
+            suggested = f"{parts[0]}.{parts[1]}.{int(parts[2]) + 1}"
+        else:
+            suggested = current_version + ".1"
+
+        new_version = input(f"Enter new version [default: {suggested}]: ").strip()
         if not new_version:
-            print("Aborted.")
-            sys.exit(0)
+            new_version = suggested
     else:
         new_version = sys.argv[1]
 
@@ -103,23 +110,49 @@ def main():
     if os.path.exists("src/superwand.egg-info"):
         run_command("rm -rf src/superwand.egg-info")
 
-    print("Installing/Updating build tools...")
-    run_command("python3 -m pip install --upgrade --break-system-packages build")
-
     print("Building package...")
-    run_command("python3 -m build")
+    run_command(
+        "python3 -m build", "Build failed. Check your pyproject.toml and dependencies."
+    )
 
-    # 4. Git Tag and Push
-    print("Tagging and pushing to git...")
+    print("Checking build distribution with twine...")
+    run_command("twine check dist/*", "Twine check failed. Metadata might be invalid.")
+
+    # 4. Git Operations
+    print("Committing and tagging in git...")
     tag_version = new_version if new_version.startswith("v") else f"v{new_version}"
     run_command(f"git add pyproject.toml src/superwand/__init__.py CHANGELOG.md")
-    run_command(f'git commit -m "Release {tag_version}"')
-    run_command(f"git tag {tag_version}")
-    run_command(f"git push origin main")
-    run_command(f"git push origin --tags")
+    # Check if there are changes to commit
+    status = subprocess.run("git diff --cached --quiet", shell=True).returncode
+    if status != 0:
+        run_command(f'git commit -m "Release {tag_version}"')
 
-    print(f"\nDone! {tag_version} has been built, committed, and tagged.")
-    print("GitHub Actions will handle the PyPI publication via Trusted Publishing.")
+    # Check if tag already exists
+    tag_exists = (
+        subprocess.run(
+            f"git rev-parse {tag_version}", shell=True, capture_output=True
+        ).returncode
+        == 0
+    )
+    if tag_exists:
+        print(f"Tag {tag_version} already exists. Skipping tagging.")
+    else:
+        run_command(f"git tag {tag_version}")
+
+    # 5. Publication choice
+    publish_local = input(
+        "\nDo you want to upload to PyPI now using twine? (y/N): "
+    ).lower()
+    if publish_local == "y":
+        print("Uploading to PyPI...")
+        run_command("twine upload dist/*")
+    else:
+        print("\nSkipping local upload. pushing to git to trigger CI/CD...")
+        run_command(f"git push origin main")
+        run_command(f"git push origin --tags")
+        print("\nDone! Push complete. GitHub Actions should handle the publication.")
+
+    print(f"\nSuccessfully processed {tag_version}.")
 
 
 if __name__ == "__main__":
