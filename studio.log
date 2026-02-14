@@ -567,3 +567,15 @@ extracting 8colorz
 127.0.0.1 - - [13/Feb/2026 22:20:58] "POST /upload HTTP/1.1" 200 -
 127.0.0.1 - - [13/Feb/2026 22:20:59] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
 127.0.0.1 - - [13/Feb/2026 22:21:36] "GET / HTTP/1.1" 200 -
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
+ * Detected change in '/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py', reloading
+ * Restarting with stat
+/Users/enrique/Desktop/fun_repos/pypilibs/superwand/src/superwand/superwand.py:53: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\/"? A raw string is also an option.
+  `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
+ * Debugger is active!
+ * Debugger PIN: 137-704-134
