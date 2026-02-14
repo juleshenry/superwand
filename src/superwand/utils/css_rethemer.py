@@ -61,7 +61,7 @@ from collections import Counter
 import argparse
 from sklearn.cluster import KMeans
 import numpy as np
-from .__color_themes__ import color_themes
+from ..core.themes import color_themes
 
 
 def hex_to_rgb(hex_code):
