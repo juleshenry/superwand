@@ -1,5 +1,5 @@
-"""
-                                ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
+r"""
+                                 ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
                                 ███████▇▃ ▅██▆
                                 ▅██████▇▅▁███▃
                                 ▄██████▇▃▁██▆▁
@@ -61,7 +61,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image, ImageDraw
 import math
-from .np_region_identifier import np_get_prominent_regions
+from ..core.np_region_identifier import np_get_prominent_regions
 import tempfile
 import os
 

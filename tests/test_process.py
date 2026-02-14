@@ -1,4 +1,4 @@
-"""
+r"""
                                        ▂▃▃▃▄▄▄▄▃▂▃▃▂▁                                               
                                        ███████▇▃ ▅██▆                                               
                                        ▅██████▇▅▁███▃                                               
@@ -58,8 +58,8 @@
 
 """
 
-from superwand.np_colorgram import np_extract
-from superwand.np_region_identifier import np_id_regiones
+from superwand.core.np_colorgram import np_extract
+from superwand.core.np_region_identifier import np_id_regiones
 from PIL import Image
 import sys
 import numpy as np

@@ -1,4 +1,4 @@
-"""
+r"""
                                 ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
                                 ███████▇▃ ▅██▆
                                 ▅██████▇▅▁███▃
@@ -58,7 +58,7 @@
 """
 
 import pytest
-from superwand.gradients import clamp, twod_dist, calc_gradient_poles, adjust_color
+from superwand.utils.gradients import clamp, twod_dist, calc_gradient_poles, adjust_color
 
 
 def test_clamp():

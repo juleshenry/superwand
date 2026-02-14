@@ -83,18 +83,18 @@ Themes included:
 
 <table>
   <tr>
-    <td><img src="src/superwand/themes_jpgs/SpringTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/SummerTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/WinterTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/FallTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/ArcticTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SpringTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SummerTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/WinterTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/FallTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/ArcticTheme.jpg" width="100"></td>
   </tr>
   <tr>
-    <td><img src="src/superwand/themes_jpgs/SafariTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/UrbanTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/NeonTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/TropicalTheme.jpg" width="100"></td>
-    <td><img src="src/superwand/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/SafariTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/UrbanTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/NeonTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/TropicalTheme.jpg" width="100"></td>
+    <td><img src="src/superwand/assets/themes_jpgs/PaixãoTheme.jpg" width="100"></td>
   </tr>
 </table>
 
