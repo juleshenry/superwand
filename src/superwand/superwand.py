@@ -58,6 +58,7 @@
 """
 
 import argparse
+import os
 from .__color_themes__ import color_themes
 from .np_region_identifier import np_get_prominent_regions, np_inject_theme
 
@@ -139,8 +140,23 @@ def main():
         default=0.2,
         help="Gradient intensity (0.0 to 1.0, default 0.2).",
     )
+    parser.add_argument(
+        "--headless",
+        action="store_true",
+        help="Run in headless mode without opening the studio.",
+    )
 
     args = parser.parse_args()
+
+    if not args.headless and not args.theme:
+        os.chdir(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        )
+        from studio.app import app
+
+        app.run(debug=True, port=5001)
+        return
+
     sw = SuperWand(color_themes, number=args.k, tolerance=args.tolerance)
     sw.apply_theme_to_image(
         args.image_path,
