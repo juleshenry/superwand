@@ -18,7 +18,12 @@ dependencies = [
     "scipy",
     "matplotlib",
     "scikit-learn",
+    "flask",
+    "werkzeug",
 ]
+
+[tool.setuptools.package-data]
+superwand = ["fonts/*.ttf", "themes_jpgs/*.jpg", "studio/templates/*.html", "studio/static/**/*"]
 
 [project.scripts]
 superwand = "superwand.superwand:main"

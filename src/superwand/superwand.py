@@ -108,7 +108,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="Process an image with a specified theme."
     )
-    parser.add_argument("image_path", type=str, help="Path to the input image file.")
+    parser.add_argument(
+        "image_path", type=str, nargs="?", help="Path to the input image file."
+    )
     parser.add_argument(
         "-theme",
         type=str,
@@ -149,15 +151,17 @@ def main():
     args = parser.parse_args()
 
     if not args.headless and not args.theme:
-        os.chdir(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        )
-        from studio.app import app
+        from .studio.app import app
 
         app.run(debug=True, port=5001)
         return
 
     sw = SuperWand(color_themes, number=args.k, tolerance=args.tolerance)
+    if not args.image_path:
+        print(
+            "Error: image_path is required when running in headless mode or applying a theme."
+        )
+        return
     sw.apply_theme_to_image(
         args.image_path,
         args.theme,
