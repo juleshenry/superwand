@@ -61,6 +61,7 @@ r"""
 import os
 import io
 import base64
+import tempfile
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps
@@ -75,7 +76,7 @@ from ..core.np_themes import CORES_DOIS as CORES
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = os.path.join(
-    os.path.dirname(__file__), "static", "uploads"
+    tempfile.gettempdir(), "superwand_uploads"
 )
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB
 
