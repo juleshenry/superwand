@@ -37,7 +37,6 @@ src/superwand/core/superwand.py
 src/superwand/core/themes.py
 src/superwand/studio/__init__.py
 src/superwand/studio/app.py
-src/superwand/studio/static/uploads/storage_emulated_0_DCIM_Camera_20171229_011933.jpeg
 src/superwand/studio/templates/index.html
 src/superwand/utils/__init__.py
 src/superwand/utils/css_rethemer.py
@@ -52,4 +51,5 @@ tests/test_gradients.py
 tests/test_polarity.py
 tests/test_process.py
 tests/test_regions.py
+tests/test_studio.py
 tests/test_superwand.py
