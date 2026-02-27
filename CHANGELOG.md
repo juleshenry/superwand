@@ -1,6 +1,6 @@
 # Changelog
 
-## v18 (2026-02-27)
+## v0.1.18 (2026-02-27)
 
 * Automated release update
 
