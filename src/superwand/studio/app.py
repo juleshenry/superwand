@@ -61,7 +61,6 @@ r"""
 import os
 import io
 import base64
-import tempfile
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps
@@ -75,13 +74,10 @@ from ..utils.gradients import gradient_enforce
 from ..core.np_themes import CORES_DOIS as CORES
 
 app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = os.path.join(
-    tempfile.gettempdir(), "superwand_uploads"
-)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB
 
-# Ensure upload folder exists
-os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+# In-memory storage for uploaded files during the session
+in_memory_storage = {}
 
 
 @app.route("/")
@@ -96,9 +92,9 @@ def process_image():
     if not image_name:
         return jsonify({"error": "No image selected"}), 400
 
-    image_path = os.path.join(app.config["UPLOAD_FOLDER"], image_name)
-    if not os.path.exists(image_path):
-        return jsonify({"error": "Image not found"}), 404
+    file_bytes = in_memory_storage.get(image_name)
+    if not file_bytes:
+        return jsonify({"error": "Image not found in memory"}), 404
 
     # Parameters
     k = int(data.get("k", 4))
@@ -111,8 +107,9 @@ def process_image():
 
     # Process
     try:
+        image_stream = io.BytesIO(file_bytes)
         # Get regions
-        regions = np_get_prominent_regions(image_path, number=k, tolerance=threshold)
+        regions = np_get_prominent_regions(image_stream, number=k, tolerance=threshold)
 
         # Prepare theme colors
         theme_rgbs = []
@@ -121,10 +118,6 @@ def process_image():
             if i < len(colors):
                 color = colors[i]
                 if not apply_palette:
-                    # If not applying palette, the "base" color is the original region color
-                    # But if there's a gradient style, we might want to use the color if provided
-                    # Actually, user said: "original photo stays in tact (when apply color palette is not selected, gradients should work!)"
-                    # This implies we use the original color as base for gradients if style is present.
                     if (
                         gradient_styles
                         and i < len(gradient_styles)
@@ -137,13 +130,10 @@ def process_image():
                         ):
                             theme_rgbs.append((tuple(color[0]), tuple(color[1])))
                         else:
-                            # Use original color but allow gradient logic to adjust it
                             theme_rgbs.append(region_keys[i])
                     else:
-                        # No gradient, no palette -> just original
                         theme_rgbs.append(None)
                 else:
-                    # Applying palette
                     if color is None:
                         theme_rgbs.append(region_keys[i])
                     elif (
@@ -158,7 +148,8 @@ def process_image():
                 theme_rgbs.append(region_keys[i] if apply_palette else None)
 
         # Inject theme
-        original_img = Image.open(image_path)
+        image_stream.seek(0)
+        original_img = Image.open(image_stream)
         original_img = ImageOps.exif_transpose(original_img)
         processed_img = np_inject_theme_image(
             regions,
@@ -190,13 +181,14 @@ def retheme_css_route():
     if not filename:
         return jsonify({"error": "No CSS file selected"}), 400
 
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    if not os.path.exists(file_path):
-        return jsonify({"error": "File not found"}), 404
+    file_bytes = in_memory_storage.get(filename)
+    if not file_bytes:
+        return jsonify({"error": "File not found in memory"}), 404
 
     try:
+        css_stream = io.BytesIO(file_bytes)
         custom_theme = [tuple(c) for c in colors]
-        modified_css = css_retheme(file_path, custom_theme=custom_theme)
+        modified_css = css_retheme(css_stream, custom_theme=custom_theme)
         return jsonify({"css": modified_css})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -211,12 +203,13 @@ def apply_gradient_route():
     if not image_name:
         return jsonify({"error": "No image selected"}), 400
 
-    image_path = os.path.join(app.config["UPLOAD_FOLDER"], image_name)
-    if not os.path.exists(image_path):
-        return jsonify({"error": "Image not found"}), 404
+    file_bytes = in_memory_storage.get(image_name)
+    if not file_bytes:
+        return jsonify({"error": "Image not found in memory"}), 404
 
     try:
-        img = Image.open(image_path).convert("RGB")
+        image_stream = io.BytesIO(file_bytes)
+        img = Image.open(image_stream).convert("RGB")
         processed_img = gradient_enforce(img, style=style)
 
         buffered = io.BytesIO()
@@ -237,8 +230,7 @@ def upload_file():
         return jsonify({"error": "No selected file"}), 400
 
     filename = secure_filename(file.filename)
-    file_path = os.path.join(str(app.config["UPLOAD_FOLDER"]), filename)
-    file.save(file_path)
+    in_memory_storage[filename] = file.read()
 
     return jsonify({"filename": filename})
 

@@ -72,9 +72,20 @@ def hex_to_rgb(hex_code):
     )
 
 
+import io
+
 def get_prominent_colors(css_file):
-    with open(css_file, "r") as file:
-        css_content = file.read()
+    if hasattr(css_file, "read"):
+        content = css_file.read()
+        css_content = content.decode("utf-8") if isinstance(content, bytes) else content
+        # Reset pointer if it's a file-like object for subsequent reads if necessary, 
+        # though here we just return the colors.
+        if hasattr(css_file, "seek"):
+            css_file.seek(0)
+    else:
+        with open(css_file, "r") as file:
+            css_content = file.read()
+    
     # Assuming the colors are in hexadecimal format
     colors = []
     for text in css_content.split():
@@ -108,10 +119,17 @@ def apply_clustering_theme(css_file, colors_text, kmp, theme):
                 return line.replace(style, theme_hex)
         return None
 
-    with open(css_file) as f:
-        for l in f.readlines():
-            rc = replace_color(l)
-            modified_lines.append(l if not rc else rc.strip())
+    if hasattr(css_file, "read"):
+        content = css_file.read()
+        css_content = content.decode("utf-8") if isinstance(content, bytes) else content
+        lines = css_content.splitlines()
+    else:
+        with open(css_file) as f:
+            lines = f.readlines()
+
+    for l in lines:
+        rc = replace_color(l)
+        modified_lines.append(l if not rc else rc.strip())
 
     return "\n".join(modified_lines)
 
