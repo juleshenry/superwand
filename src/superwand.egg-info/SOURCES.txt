@@ -10,6 +10,7 @@ src/superwand.egg-info/requires.txt
 src/superwand.egg-info/top_level.txt
 src/superwand/assets/__init__.py
 src/superwand/assets/curacao.jpg
+src/superwand/assets/whale.jpg
 src/superwand/assets/fonts/arial.ttf
 src/superwand/assets/themes_jpgs/ArcticTheme.jpg
 src/superwand/assets/themes_jpgs/CyberpunkTheme.jpg
@@ -55,3 +56,4 @@ tests/test_process.py
 tests/test_regions.py
 tests/test_studio.py
 tests/test_superwand.py
+tests/test_whale_avif.py
