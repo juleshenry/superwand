@@ -62,10 +62,16 @@ import os
 import io
 import base64
 import uuid
+import logging
 from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps, UnidentifiedImageError
+import pillow_avif  # Register AVIF support
 import numpy as np
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 from ..core.np_region_identifier import (
     np_get_prominent_regions,
     np_inject_theme_image,
@@ -95,6 +101,7 @@ def process_image():
 
     file_bytes = in_memory_storage.get(image_name)
     if not file_bytes:
+        logger.error(f"Image not found in memory: {image_name}")
         return jsonify({"error": "Image not found in memory"}), 404
 
     # Parameters
@@ -110,10 +117,13 @@ def process_image():
     try:
         # Open image once and use it everywhere
         try:
+            logger.info(f"Opening image for processing: {image_name}, size: {len(file_bytes)} bytes")
             original_img = Image.open(io.BytesIO(file_bytes))
+            logger.info(f"Successfully opened {image_name}. Format: {original_img.format}, Size: {original_img.size}")
             original_img = ImageOps.exif_transpose(original_img).convert("RGB")
-        except UnidentifiedImageError:
-            return jsonify({"error": "Cannot identify image file. Please try another format (PNG, JPG, WEBP)."}), 400
+        except UnidentifiedImageError as e:
+            logger.error(f"Failed to identify image {image_name}: {str(e)}")
+            return jsonify({"error": f"Cannot identify image file: {str(e)}. Please try another format (PNG, JPG, WEBP)."}), 400
 
         # Get regions
         regions = np_get_prominent_regions(original_img, number=k, tolerance=threshold)
@@ -261,7 +271,9 @@ def upload_file():
     ext = os.path.splitext(original_filename.lower())[1]
     if ext in ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.gif', '.avif', '.heic', '.tiff']:
         try:
+            logger.info(f"Attempting to normalize uploaded file: {original_filename}, size: {len(file_bytes)} bytes")
             with Image.open(io.BytesIO(file_bytes)) as img:
+                logger.info(f"Identified as {img.format}, Size: {img.size}")
                 # Normalize to PNG for consistent browser support and to fix mislabeled formats (like AVIF-as-JPG)
                 img = ImageOps.exif_transpose(img).convert("RGBA")
                 output = io.BytesIO()
@@ -269,7 +281,9 @@ def upload_file():
                 file_bytes = output.getvalue()
                 # Change the extension in the stored filename to .png to reflect reality
                 original_filename = os.path.splitext(original_filename)[0] + ".png"
+                logger.info(f"Normalization successful: {original_filename}, new size: {len(file_bytes)} bytes")
         except Exception as e:
+            logger.error(f"Image normalization failed for {original_filename}: {str(e)}")
             return jsonify({"error": f"Cannot identify or normalize image file: {str(e)}"}), 400
 
     # Use a unique ID to avoid any filename collision or secure_filename stripping issues
