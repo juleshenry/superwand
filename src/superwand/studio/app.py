@@ -270,7 +270,7 @@ def upload_file():
                 # Change the extension in the stored filename to .png to reflect reality
                 original_filename = os.path.splitext(original_filename)[0] + ".png"
         except Exception as e:
-            print(f"Warning: Image normalization failed for {original_filename}: {e}")
+            return jsonify({"error": f"Cannot identify or normalize image file: {str(e)}"}), 400
 
     # Use a unique ID to avoid any filename collision or secure_filename stripping issues
     file_id = f"{uuid.uuid4().hex}_{original_filename}"
