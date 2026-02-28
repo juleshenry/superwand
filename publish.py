@@ -118,7 +118,7 @@ def main():
     # 4. Git Operations
     print("Committing and tagging in git...")
     tag_version = new_version if new_version.startswith("v") else f"v{new_version}"
-    run_command(f"git add pyproject.toml src/superwand/__init__.py CHANGELOG.md")
+    run_command(f"git add .")
     # Check if there are changes to commit
     status = subprocess.run("git diff --cached --quiet", shell=True).returncode
     if status != 0:
