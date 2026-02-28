@@ -175,17 +175,6 @@ def process_image():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-        # Convert to base64 for live display
-        buffered = io.BytesIO()
-        processed_img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-
-        return jsonify(
-            {"image": img_str, "original_colors": [list(c) for c in regions.keys()]}
-        )
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 
 @app.route("/retheme_css", methods=["POST"])
 def retheme_css_route():
