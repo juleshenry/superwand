@@ -107,9 +107,8 @@ def process_image():
 
     # Process
     try:
-        image_stream = io.BytesIO(file_bytes)
         # Get regions
-        regions = np_get_prominent_regions(image_stream, number=k, tolerance=threshold)
+        regions = np_get_prominent_regions(io.BytesIO(file_bytes), number=k, tolerance=threshold)
 
         # Prepare theme colors
         theme_rgbs = []
@@ -148,8 +147,7 @@ def process_image():
                 theme_rgbs.append(region_keys[i] if apply_palette else None)
 
         # Inject theme
-        image_stream.seek(0)
-        original_img = Image.open(image_stream)
+        original_img = Image.open(io.BytesIO(file_bytes))
         original_img = ImageOps.exif_transpose(original_img)
         processed_img = np_inject_theme_image(
             regions,
@@ -186,9 +184,8 @@ def retheme_css_route():
         return jsonify({"error": "File not found in memory"}), 404
 
     try:
-        css_stream = io.BytesIO(file_bytes)
         custom_theme = [tuple(c) for c in colors]
-        modified_css = css_retheme(css_stream, custom_theme=custom_theme)
+        modified_css = css_retheme(io.BytesIO(file_bytes), custom_theme=custom_theme)
         return jsonify({"css": modified_css})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -208,8 +205,7 @@ def apply_gradient_route():
         return jsonify({"error": "Image not found in memory"}), 404
 
     try:
-        image_stream = io.BytesIO(file_bytes)
-        img = Image.open(image_stream).convert("RGB")
+        img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
         processed_img = gradient_enforce(img, style=style)
 
         buffered = io.BytesIO()
@@ -230,7 +226,15 @@ def upload_file():
         return jsonify({"error": "No selected file"}), 400
 
     filename = secure_filename(file.filename)
-    in_memory_storage[filename] = file.read()
+    
+    # Ensure we're at the beginning of the stream and read all bytes
+    file.seek(0)
+    file_bytes = file.read()
+    
+    if not file_bytes:
+        return jsonify({"error": "Uploaded file is empty"}), 400
+        
+    in_memory_storage[filename] = file_bytes
 
     return jsonify({"filename": filename})
 
