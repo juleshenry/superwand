@@ -9,6 +9,7 @@ src/superwand.egg-info/entry_points.txt
 src/superwand.egg-info/requires.txt
 src/superwand.egg-info/top_level.txt
 src/superwand/assets/__init__.py
+src/superwand/assets/curacao.jpg
 src/superwand/assets/fonts/arial.ttf
 src/superwand/assets/themes_jpgs/ArcticTheme.jpg
 src/superwand/assets/themes_jpgs/CyberpunkTheme.jpg
@@ -46,6 +47,7 @@ src/superwand/utils/gradient_injector.py
 src/superwand/utils/gradients.py
 src/superwand/utils/prompt_input.py
 tests/test_bug.py
+tests/test_curacao.py
 tests/test_extract.py
 tests/test_gradients.py
 tests/test_polarity.py
