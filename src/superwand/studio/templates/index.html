@@ -150,7 +150,6 @@
         let currentActiveTab = 'image';
         let currentOriginalColors = [];
         let regionGradients = []; // Array of { style: 'none', color2: null, polarity: 0.5, paletteColor: null }
-        let currentObjectUrl = null;
 
         const kSlider = document.getElementById('kSlider');
         const kValue = document.getElementById('kValue');
@@ -453,6 +452,10 @@
 
             try {
                 const resp = await fetch('/upload', { method: 'POST', body: formData });
+                if (!resp.ok) {
+                    const errorData = await resp.json();
+                    throw new Error(errorData.error || "Upload failed");
+                }
                 const data = await resp.json();
                 
                 if (data.filename) {
@@ -460,17 +463,16 @@
                     currentOriginalColors = []; // Reset colors for new image
                     regionGradients = []; // Reset gradients and palette selection
                     
-                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
-                    currentObjectUrl = URL.createObjectURL(file);
+                    // Show normalized image from server in original preview
+                    const normalizedUrl = `/image/${currentImageName}`;
                     
-                    // Show in original preview
-                    document.getElementById('originalPreview').src = currentObjectUrl;
+                    document.getElementById('originalPreview').src = normalizedUrl;
                     document.getElementById('originalPreview').classList.remove('hidden');
                     document.getElementById('originalPlaceholder').classList.add('hidden');
                     
                     // Also show in processed preview immediately (as is)
                     const processedPreview = document.getElementById('processedPreview');
-                    processedPreview.src = currentObjectUrl;
+                    processedPreview.src = normalizedUrl;
                     processedPreview.classList.remove('hidden');
                     document.getElementById('processedPlaceholder').classList.add('hidden');
                     document.getElementById('downloadImageBtn').classList.remove('hidden');
@@ -480,6 +482,7 @@
                 }
             } catch (err) {
                 console.error("Upload failed", err);
+                alert("Upload Error: " + err.message);
             } finally {
                 document.getElementById('loadingOverlay').classList.add('hidden');
             }
@@ -599,8 +602,8 @@
 
         floodCheckbox.onchange = triggerProcess;
         paletteCheckbox.onchange = () => {
-            if (!paletteCheckbox.checked && currentObjectUrl) {
-                document.getElementById('processedPreview').src = currentObjectUrl;
+            if (!paletteCheckbox.checked && currentImageName) {
+                document.getElementById('processedPreview').src = `/image/${currentImageName}`;
             }
             triggerProcess();
         };

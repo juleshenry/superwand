@@ -24,7 +24,7 @@ def test_upload_and_process_curacao(client):
     
     assert rv.status_code == 200
     filename = rv.get_json()['filename']
-    assert 'curacao.jpg' in filename
+    assert 'curacao.png' in filename
 
     # Test process
     process_data = {
