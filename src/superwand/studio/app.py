@@ -61,9 +61,10 @@ r"""
 import os
 import io
 import base64
+import uuid
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 import numpy as np
 from ..core.np_region_identifier import (
     np_get_prominent_regions,
@@ -74,7 +75,7 @@ from ..utils.gradients import gradient_enforce
 from ..core.np_themes import CORES_DOIS as CORES
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB
+app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024  # 32MB
 
 # In-memory storage for uploaded files during the session
 in_memory_storage = {}
@@ -107,8 +108,15 @@ def process_image():
 
     # Process
     try:
+        # Open image once and use it everywhere
+        try:
+            original_img = Image.open(io.BytesIO(file_bytes))
+            original_img = ImageOps.exif_transpose(original_img).convert("RGB")
+        except UnidentifiedImageError:
+            return jsonify({"error": "Cannot identify image file. Please try another format (PNG, JPG, WEBP)."}), 400
+
         # Get regions
-        regions = np_get_prominent_regions(io.BytesIO(file_bytes), number=k, tolerance=threshold)
+        regions = np_get_prominent_regions(original_img, number=k, tolerance=threshold)
 
         # Prepare theme colors
         theme_rgbs = []
@@ -147,8 +155,6 @@ def process_image():
                 theme_rgbs.append(region_keys[i] if apply_palette else None)
 
         # Inject theme
-        original_img = Image.open(io.BytesIO(file_bytes))
-        original_img = ImageOps.exif_transpose(original_img)
         processed_img = np_inject_theme_image(
             regions,
             theme_rgbs,
@@ -157,6 +163,17 @@ def process_image():
             gradient_styles=gradient_styles,
             gradient_polarities=gradient_polarities,
         )
+
+        # Convert to base64 for live display
+        buffered = io.BytesIO()
+        processed_img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+
+        return jsonify(
+            {"image": img_str, "original_colors": [list(c) for c in regions.keys()]}
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
         # Convert to base64 for live display
         buffered = io.BytesIO()
@@ -225,7 +242,7 @@ def upload_file():
     if not file.filename:
         return jsonify({"error": "No selected file"}), 400
 
-    filename = secure_filename(file.filename)
+    original_filename = secure_filename(file.filename)
     
     # Ensure we're at the beginning of the stream and read all bytes
     file.seek(0)
@@ -233,10 +250,21 @@ def upload_file():
     
     if not file_bytes:
         return jsonify({"error": "Uploaded file is empty"}), 400
-        
-    in_memory_storage[filename] = file_bytes
 
-    return jsonify({"filename": filename})
+    # Basic format check: if it looks like an image, try to open it
+    ext = os.path.splitext(original_filename.lower())[1]
+    if ext in ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.gif', '.avif', '.heic']:
+        try:
+            with Image.open(io.BytesIO(file_bytes)) as img:
+                img.verify()
+        except Exception:
+            return jsonify({"error": "Invalid or corrupted image file. Please try another image."}), 400
+
+    # Use a unique ID to avoid any filename collision or secure_filename stripping issues
+    file_id = f"{uuid.uuid4().hex}_{original_filename}"
+    in_memory_storage[file_id] = file_bytes
+
+    return jsonify({"filename": file_id})
 
 
 if __name__ == "__main__":
