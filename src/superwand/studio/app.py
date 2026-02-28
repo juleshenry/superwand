@@ -62,7 +62,7 @@ import os
 import io
 import base64
 import uuid
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps, UnidentifiedImageError
 import numpy as np
@@ -223,6 +223,23 @@ def apply_gradient_route():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/image/<filename>")
+def serve_image(filename):
+    file_bytes = in_memory_storage.get(filename)
+    if not file_bytes:
+        return "Image not found", 404
+    
+    # Identify format from filename extension
+    ext = os.path.splitext(filename)[1].lower()
+    mimetype = "image/png" if ext == ".png" else "image/jpeg"
+    
+    return send_file(
+        io.BytesIO(file_bytes),
+        mimetype=mimetype,
+        as_attachment=False,
+        download_name=filename
+    )
+
 @app.route("/upload", methods=["POST"])
 def upload_file():
     if "file" not in request.files:
@@ -240,19 +257,20 @@ def upload_file():
     if not file_bytes:
         return jsonify({"error": "Uploaded file is empty"}), 400
 
-    # Basic format check: if it looks like an image, try to open it
+    # Basic format check: if it looks like an image, try to open and normalize it
     ext = os.path.splitext(original_filename.lower())[1]
     if ext in ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.gif', '.avif', '.heic', '.tiff']:
         try:
             with Image.open(io.BytesIO(file_bytes)) as img:
-                img.verify()
+                # Normalize to PNG for consistent browser support and to fix mislabeled formats (like AVIF-as-JPG)
+                img = ImageOps.exif_transpose(img).convert("RGBA")
+                output = io.BytesIO()
+                img.save(output, format="PNG")
+                file_bytes = output.getvalue()
+                # Change the extension in the stored filename to .png to reflect reality
+                original_filename = os.path.splitext(original_filename)[0] + ".png"
         except Exception as e:
-            # If verify fails, we just log a warning but still allow the upload.
-            # Some formats like AVIF might fail verify in some environments but still be readable.
-            print(f"Warning: Image verification failed for {original_filename}: {e}")
-            # If it's a format we know we might have trouble with, let it pass.
-            # Otherwise, if it's a standard format and it's clearly broken, we could still block it,
-            # but for now, let's be permissive to solve the user's issue.
+            print(f"Warning: Image normalization failed for {original_filename}: {e}")
 
     # Use a unique ID to avoid any filename collision or secure_filename stripping issues
     file_id = f"{uuid.uuid4().hex}_{original_filename}"
