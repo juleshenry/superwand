@@ -1,5 +1,6 @@
 numpy
 pillow
+pillow-avif-plugin
 scipy
 matplotlib
 scikit-learn

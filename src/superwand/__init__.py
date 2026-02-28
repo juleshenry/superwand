@@ -69,4 +69,4 @@ __all__ = [
     "np_inject_theme",
     "color_themes",
 ]
-__version__ = "v0.2.9"
+__version__ = "v0.2.10"
