@@ -122,7 +122,7 @@ def main():
     # Check if there are changes to commit
     status = subprocess.run("git diff --cached --quiet", shell=True).returncode
     if status != 0:
-        run_command(f'git commit -m "Release {tag_version}"')
+        run_command(f'git commit -m "superwand {tag_version}"')
 
     # Check if tag already exists
     tag_exists = (

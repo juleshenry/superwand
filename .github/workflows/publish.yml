@@ -1,4 +1,5 @@
 name: Upload Python Package to PyPI
+run-name: Publish ${{ github.ref_name }} to PyPI
 
 on:
   push:
@@ -9,9 +10,7 @@ jobs:
   pypi-publish:
     name: Publish release to PyPI
     runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/superwand
+    environment: pypi
     permissions:
       id-token: write
     steps:
