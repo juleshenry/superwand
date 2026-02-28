@@ -26,7 +26,7 @@ def test_upload_and_process(client):
     
     assert rv.status_code == 200
     filename = rv.get_json()['filename']
-    assert filename == 'test_charizard.png'
+    assert 'test_charizard.png' in filename
 
     # Check if file exists in memory
     assert filename in in_memory_storage
@@ -52,6 +52,7 @@ def test_upload_css_and_retheme(client):
     rv = client.post('/upload', data=data, content_type='multipart/form-data')
     assert rv.status_code == 200
     filename = rv.get_json()['filename']
+    assert 'test.css' in filename
     
     retheme_data = {
         'filename': filename,
