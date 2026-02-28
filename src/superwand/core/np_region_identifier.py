@@ -81,15 +81,18 @@ def np_id_regiones(img_path, target_color, tolerance=20, debug=False, img_array=
     return matches.tolist()
 
 
-def np_get_prominent_regions(ip: str, number: int = 4, tolerance: int = 50):
+def np_get_prominent_regions(ip, number: int = 4, tolerance: int = 50):
     """
     Identifies prominent color regions using KMeans clustering.
     Returns an OrderedDict mapping cluster center RGB tuples to pixel indices.
     Every pixel is assigned to one of the k clusters.
     """
-    img = Image.open(ip)
+    if isinstance(ip, Image.Image):
+        img = ip
+    else:
+        img = Image.open(ip)
+    
     from PIL import ImageOps
-
     img = ImageOps.exif_transpose(img).convert("RGB")
     img_array = np.array(img)
     h, w, _ = img_array.shape

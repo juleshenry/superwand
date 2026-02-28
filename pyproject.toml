@@ -34,7 +34,7 @@ Homepage = "https://github.com/juleshenry/superwand"
 test = ["pytest", "pytest-cov"]
 
 [tool.setuptools.package-data]
-superwand = ["assets/fonts/*.ttf", "assets/themes_jpgs/*.jpg", "studio/templates/*.html", "studio/static/**/*"]
+superwand = ["assets/fonts/*.ttf", "assets/themes_jpgs/*.jpg", "assets/*.jpg", "studio/templates/*.html", "studio/static/**/*"]
 
 [project.scripts]
 superwand = "superwand.core.superwand:main"
