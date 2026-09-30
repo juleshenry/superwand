@@ -1,3 +1,9 @@
-__pychache__/*
-__pycache__
+__pycache__/
 .DS_Store
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
