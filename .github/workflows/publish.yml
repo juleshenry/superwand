@@ -25,6 +25,6 @@ jobs:
           pip install build
       - name: Build package
         run: |
-          python -m build
+          rm -rf dist && python -m build  # dist/ is tracked in git; start clean
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
