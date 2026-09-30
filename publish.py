@@ -112,7 +112,7 @@ def main():
 
     print("Building package...")
     run_command(
-        "python3 -m build", "Build failed. Check your pyproject.toml and dependencies."
+        "uv build", "Build failed. Check your pyproject.toml and dependencies."
     )
 
     # 4. Git Operations
