@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.1 (2026-09-30)
+
+* Automated release update
+
 ## v0.3.0 (2026-09-30)
 
 * Add `retheme()`, `transfer_palette()` and `extract_palette()` Python API returning PIL Images.
