@@ -7,7 +7,7 @@ name = "superwand"
 version = "v0.2.10"
 description = "A tool for retheming images and CSS using color palettes and gradients."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = "MIT"
 authors = [
     {name = "Julian Henry"}
@@ -40,6 +40,7 @@ superwand = ["assets/fonts/*.ttf", "assets/themes_jpgs/*.jpg", "assets/*.jpg", "
 [project.scripts]
 superwand = "superwand.core.superwand:main"
 gradient-enforce = "superwand.utils.gradient_enforce:main"
+css-retheme = "superwand.utils.css_rethemer:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

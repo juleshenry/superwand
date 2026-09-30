@@ -76,7 +76,6 @@ class Color:
         )
 
 def np_extract(image_path, number_of_colors):
-    print("extracting "+str(number_of_colors)+ 'colorz')
     # Load the image and convert to RGB if necessary
     image = image_path if isinstance(image_path, Image.Image) else Image.open(image_path)
     if image.mode not in ("RGB", "RGBA", "RGBa"):
@@ -122,17 +121,12 @@ def np_sample(image):
 
 def pick_used(samples):
     # Get indices where the count (last column) is greater than 0
-    # TODO: bug lays here 
     non_zero_indices = np.nonzero(samples[:, 3])[0]
     counts = samples[non_zero_indices, 3]
-    print(len(counts), len(non_zero_indices), )
-    pu_return  = list(zip(counts, non_zero_indices))
-    print(9999999,len(pu_return))
-    return pu_return
+    return list(zip(counts, non_zero_indices))
 
 
 def get_colors(samples, used, number_of_colors):
-    print("#####",number_of_colors)
     pixels = sum(count for count, _ in used[:number_of_colors])
     colors = []
 
@@ -144,7 +138,6 @@ def get_colors(samples, used, number_of_colors):
             count
         )
         colors.append(color)
-    print(len(colors),'!@#$!@#@$#!')
     # Normalize proportions
     for color in colors:
         color.proportion /= pixels

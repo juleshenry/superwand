@@ -58,13 +58,15 @@ r"""
 
 """
 
+import os
 from .np_themes import np_get_prominent_colors, CORES_DOIS as CORES
-from PIL import Image
-import secrets
+from PIL import Image, ImageOps
 import numpy as np
 from sklearn.cluster import KMeans
 from scipy.ndimage import binary_dilation, binary_closing
 from collections import OrderedDict
+
+MATCH_MODES = ("order", "luminance")
 
 
 def np_id_regiones(img_path, target_color, tolerance=20, debug=False, img_array=None):
@@ -72,7 +74,7 @@ def np_id_regiones(img_path, target_color, tolerance=20, debug=False, img_array=
         img = np.array(Image.open(img_path).convert("RGB"))
     else:
         img = img_array
-    diff = np.sqrt(np.sum((img - target_color) ** 2, axis=2))
+    diff = np.sqrt(np.sum((img.astype(np.int32) - target_color) ** 2, axis=2))
     matches = np.argwhere(diff < tolerance)
     if debug:
         mask = np.zeros((*img.shape[:2], 4), dtype=np.uint8)
@@ -81,30 +83,26 @@ def np_id_regiones(img_path, target_color, tolerance=20, debug=False, img_array=
     return matches.tolist()
 
 
-def np_get_prominent_regions(ip, number: int = 4, tolerance: int = 50):
+def np_get_prominent_regions(ip, number: int = 4, tolerance: int = 50, seed: int = 42):
     """
     Identifies prominent color regions using KMeans clustering.
-    Returns an OrderedDict mapping cluster center RGB tuples to pixel indices.
-    Every pixel is assigned to one of the k clusters.
+    Returns an OrderedDict mapping cluster center RGB tuples to pixel indices
+    ([row, col] arrays), largest region first. Every pixel is assigned to one
+    of the k clusters. `tolerance` is kept for API compatibility and unused.
     """
-    if isinstance(ip, Image.Image):
-        img = ip
-    else:
-        img = Image.open(ip)
-    
-    from PIL import ImageOps
+    img = ip if isinstance(ip, Image.Image) else Image.open(ip)
     img = ImageOps.exif_transpose(img).convert("RGB")
     img_array = np.array(img)
     h, w, _ = img_array.shape
     pixels = img_array.reshape(-1, 3)
 
-    # Use KMeans to find 'number' clusters as original values
-    # Downsample for speed if image is large
+    # Downsample for speed if image is large; seeded so results are reproducible
+    rng = np.random.default_rng(seed)
     num_samples = min(len(pixels), 100000)
-    indices = np.random.choice(len(pixels), num_samples, replace=False)
+    indices = rng.choice(len(pixels), num_samples, replace=False)
     sample_pixels = pixels[indices]
 
-    kmeans = KMeans(n_clusters=number, random_state=42, n_init="auto").fit(
+    kmeans = KMeans(n_clusters=number, random_state=seed, n_init="auto").fit(
         sample_pixels
     )
     labels = np.array(kmeans.predict(pixels), dtype=int)
@@ -117,11 +115,49 @@ def np_get_prominent_regions(ip, number: int = 4, tolerance: int = 50):
     labels_reshaped = labels.reshape((h, w))
 
     for i in sorted_indices:
+        if counts[i] == 0:
+            continue
         color_tuple = tuple(centers[i].tolist())
-        region_indices = np.argwhere(labels_reshaped == i)
-        color_regions[color_tuple] = region_indices
+        color_regions[color_tuple] = np.argwhere(labels_reshaped == i)
 
     return color_regions
+
+
+def extract_palette(ip, number: int = 4):
+    """Returns the image's `number` dominant colors as RGB tuples, most prominent first."""
+    return list(np_get_prominent_regions(ip, number=number).keys())
+
+
+def luminance(rgb):
+    r, g, b = rgb[:3]
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def match_palette(region_colors, palette, match="order"):
+    """
+    Assigns one palette color per region.
+    - "order": region i (by prominence) gets palette[i], cycling if short.
+    - "luminance": darkest region gets the darkest palette color, and so on,
+      which preserves the image's light/shadow structure.
+    """
+    region_colors = list(region_colors)
+    palette = [tuple(c) for c in palette]
+    if not palette:
+        raise ValueError("palette must contain at least one color")
+    if match not in MATCH_MODES:
+        raise ValueError(f"match must be one of {MATCH_MODES}, got {match!r}")
+
+    n = len(region_colors)
+    chosen = [palette[i % len(palette)] for i in range(n)]
+    if match == "order":
+        return chosen
+
+    regions_by_lum = sorted(range(n), key=lambda i: luminance(region_colors[i]))
+    colors_by_lum = sorted(chosen, key=luminance)
+    assigned = [None] * n
+    for region_idx, color in zip(regions_by_lum, colors_by_lum):
+        assigned[region_idx] = color
+    return assigned
 
 
 def np_inject_2(
@@ -150,7 +186,7 @@ def np_inject_2(
     pixel_arr = pixel_arr.astype(int)
     height, width = arr.shape[:2]
 
-    # original pixel_arr from np_id_regiones is [y, x]
+    # pixel_arr rows are [y, x]
     y_coords = pixel_arr[:, 0]
     x_coords = pixel_arr[:, 1]
 
@@ -173,113 +209,37 @@ def np_inject_2(
         mask = binary_dilation(mask, iterations=3)
 
     # pixel can be a single RGB tuple or a list/tuple of two RGB tuples for gradients
-    if isinstance(pixel[0], (list, tuple, np.ndarray)):
-        start_rgb, end_rgb = pixel[0], pixel[1]
-        base_rgb = start_rgb  # fallback for non-gradient use
-    else:
-        start_rgb = None
-        end_rgb = None
-        base_rgb = pixel
+    is_pair = isinstance(pixel[0], (list, tuple, np.ndarray))
+    base_rgb = pixel[0] if is_pair else pixel
 
-    target_pixel_rgba = np.array((*base_rgb, 255), dtype=np.uint8)
+    target_pixel_rgba = np.array((*base_rgb[:3], 255), dtype=np.uint8)
     rows, cols = np.where(mask)
+    arr[rows, cols, :] = target_pixel_rgba
 
     if gradient_style and gradient_style != "none":
-        # Apply gradient logic
-        from ..utils.gradients import twod_dist, calc_gradient_poles, adjust_color
-        import math
+        from ..utils.gradients import (
+            adjust_color,
+            blend_colors,
+            calc_gradient_poles,
+            gradient_factors,
+            normalize_style,
+        )
 
-        # Map UI styles to internal styles
-        style_map = {
-            "vertical": "top-down",
-            "horizontal": "left-right",
-            "auto": "top-down",
-        }
-        style = style_map.get(gradient_style, gradient_style)
+        style = normalize_style(gradient_style)
+        if is_pair:
+            start_color, end_color = pixel[0], pixel[1]
+        else:
+            start_color = adjust_color(base_rgb, 1 + gradient_intensity)
+            end_color = adjust_color(base_rgb, 1 - gradient_intensity)
 
-        # Midpoint/Bias logic
-        p = 1.0
-        # Fix: polarity should work even if very close to 0 or 1. Use an epsilon.
-        safe_polarity = max(0.001, min(0.999, gradient_polarity))
-        if safe_polarity != 0.5:
-            p = math.log(0.5) / math.log(safe_polarity)
-
-        if len(rows) > 0:
-            try:
-                # Use global image boundaries for poles if style is provided
-                poles = calc_gradient_poles(style, None, img_size=(width, height))
-                if poles is None:
-                    arr[rows, cols, :] = target_pixel_rgba
-                else:
-                    p1, p2 = poles
-                    if p1 is None or p2 is None:
-                        arr[rows, cols, :] = target_pixel_rgba
-                    else:
-                        if isinstance(pixel[0], (list, tuple, np.ndarray)):
-                            start_color = pixel[0]
-                            end_color = pixel[1]
-                        else:
-                            start_color = adjust_color(base_rgb, 1 + gradient_intensity)
-                            end_color = adjust_color(base_rgb, 1 - gradient_intensity)
-
-                        if style in ["left-right", "right-left"]:
-                            spx, epx = float(p1[0]), float(p2[0])
-                            if abs(epx - spx) < 1e-6:
-                                arr[rows, cols, :] = target_pixel_rgba
-                            else:
-                                factor = (cols.astype(np.float64) - spx) / (epx - spx)
-                                factor = np.clip(factor, 0, 1)
-                                if p != 1.0:
-                                    factor = factor**p
-                                factor = factor[:, np.newaxis]
-                                sc = np.array(start_color, dtype=np.float64)
-                                ec = np.array(end_color, dtype=np.float64)
-                                colors = sc + (ec - sc) * factor
-                                arr[rows, cols, :3] = colors.astype(np.uint8)
-                                arr[rows, cols, 3] = 255
-
-                        elif style in ["top-down", "bottom-up"]:
-                            spy, epy = float(p1[1]), float(p2[1])
-                            if abs(epy - spy) < 1e-6:
-                                arr[rows, cols, :] = target_pixel_rgba
-                            else:
-                                factor = (rows.astype(np.float64) - spy) / (epy - spy)
-                                factor = np.clip(factor, 0, 1)
-                                if p != 1.0:
-                                    factor = factor**p
-                                factor = factor[:, np.newaxis]
-                                sc = np.array(start_color, dtype=np.float64)
-                                ec = np.array(end_color, dtype=np.float64)
-                                colors = sc + (ec - sc) * factor
-                                arr[rows, cols, :3] = colors.astype(np.uint8)
-                                arr[rows, cols, 3] = 255
-
-                        elif style == "radial":
-                            center = np.array(p1, dtype=np.float64)
-                            max_dist = float(twod_dist(p1, p2))
-                            if max_dist < 1e-6:
-                                arr[rows, cols, :] = target_pixel_rgba
-                            else:
-                                pts = np.column_stack((cols, rows)).astype(np.float64)
-                                dists = np.sqrt(np.sum((pts - center) ** 2, axis=1))
-                                factor = dists / max_dist
-                                factor = np.clip(factor, 0, 1)
-                                if p != 1.0:
-                                    factor = factor**p
-                                factor = factor[:, np.newaxis]
-                                sc = np.array(start_color, dtype=np.float64)
-                                ec = np.array(end_color, dtype=np.float64)
-                                colors = sc + (ec - sc) * factor
-                                arr[rows, cols, :3] = colors.astype(np.uint8)
-                                arr[rows, cols, 3] = 255
-                        else:
-                            arr[rows, cols, :] = target_pixel_rgba
-            except Exception as e:
-                print(f"Gradient failed: {e}")
-                arr[rows, cols, :] = target_pixel_rgba
-    else:
-        if len(rows) > 0:
-            arr[rows, cols, :] = target_pixel_rgba
+        try:
+            # Poles span the whole image so neighbouring regions line up
+            p1, p2 = calc_gradient_poles(style, None, img_size=(width, height))
+            factor = gradient_factors(rows, cols, style, p1, p2, gradient_polarity)
+            if factor is not None:
+                arr[rows, cols, :3] = blend_colors(start_color, end_color, factor)
+        except ValueError as e:
+            print(f"Gradient failed: {e}")
 
     return Image.fromarray(arr, "RGBA")
 
@@ -339,6 +299,17 @@ def np_inject_theme_image(
     return image
 
 
+def resolve_theme(theme):
+    """A theme is either a built-in theme name or a sequence of RGB tuples."""
+    if isinstance(theme, str):
+        if theme not in CORES:
+            raise ValueError(
+                f"Unknown theme {theme!r}. Available: {', '.join(CORES)}"
+            )
+        return list(CORES[theme])
+    return [tuple(c) for c in theme]
+
+
 def np_inject_theme(
     cpd,
     theme_name,
@@ -347,13 +318,20 @@ def np_inject_theme(
     flood=False,
     gradient_styles=None,
     gradient_polarities=None,
+    output_dir=".",
+    match="order",
+    palette=None,
 ):
-    # fmt : off
-    theme_rgbs = (c := CORES[theme_name])[: min(number, len(c))] + [
-        secrets.choice(c) for _ in range(max(number - len(c), 0))
-    ]
-    # fmt : on
-    image = Image.open(image_path).convert("RGB")
+    """
+    Rethemes image_path with a built-in theme (or an explicit `palette`, in
+    which case theme_name only labels the output) and saves
+    <name>_<theme_name>.png in output_dir. Returns the saved path.
+    """
+    theme_rgbs = match_palette(
+        list(cpd.keys())[:number], resolve_theme(palette if palette is not None else theme_name), match
+    )
+    image = Image.open(image_path)
+    image = ImageOps.exif_transpose(image).convert("RGB")
     image = np_inject_theme_image(
         cpd,
         theme_rgbs,
@@ -362,28 +340,8 @@ def np_inject_theme(
         gradient_styles=gradient_styles,
         gradient_polarities=gradient_polarities,
     )
-    image.save(f"{image_path.split('/')[-1].split('.')[0]}_{theme_name}.png")
-
-
-class JHsuperwand:
-    # fmt: off
-    def __init__(_s, ip, slowww = 4):_s.np_color_pix_dict, _s.slowww = (np_get_prominent_regions(ip,number = slowww), slowww,)
-    # fmt: on
-
-    def superwand_jh(
-        _s,
-        theme_name,
-        ip,
-        flood=False,
-        gradient_styles=None,
-        gradient_polarities=None,
-    ):
-        np_inject_theme(
-            _s.np_color_pix_dict,
-            theme_name,
-            ip,
-            number=_s.slowww,
-            flood=flood,
-            gradient_styles=gradient_styles,
-            gradient_polarities=gradient_polarities,
-        )
+    stem = os.path.splitext(os.path.basename(image_path))[0]
+    os.makedirs(output_dir, exist_ok=True)
+    out_path = os.path.join(output_dir, f"{stem}_{theme_name}.png")
+    image.save(out_path)
+    return out_path

@@ -131,15 +131,9 @@ def test_apply_all_themes_to_image(mock_inject, mock_get_regions):
 
 
 @patch("superwand.core.superwand.SuperWand")
-@patch("argparse.ArgumentParser.parse_args")
-def test_main(mock_parse_args, mock_superwand_class):
+@patch("sys.argv", ["superwand", "test.png", "-theme", "Tropical"])
+def test_main(mock_superwand_class):
     from superwand.core.superwand import main
-
-    # Setup mocks
-    mock_args = MagicMock()
-    mock_args.image_path = "test.png"
-    mock_args.theme = "Tropical"
-    mock_parse_args.return_value = mock_args
 
     mock_sw_instance = mock_superwand_class.return_value
 

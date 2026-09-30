@@ -57,14 +57,25 @@ r"""
                            by Julian Henry
 """
 
-from .core.superwand import SuperWand
+from .core.superwand import SuperWand, retheme, transfer_palette
 from .utils.gradients import gradient_enforce
-from .core.np_region_identifier import np_get_prominent_regions, np_inject_theme
+from .utils.css_rethemer import css_retheme
+from .utils.gif_maker import theme_cycle_gif
+from .core.np_region_identifier import (
+    extract_palette,
+    np_get_prominent_regions,
+    np_inject_theme,
+)
 from .core.themes import color_themes
 
 __all__ = [
     "SuperWand",
+    "retheme",
+    "transfer_palette",
+    "extract_palette",
     "gradient_enforce",
+    "css_retheme",
+    "theme_cycle_gif",
     "np_get_prominent_regions",
     "np_inject_theme",
     "color_themes",
