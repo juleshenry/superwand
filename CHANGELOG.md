@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.3.0 (2026-09-30)
 
 * Add `retheme()`, `transfer_palette()` and `extract_palette()` Python API returning PIL Images.
 * Add `-palette-from` (palette transfer from a reference image) and `-match order|luminance`.
