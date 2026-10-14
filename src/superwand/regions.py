@@ -175,7 +175,7 @@ def regions_from_array(
         raise ValueError(f"space must be one of {SPACES}, got {space!r}")
     h, w = rgb.shape[:2]
     flat = rgb.reshape(-1, 3)
-    labels = np.full(h * w, -1, dtype=np.int16)
+    labels: npt.NDArray[np.int16] = np.full(h * w, -1, dtype=np.int16)
 
     visible: npt.NDArray[Any] | None
     pool: npt.NDArray[Any]
@@ -211,7 +211,7 @@ def regions_from_array(
     order = [int(i) for i in np.argsort(-counts, kind="stable") if counts[i] > 0]
     remap = np.full(n_clusters + 1, -1, dtype=np.int16)  # last slot maps -1 to -1
     remap[order] = np.arange(len(order))
-    labels = remap[labels]  # type: ignore[assignment]
+    labels = remap[labels]
 
     centers = centers[order]
     if space == "oklab":

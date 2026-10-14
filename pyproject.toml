@@ -129,7 +129,7 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 
 [[tool.mypy.overrides]]
-module = ["sklearn.*", "scipy.*", "flask.*"]
+module = ["sklearn.*", "scipy.*", "flask.*", "tomli"]
 ignore_missing_imports = true
 
 # --- Tests -------------------------------------------------------------------
