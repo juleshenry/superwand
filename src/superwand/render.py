@@ -211,6 +211,21 @@ def _apply_overrides(
     return targets
 
 
+def render_theme(
+    rgb: U8Array,
+    alpha: U8Array | None,
+    regions: Regions,
+    theme: Theme,
+    *,
+    match: str = "order",
+    overrides: Mapping[int, ColorLike | None] | None = None,
+    **paint_kwargs: Any,
+) -> Image.Image:
+    """Paints already-found regions with a theme: match colors, apply overrides, paint."""
+    targets: list[Target] = list(match_palette(regions.colors, resolve_theme(theme), match))
+    return paint(rgb, alpha, regions, _apply_overrides(targets, overrides), **paint_kwargs)
+
+
 def retheme(
     image: ImageInput,
     theme: Theme,
@@ -225,6 +240,7 @@ def retheme(
     shading: bool = False,
     overrides: Mapping[int, ColorLike | None] | None = None,
     space: str = "oklab",
+    seed: int = 42,
 ) -> Image.Image:
     """
     Rethemes an image and returns the result as an RGBA PIL Image.
@@ -243,18 +259,19 @@ def retheme(
     overrides: {region index: color or None} to pin a region to a color, or
                keep its original pixels with None; index 0 is the largest region
     space:     color space for finding regions, "oklab" or "rgb"
+    seed:      k-means seed; the same seed always gives the same regions
     """
     rgb, alpha = load_image(image)
     found = _coerce_regions(regions, (rgb.shape[0], rgb.shape[1])) or regions_from_array(
-        rgb, alpha, k, space=space
+        rgb, alpha, k, seed=seed, space=space
     )
-    targets: list[Target] = list(match_palette(found.colors, resolve_theme(theme), match))
-    targets = _apply_overrides(targets, overrides)
-    return paint(
+    return render_theme(
         rgb,
         alpha,
         found,
-        targets,
+        theme,
+        match=match,
+        overrides=overrides,
         gradient=gradient,
         polarity=polarity,
         flood=flood,

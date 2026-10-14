@@ -27,6 +27,7 @@
 
             <div class="mb-4 flex space-x-1 bg-gray-100 p-1 rounded-lg">
                 <button onclick="switchTab('image')" id="tab-image" class="flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm">Image</button>
+                <button onclick="switchTab('sweep')" id="tab-sweep" class="flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200">Sweep</button>
                 <button onclick="switchTab('text')" id="tab-text" class="flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200">CSS / SVG</button>
             </div>
 
@@ -65,6 +66,46 @@
                 <p class="text-[10px] text-gray-400 -mt-4 mb-6">Smooth edges and flood can't be combined.</p>
             </div>
 
+            <div id="sidebar-sweep" class="hidden">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2" for="sweepImageInput">Image</label>
+                    <p id="sweepImageName" class="text-xs text-gray-500 mb-2">No image uploaded yet.</p>
+                    <input type="file" id="sweepImageInput" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-gray-100">
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Regions (k)</h3>
+                    <div id="sweepKs" class="grid grid-cols-5 gap-1"></div>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-700">Themes</h3>
+                        <div class="space-x-2 text-[10px] font-bold uppercase">
+                            <button id="sweepAllThemes" class="text-indigo-600 hover:underline">All</button>
+                            <button id="sweepNoThemes" class="text-gray-500 hover:underline">None</button>
+                        </div>
+                    </div>
+                    <div id="sweepThemes" class="space-y-1 max-h-56 overflow-y-auto pr-1"></div>
+                </div>
+                <div class="mb-3 flex items-center">
+                    <input type="checkbox" id="sweepSmooth" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="sweepSmooth" class="ml-2 block text-sm font-medium text-gray-700">Smooth edges</label>
+                </div>
+                <div class="mb-3 flex items-center">
+                    <input type="checkbox" id="sweepShading" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="sweepShading" class="ml-2 block text-sm font-medium text-gray-700">Preserve shading</label>
+                </div>
+                <div class="mb-6 flex items-center justify-between">
+                    <label for="sweepSize" class="text-sm font-medium text-gray-700">Tile size</label>
+                    <select id="sweepSize" class="text-xs border rounded p-1 bg-gray-50">
+                        <option value="160">small</option>
+                        <option value="240" selected>medium</option>
+                        <option value="360">large</option>
+                    </select>
+                </div>
+                <button id="sweepBtn" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-700 transition">Render grid</button>
+                <p class="text-[10px] text-gray-400 mt-2">Regions are found once per k and cached, so changing themes is quick. Click a tile to open it in the editor.</p>
+            </div>
+
             <div id="sidebar-text" class="hidden">
                 <div class="mb-6">
                     <h3 class="text-sm font-medium text-gray-700 mb-3">CSS / SVG Rethemer</h3>
@@ -89,6 +130,7 @@
                 </div>
             </div>
 
+            <div id="sidebar-shared">
             <hr class="my-6">
 
             <div class="mb-6">
@@ -114,6 +156,7 @@
                     </div>
                     {% endfor %}
                 </div>
+            </div>
             </div>
         </div>
 
@@ -154,6 +197,20 @@
                         </div>
                     </div>
                     <input type="range" id="compareSlider" min="0" max="100" value="50" aria-label="Before/after position" class="hidden mt-3 w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+
+            <div id="content-sweep" class="hidden flex-1 bg-white rounded-xl shadow-md p-6 flex flex-col min-h-0">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider">Theme &times; k sweep</h3>
+                    <span id="sweepStatus" class="text-xs text-gray-500">Pick k values and themes, then render the grid.</span>
+                </div>
+                <div class="relative flex-1 overflow-auto">
+                    <table id="sweepGrid" class="border-separate" style="border-spacing: 6px;"></table>
+                    <div id="sweepLoading" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white/60">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-2"></div>
+                        <span class="text-indigo-600 font-medium">Rendering grid...</span>
+                    </div>
                 </div>
             </div>
 
@@ -265,16 +322,14 @@
 
         function switchTab(tab) {
             currentActiveTab = tab;
-            $('sidebar-image').classList.toggle('hidden', tab !== 'image');
-            $('sidebar-text').classList.toggle('hidden', tab !== 'text');
-            $('content-image').classList.toggle('hidden', tab !== 'image');
-            $('content-text').classList.toggle('hidden', tab !== 'text');
-            $('tab-image').className = tab === 'image'
-                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm'
-                : 'flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200';
-            $('tab-text').className = tab === 'text'
-                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm'
-                : 'flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200';
+            for (const name of ['image', 'sweep', 'text']) {
+                $('sidebar-' + name).classList.toggle('hidden', tab !== name);
+                $('content-' + name).classList.toggle('hidden', tab !== name);
+                $('tab-' + name).className = tab === name
+                    ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm'
+                    : 'flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200';
+            }
+            $('sidebar-shared').classList.toggle('hidden', tab === 'sweep');
         }
 
         // ---- CSS / SVG rethemer -------------------------------------------------
@@ -606,8 +661,7 @@
             }, 300);
         }
 
-        async function uploadImage() {
-            const file = imageInput.files[0];
+        async function uploadImage(file = imageInput.files[0]) {
             if (!file) return;
 
             const formData = new FormData();
@@ -621,6 +675,7 @@
                 if (data.kind !== 'image') throw new Error('Please choose an image file');
 
                 currentImageName = data.filename;
+                $('sweepImageName').textContent = displayName(currentImageName, 'image');
                 currentOriginalColors = [];
                 currentRegionShares = [];
                 regionGradients = [];
@@ -760,7 +815,138 @@
             }
             triggerProcess();
         };
-        imageInput.onchange = uploadImage;
+        imageInput.onchange = () => uploadImage();
+
+        // ---- Theme x k sweep -------------------------------------------------------
+        const SWEEP_K_CHOICES = Array.from({ length: 15 }, (_, i) => i + 2);
+        const SWEEP_K_DEFAULT = [2, 3, 4, 6, 8];
+        const themeNames = Array.from(document.querySelectorAll('#presets .preset-item'))
+            .map(item => item.dataset.name);
+
+        function checkboxChip(container, value, label, checked) {
+            const wrap = document.createElement('label');
+            wrap.className = 'flex items-center space-x-1 text-xs text-gray-700 cursor-pointer';
+            const box = document.createElement('input');
+            box.type = 'checkbox';
+            box.value = value;
+            box.checked = checked;
+            box.className = 'w-3 h-3 text-indigo-600 border-gray-300 rounded';
+            const text = document.createElement('span');
+            text.textContent = label;
+            wrap.append(box, text);
+            container.appendChild(wrap);
+        }
+        SWEEP_K_CHOICES.forEach(k => checkboxChip($('sweepKs'), k, String(k), SWEEP_K_DEFAULT.includes(k)));
+        themeNames.forEach(name => checkboxChip($('sweepThemes'), name, name, true));
+        const checkedValues = (id) => Array.from($(id).querySelectorAll('input:checked')).map(b => b.value);
+        const setAllThemes = (on) => $('sweepThemes').querySelectorAll('input').forEach(b => { b.checked = on; });
+        $('sweepAllThemes').onclick = () => setAllThemes(true);
+        $('sweepNoThemes').onclick = () => setAllThemes(false);
+
+        $('sweepImageInput').onchange = async () => {
+            await uploadImage($('sweepImageInput').files[0]);
+            if (currentImageName) runSweep();
+        };
+
+        async function runSweep() {
+            if (!currentImageName) {
+                alert('Upload an image first.');
+                return;
+            }
+            const ks = checkedValues('sweepKs').map(Number);
+            const themes = checkedValues('sweepThemes');
+            if (!ks.length || !themes.length) {
+                alert('Pick at least one k value and one theme.');
+                return;
+            }
+            const size = Number($('sweepSize').value);
+            $('sweepLoading').classList.remove('hidden');
+            $('sweepStatus').textContent = `Rendering ${themes.length} × ${ks.length} tiles...`;
+            try {
+                const resp = await fetch('/sweep', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image_name: currentImageName,
+                        ks: ks,
+                        themes: themes,
+                        smooth: $('sweepSmooth').checked,
+                        shading: $('sweepShading').checked,
+                        size: size,
+                    }),
+                });
+                if (!resp.ok) throw new Error(await readError(resp, 'Sweep failed'));
+                renderSweep(await resp.json(), size);
+            } catch (err) {
+                console.error('Sweep failed', err);
+                alert('Sweep Error: ' + err.message);
+                $('sweepStatus').textContent = 'Sweep failed.';
+            } finally {
+                $('sweepLoading').classList.add('hidden');
+            }
+        }
+        $('sweepBtn').onclick = runSweep;
+
+        function renderSweep(data, size) {
+            const grid = $('sweepGrid');
+            grid.replaceChildren();
+            const head = document.createElement('tr');
+            head.appendChild(document.createElement('th'));
+            data.ks.forEach(k => {
+                const th = document.createElement('th');
+                th.className = 'text-xs font-semibold text-gray-500 pb-1';
+                th.textContent = `k = ${k}`;
+                head.appendChild(th);
+            });
+            grid.appendChild(head);
+            const byKey = new Map(data.tiles.map(t => [`${t.theme}|${t.k}`, t]));
+            data.themes.forEach(theme => {
+                const row = document.createElement('tr');
+                const label = document.createElement('th');
+                label.className = 'text-xs font-semibold text-gray-600 text-right pr-2 whitespace-nowrap';
+                label.textContent = theme;
+                row.appendChild(label);
+                data.ks.forEach(k => {
+                    const td = document.createElement('td');
+                    const tile = byKey.get(`${theme}|${k}`);
+                    if (tile) {
+                        const btn = document.createElement('button');
+                        btn.className = 'checker rounded-md overflow-hidden ring-indigo-500 hover:ring-2 focus:ring-2 focus:outline-none block';
+                        btn.style.width = size + 'px';
+                        btn.style.height = size + 'px';
+                        btn.title = `${theme}, k = ${k}: open in the editor`;
+                        const img = document.createElement('img');
+                        img.src = 'data:image/png;base64,' + tile.image;
+                        img.alt = `${theme} at k = ${k}`;
+                        img.className = 'w-full h-full object-contain';
+                        btn.appendChild(img);
+                        btn.onclick = () => openCombination(tile);
+                        td.appendChild(btn);
+                    }
+                    row.appendChild(td);
+                });
+                grid.appendChild(row);
+            });
+            $('sweepStatus').textContent =
+                `${data.themes.length} themes × ${data.ks.length} k values. Click a tile to open it in the editor.`;
+        }
+
+        function openCombination(tile) {
+            if (Number(kSlider.max) < tile.k) kSlider.max = tile.k;
+            kSlider.value = tile.k;
+            kValue.textContent = tile.k;
+            paletteCheckbox.checked = true;
+            smoothCheckbox.checked = $('sweepSmooth').checked;
+            shadingCheckbox.checked = $('sweepShading').checked;
+            floodCheckbox.checked = false;
+            syncEdgeOptions();
+            regionGradients = tile.colors.map(hex => (
+                { style: 'none', color2: null, polarity: 0.5, paletteColor: hex }
+            ));
+            switchTab('image');
+            updateColorPickers();
+            triggerProcess();
+        }
 
         // Init
         syncEdgeOptions();

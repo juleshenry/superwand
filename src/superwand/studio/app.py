@@ -16,6 +16,7 @@ import uuid
 from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -29,15 +30,17 @@ from ..color import RGB, parse_color, rgb_to_hex
 from ..css import recolor_text
 from ..gradients import GRADIENT_STYLES
 from ..regions import Regions, U8Array, load_image, regions_from_array
-from ..render import Target, gradient_enforce, paint
-from ..themes import MATCH_MODES, all_themes
+from ..render import Target, gradient_enforce, paint, render_theme
+from ..sweep import downsample, parse_k_values
+from ..themes import MATCH_MODES, all_themes, match_palette, resolve_theme
 
 logger = logging.getLogger(__name__)
 
 MAX_UPLOAD_BYTES = 32 * 1024 * 1024
 MAX_K = 32
 TEXT_KINDS = {".css": "css", ".svg": "svg"}
-REGION_CACHE_SIZE = 4  # k values remembered per image
+REGION_CACHE_SIZE = 16  # k values remembered per image (enough for a full sweep)
+MAX_SWEEP_TILES = 400
 
 
 class BadRequest(ValueError):
@@ -131,7 +134,11 @@ class UploadStore:
         found = compute()
         with self._lock:
             item.regions[k] = found
-            while len(item.regions) > REGION_CACHE_SIZE:
+            # Keep the cache from crowding out other uploads: at most half the budget
+            while len(item.regions) > 1 and (
+                len(item.regions) > REGION_CACHE_SIZE
+                or sum(r.labels.nbytes for r in item.regions.values()) > self.max_bytes // 2
+            ):
                 item.regions.popitem(last=False)
             self._evict()
         return found
@@ -343,6 +350,65 @@ def process_image() -> Response:
     )
 
 
+def sweep_image() -> Response:
+    """
+    Renders preview tiles for every (theme, k) pair. Regions come from the
+    full image through the same per-k cache /process uses, so opening a tile
+    in the editor reproduces it exactly without clustering again.
+    """
+    data = _payload()
+    item = _lookup(data, "image_name", kind="image")
+    raw_ks = data.get("ks", "2,3,4,6,8")
+    try:
+        ks = parse_k_values(raw_ks if isinstance(raw_ks, (str, int)) else list(raw_ks))
+    except (TypeError, ValueError) as e:
+        raise BadRequest(f"ks: {e}") from e
+    if ks[-1] > MAX_K:
+        raise BadRequest(f"k must be at most {MAX_K}")
+
+    available = all_themes()
+    raw_themes = data.get("themes") or "all"
+    if raw_themes == "all":
+        names = list(available)
+    elif isinstance(raw_themes, list) and all(isinstance(t, str) for t in raw_themes):
+        unknown = [t for t in raw_themes if t not in available]
+        if unknown:
+            raise BadRequest(f"Unknown theme {unknown[0]!r}")
+        names = list(dict.fromkeys(raw_themes))
+    else:
+        raise BadRequest('themes must be a list of theme names or "all"')
+    if len(names) * len(ks) > MAX_SWEEP_TILES:
+        raise BadRequest(f"Too many tiles ({len(names) * len(ks)}); the limit is {MAX_SWEEP_TILES}")
+
+    match = data.get("match") or "order"
+    if match not in MATCH_MODES:
+        raise BadRequest(f"match must be one of {', '.join(MATCH_MODES)}")
+    smooth, shading = bool(data.get("smooth")), bool(data.get("shading"))
+    size = _int_param(data, "size", 240, 64, 512)
+
+    store = _store()
+    rgb, alpha = store.decoded(item)
+    tiles = []
+    for k in ks:
+        regions = store.regions(item, k, partial(regions_from_array, rgb, alpha, k))
+        p_rgb, p_alpha, p_regions = downsample(rgb, alpha, regions, size)
+        for name in names:
+            colors = match_palette(regions.colors, resolve_theme(name), match)
+            img = render_theme(
+                p_rgb, p_alpha, p_regions, name, match=match, smooth=smooth, shading=shading
+            )
+            tiles.append(
+                {
+                    "theme": name,
+                    "k": k,
+                    "regions": len(regions),
+                    "colors": [rgb_to_hex(c) for c in colors],
+                    "image": _png_base64(img),
+                }
+            )
+    return jsonify({"ks": ks, "themes": names, "tiles": tiles})
+
+
 def retheme_text() -> Response:
     data = _payload()
     item = _lookup(data, "filename", kind="text")
@@ -406,6 +472,7 @@ def create_app(max_items: int = 32, max_bytes: int = 512 * 1024 * 1024) -> Flask
     app.add_url_rule("/upload", view_func=upload_file, methods=["POST"])
     app.add_url_rule("/image/<path:filename>", view_func=serve_image)
     app.add_url_rule("/process", view_func=process_image, methods=["POST"])
+    app.add_url_rule("/sweep", view_func=sweep_image, methods=["POST"])
     app.add_url_rule("/retheme_text", view_func=retheme_text, methods=["POST"])
     app.add_url_rule(
         "/retheme_css", endpoint="retheme_css", view_func=retheme_text, methods=["POST"]

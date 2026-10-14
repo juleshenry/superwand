@@ -387,3 +387,79 @@ def test_create_app_has_no_import_side_effects():
     root_handlers = list(logging.getLogger().handlers)
     create_app()
     assert list(logging.getLogger().handlers) == root_handlers
+
+
+# ---- theme x k sweep --------------------------------------------------------
+
+
+def _decode(b64):
+    return np.array(Image.open(io.BytesIO(base64.b64decode(b64))))
+
+
+def test_index_has_sweep_tab(client):
+    html = client.get("/").get_data(as_text=True)
+    assert 'id="tab-sweep"' in html and 'id="sweepGrid"' in html
+
+
+def test_sweep_grid_matches_the_editor(client):
+    arr = np.zeros((128, 128, 4), dtype=np.uint8)  # big enough to be downsampled
+    arr[20:100, 20:64] = (200, 40, 40, 255)
+    arr[20:100, 64:110] = (40, 40, 200, 255)
+    arr[40:60, 30:50] = (240, 220, 60, 255)
+    fid = upload_id(client, png_bytes(arr), "big_sprite.png")
+    resp = client.post(
+        "/sweep", json={"image_name": fid, "ks": "2-3", "themes": ["Neon", "Arctic"], "size": 64}
+    )
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["ks"] == [2, 3] and data["themes"] == ["Neon", "Arctic"]
+    assert [(t["theme"], t["k"]) for t in data["tiles"]] == [
+        ("Neon", 2),
+        ("Arctic", 2),
+        ("Neon", 3),
+        ("Arctic", 3),
+    ]
+    tile = data["tiles"][1]
+    small = _decode(tile["image"])
+    assert small.shape[0] == 64
+    # Opening the tile in the editor (its k and colors) reproduces it at full size
+    colors = [[int(h[i : i + 2], 16) for i in (1, 3, 5)] for h in tile["colors"]]
+    full = _decode(
+        client.post(
+            "/process", json={"image_name": fid, "k": 2, "apply_palette": True, "colors": colors}
+        ).get_json()["image"]
+    )
+    step = full.shape[0] // small.shape[0]
+    assert np.array_equal(full[::step, ::step], small)
+
+
+def test_sweep_reuses_cached_regions(client, sprite_png, monkeypatch):
+    fid = upload_id(client, sprite_png, "sprite.png")
+    calls = []
+    real = studio.regions_from_array
+    monkeypatch.setattr(
+        studio, "regions_from_array", lambda *a, **kw: calls.append(a[2]) or real(*a, **kw)
+    )
+    body = {"image_name": fid, "ks": [2, 3], "themes": ["Neon"]}
+    assert client.post("/sweep", json=body).status_code == 200
+    assert client.post("/sweep", json={**body, "themes": "all", "shading": True}).status_code == 200
+    assert client.post("/process", json={"image_name": fid, "k": 3}).status_code == 200
+    assert sorted(calls) == [2, 3]
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"ks": "0-3"},
+        {"ks": [40]},
+        {"ks": "x"},
+        {"themes": ["Nope"]},
+        {"themes": 5},
+        {"themes": "all", "ks": "1-32"},
+        {"match": "nope"},
+        {"size": 5},
+    ],
+)
+def test_sweep_rejects_bad_input(client, sprite_png, bad):
+    fid = upload_id(client, sprite_png, "sprite.png")
+    assert client.post("/sweep", json={"image_name": fid, **bad}).status_code == 400

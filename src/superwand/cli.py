@@ -11,16 +11,24 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Any
 
-from PIL import UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError
 
 from .color import parse_color, rgb_to_hex
 from .gradients import GRADIENT_STYLES
 from .palette_io import FORMATS, dumps_palette, save_palette
 from .regions import SPACES, find_regions, load_image, regions_from_array
-from .themes import MATCH_MODES, all_themes, color_themes, resolve_theme, theme_label
+from .themes import (
+    MATCH_MODES,
+    all_themes,
+    color_themes,
+    find_theme,
+    resolve_theme,
+    theme_label,
+)
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".tif", ".tiff", ".avif"}
 TEXT_KINDS = {".css": "css", ".svg": "svg"}
+SHEET_CELL = 200  # contact sheet tile size in pixels
 INPUT_EXTENSIONS = IMAGE_EXTENSIONS | set(TEXT_KINDS)
 
 EXAMPLES = """\
@@ -34,6 +42,8 @@ examples:
   superwand art.png --palette                 list regions (numbered for --lock/--map)
   superwand art.png -t Neon --lock 1 --map 2=hotpink
   superwand sprites/ -t Arctic -j 4 -o out/   a whole folder, in parallel
+  superwand art.png -k 2-8 --sheet -o sweep/   every theme at k = 2..8, plus a theme x k grid
+  superwand art.png -t Neon,Arctic -k 2,4,8    two themes at three k values
 """
 
 
@@ -74,8 +84,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--theme",
         action="append",
         metavar="THEME",
-        help="theme name, palette file (.json .toml .gpl .ase .hex .txt .css), or colors "
-        "like '#ff0080,#00ffff'; repeat for several. Default: every theme",
+        help="theme name, comma list of names, 'all', palette file (.json .toml .gpl .ase "
+        ".hex .txt .css), or colors like '#ff0080,#00ffff'; repeatable. Default: all",
     )
     g.add_argument(
         "--palette-from",
@@ -91,7 +101,17 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--list-themes", action="store_true", help="list themes and exit")
 
     r = p.add_argument_group("regions")
-    r.add_argument("-k", type=int, default=4, help="number of color regions (default 4)")
+    r.add_argument(
+        "-k",
+        type=_k_arg,
+        default=[4],
+        metavar="K",
+        help="number of color regions: 4, a list like 2,3,4,6,8, or a range like 2-8 "
+        "(default 4). With several values, results go to k<N>/ subfolders",
+    )
+    r.add_argument(
+        "--seed", type=int, default=42, help="k-means seed; same seed, same result (default 42)"
+    )
     r.add_argument(
         "--space", choices=SPACES, default="oklab", help="color space for finding regions"
     )
@@ -135,7 +155,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     o = p.add_argument_group("output")
-    o.add_argument("-o", "--output-dir", default=".", help="output folder (default: current)")
+    o.add_argument(
+        "-o",
+        "--output-dir",
+        "--out-dir",
+        dest="output_dir",
+        default=".",
+        help="output folder (default: current)",
+    )
+    o.add_argument(
+        "--sheet",
+        action="store_true",
+        help="also write <name>_sheet.png, a labelled grid with themes as rows and k as columns",
+    )
     o.add_argument("--gif", action="store_true", help="write an animated GIF cycling the themes")
     o.add_argument("--delay", type=int, default=700, help="GIF frame time in ms (default 700)")
     o.add_argument(
@@ -171,6 +203,33 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-tolerance", dest="tolerance", type=int, help=hide)
     p.add_argument("--headless", action="store_true", help=hide)
     return p
+
+
+def _k_arg(value: str) -> list[int]:
+    from .sweep import parse_k_values
+
+    try:
+        return parse_k_values(value)
+    except ValueError as e:
+        raise argparse.ArgumentTypeError(str(e)) from e
+
+
+def expand_themes(values: Sequence[str] | None) -> list[str] | None:
+    """-t values: 'all', comma lists of theme names, or any single theme (name, file, colors)."""
+    if not values:
+        return None
+    out: list[str] = []
+    for value in values:
+        if value.strip().casefold() == "all":
+            out.extend(all_themes())
+            continue
+        parts = [part.strip() for part in value.split(",") if part.strip()]
+        found = [find_theme(part) for part in parts]
+        if len(parts) > 1 and all(found):
+            out.extend(f[0] for f in found if f)
+        else:
+            out.append(value)
+    return list(dict.fromkeys(out))
 
 
 def expand_inputs(patterns: Sequence[str]) -> list[Path]:
@@ -210,11 +269,11 @@ def parse_overrides(locks: Sequence[int], maps: Sequence[str]) -> dict[int, Any]
     return overrides
 
 
-def _themes(opts: dict[str, Any]) -> list[Any]:
+def _themes(opts: dict[str, Any], k: int) -> list[Any]:
     if opts["palette_from"]:
         from .regions import extract_palette
 
-        return [extract_palette(opts["palette_from"], opts["k"])]
+        return [extract_palette(opts["palette_from"], k, seed=opts["seed"])]
     return list(opts["theme"] or all_themes())
 
 
@@ -227,19 +286,27 @@ def _label(theme: Any, opts: dict[str, Any]) -> str:
 def process_input(path: Path, opts: dict[str, Any]) -> list[str]:
     """Rethemes one input with every requested theme; returns the saved paths."""
     from .css import recolor_text
-    from .render import paint
-    from .themes import match_palette
+    from .render import render_theme
+    from .sweep import SweepTile, contact_sheet
 
     out_dir = Path(opts["output_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
     saved: list[str] = []
     default_match = "luminance" if opts["palette_from"] else "order"
     match = opts["match"] or default_match
+    ks: list[int] = opts["k"]
+    multi_k = len(ks) > 1
+
+    def folder(k: int) -> Path:
+        """One subfolder per k when sweeping several values, else the output folder."""
+        target = out_dir / f"k{k}" if multi_k else out_dir
+        target.mkdir(parents=True, exist_ok=True)
+        return target
 
     kind = TEXT_KINDS.get(path.suffix.lower())
-    if kind:
+    if kind:  # k plays no part in CSS/SVG, so text inputs render once
         text = path.read_text(encoding="utf-8")
-        for theme in _themes(opts):
+        for theme in _themes(opts, ks[0]):
             result = recolor_text(
                 text, theme, kind=kind, match=match, min_contrast=opts["min_contrast"]
             )
@@ -253,46 +320,65 @@ def process_input(path: Path, opts: dict[str, Any]) -> list[str]:
                 )
         return saved
 
+    render_opts = {
+        "gradient": opts["gradient"],
+        "polarity": opts["polarity"],
+        "smooth": opts["smooth"],
+        "shading": opts["shading"],
+    }
     if opts["gif"]:
         from .gif import theme_cycle_gif
 
-        out = out_dir / f"{path.stem}_themes.gif"
-        theme_cycle_gif(
-            path,
-            out,
-            themes=_themes(opts),
-            k=opts["k"],
-            delay=opts["delay"],
-            gradient=opts["gradient"],
-            polarity=opts["polarity"],
-            match=match,
-            smooth=opts["smooth"],
-            shading=opts["shading"],
-            overrides=opts["overrides"],
-        )
-        return [str(out)]
-
-    from .render import _apply_overrides
+        for k in ks:
+            out = folder(k) / f"{path.stem}_themes.gif"
+            theme_cycle_gif(
+                path,
+                out,
+                themes=_themes(opts, k),
+                k=k,
+                delay=opts["delay"],
+                match=match,
+                overrides=_overrides_for(opts["overrides"], k, multi_k),
+                **render_opts,
+            )
+            saved.append(str(out))
+        return saved
 
     rgb, alpha = load_image(path)
-    regions = regions_from_array(rgb, alpha, opts["k"], space=opts["space"])
-    for theme in _themes(opts):
-        targets = list(match_palette(regions.colors, resolve_theme(theme), match))
-        img = paint(
-            rgb,
-            alpha,
-            regions,
-            _apply_overrides(targets, opts["overrides"]),  # type: ignore[arg-type]
-            gradient=opts["gradient"],
-            polarity=opts["polarity"],
-            flood=opts["flood"],
-            smooth=opts["smooth"],
-            shading=opts["shading"],
-        )
-        out = out_dir / f"{path.stem}_{_label(theme, opts)}.png"
-        img.save(out)
+    tiles: list[SweepTile] = []
+    for k in ks:
+        regions = regions_from_array(rgb, alpha, k, seed=opts["seed"], space=opts["space"])
+        overrides = _overrides_for(opts["overrides"], len(regions), multi_k)
+        for theme in _themes(opts, k):
+            img = render_theme(
+                rgb,
+                alpha,
+                regions,
+                theme,
+                match=match,
+                overrides=overrides,
+                flood=opts["flood"],
+                **render_opts,
+            )
+            label = _label(theme, opts)
+            out = folder(k) / f"{path.stem}_{label}.png"
+            img.save(out)
+            saved.append(str(out))
+            if opts["sheet"]:
+                img.thumbnail((SHEET_CELL, SHEET_CELL), Image.Resampling.LANCZOS)
+                tiles.append(SweepTile(label, k, img))
+    if tiles:
+        out = out_dir / f"{path.stem}_sheet.png"
+        contact_sheet(tiles, cell=SHEET_CELL, title=path.name).save(out)
         saved.append(str(out))
     return saved
+
+
+def _overrides_for(overrides: dict[int, Any], n_regions: int, lenient: bool) -> dict[int, Any]:
+    """In a k sweep, --lock/--map only apply at the k values that have that region."""
+    if not lenient:
+        return overrides
+    return {i: color for i, color in overrides.items() if i < n_regions}
 
 
 def _run_one(path: Path, opts: dict[str, Any]) -> tuple[Path, list[str], str | None]:
@@ -302,8 +388,10 @@ def _run_one(path: Path, opts: dict[str, Any]) -> tuple[Path, list[str], str | N
         return path, [], str(e)
 
 
-def print_palette(path: Path, k: int, target: str, fmt: str | None, space: str) -> None:
-    regions = find_regions(path, k, space=space)
+def print_palette(
+    path: Path, k: int, target: str, fmt: str | None, space: str, seed: int = 42
+) -> None:
+    regions = find_regions(path, k, space=space, seed=seed)
     colors = regions.colors
     if target != "-":
         save_palette(colors, target, None if fmt in (None, "text") else fmt, path.stem)
@@ -373,34 +461,40 @@ def _main(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
             raise CliError("no images, .svg or .css files found in the given folders")
         return run_studio(args.host, args.port, args.debug)
 
-    if args.k < 1:
-        raise CliError("-k must be at least 1")
     if not 0 <= args.polarity <= 1:
         raise CliError("--polarity must be between 0 and 1")
     if args.flood and args.smooth:
         raise CliError("--flood and --smooth can't be combined")
     if args.jobs < 1:
         raise CliError("--jobs must be at least 1")
+    if args.sheet and args.gif:
+        raise CliError("--sheet can't be combined with --gif")
+    themes = expand_themes(args.theme)
     try:
-        for theme in args.theme or []:
+        for theme in themes or []:
             resolve_theme(theme)
     except ValueError as e:
         raise CliError(str(e)) from e
 
     if args.palette:
-        if args.palette != "-" and len(inputs) > 1:
-            raise CliError("--palette FILE takes a single input")
+        if args.palette != "-" and (len(inputs) > 1 or len(args.k) > 1):
+            raise CliError("--palette FILE takes a single input and a single -k")
         for path in inputs:
             if len(inputs) > 1:
                 print(f"{path}:")
-            print_palette(path, args.k, args.palette, args.format, args.space)
+            for k in args.k:
+                if len(args.k) > 1:
+                    print(f"k = {k}:")
+                print_palette(path, k, args.palette, args.format, args.space, args.seed)
         return 0
 
     opts = {
-        "theme": args.theme,
+        "theme": themes,
         "palette_from": args.palette_from,
         "match": args.match,
         "k": args.k,
+        "seed": args.seed,
+        "sheet": args.sheet,
         "space": args.space,
         "overrides": parse_overrides(args.lock, args.map),
         "gradient": None if args.gradient in (None, "none") else args.gradient,
