@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import multiprocessing
 import os
 import sys
 from collections.abc import Iterable, Sequence
@@ -511,7 +512,9 @@ def _main(parser: argparse.ArgumentParser, args: argparse.Namespace) -> int:
     failures = 0
     results: Iterable[tuple[Path, list[str], str | None]]
     if args.jobs > 1 and len(inputs) > 1:
-        with ProcessPoolExecutor(max_workers=args.jobs) as pool:
+        # Spawn, not fork: forking after scikit-learn's OpenMP threads start can deadlock
+        spawn = multiprocessing.get_context("spawn")
+        with ProcessPoolExecutor(max_workers=args.jobs, mp_context=spawn) as pool:
             results = list(pool.map(_run_one, inputs, [opts] * len(inputs)))
     else:
         results = (_run_one(path, opts) for path in inputs)
