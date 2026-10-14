@@ -1,0 +1,42 @@
+# git-cliff (https://git-cliff.org) drafts release notes from commit messages:
+#   git cliff --unreleased --strip all
+# Paste the result into the "## [Unreleased]" section of CHANGELOG.md and edit it into prose.
+
+[changelog]
+header = ""
+body = """
+{% if version %}\
+## {{ version }} ({{ timestamp | date(format="%Y-%m-%d") }})
+{% else %}\
+## [Unreleased]
+{% endif %}\
+{% for group, commits in commits | sort(attribute="group") | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+* {% if commit.breaking %}**Breaking:** {% endif %}\
+{% if commit.scope %}{{ commit.scope }}: {% endif %}\
+{{ commit.message | upper_first }}\
+{% endfor %}
+{% endfor %}
+"""
+footer = ""
+trim = false
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+protect_breaking_commits = true
+# Real releases only; ignores the stray `v20` tag
+tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+"
+sort_commits = "oldest"
+commit_parsers = [
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^superwand v", skip = true },
+  { message = "^Release v", skip = true },
+  { message = "^feat", group = "<!-- 0 -->Features" },
+  { message = "^(fix|bugfix)", group = "<!-- 1 -->Bug fixes" },
+  { message = "^perf", group = "<!-- 2 -->Performance" },
+  { message = "^refactor", group = "<!-- 3 -->Refactoring" },
+  { message = "^docs", group = "<!-- 4 -->Documentation" },
+  { message = "^(chore|ci|build|test|style)", group = "<!-- 5 -->Maintenance" },
+]
