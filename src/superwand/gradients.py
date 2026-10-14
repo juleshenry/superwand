@@ -74,19 +74,17 @@ def calc_gradient_poles(
 
     pts = np.asarray(pixel_arr, dtype=np.float64).reshape(-1, 2)
     xs, ys = pts[:, 0], pts[:, 1]
+    x_lo, x_hi, y_lo, y_hi = (float(f(v)) for v in (xs, ys) for f in (np.min, np.max))
+    mid_x, mid_y = (x_lo + x_hi) / 2, (y_lo + y_hi) / 2
     match grad_kw:
         case "bottom-up":
-            mid_x = (xs.min() + xs.max()) / 2
-            return (mid_x, ys.max()), (mid_x, ys.min())
+            return (mid_x, y_hi), (mid_x, y_lo)
         case "top-down":
-            mid_x = (xs.min() + xs.max()) / 2
-            return (mid_x, ys.min()), (mid_x, ys.max())
+            return (mid_x, y_lo), (mid_x, y_hi)
         case "left-right":
-            mid_y = (ys.min() + ys.max()) / 2
-            return (xs.min(), mid_y), (xs.max(), mid_y)
+            return (x_lo, mid_y), (x_hi, mid_y)
         case "right-left":
-            mid_y = (ys.min() + ys.max()) / 2
-            return (xs.max(), mid_y), (xs.min(), mid_y)
+            return (x_hi, mid_y), (x_lo, mid_y)
         case "radial":
             center = pts.mean(axis=0)
             farthest = pts[np.argmax(np.hypot(xs - center[0], ys - center[1]))]
