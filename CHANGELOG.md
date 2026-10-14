@@ -28,6 +28,9 @@ releases may contain breaking changes, and those are called out explicitly.
 * Palette export: `--palette FILE` and `--format hex|json|css|gpl|ase`, plus `load_palette()` / `save_palette()`.
 * Region control: `--lock N` keeps region N's original pixels and `--map N=COLOR` pins it; `overrides=` in `retheme()`. `--palette` now prints numbered regions with their share of the image.
 * Batch runs: several inputs, folders and globs in one command, `-j/--jobs` for parallel processing, and repeatable `-t`.
+* Theme × k sweeps: `-k` takes a list (`2,3,4,6,8`) or a range (`2-8`), with results in `k<N>/` subfolders (a single k keeps the flat layout). `--sheet` writes a labelled theme × k contact sheet. Regions are found once per k and reused for every theme. `-t` also takes comma lists of theme names and `all`, and `--out-dir` works as an alias for `-o`. In Python: `k_sweep()`, `contact_sheet()`, `parse_k_values()`.
+* `--seed` (and `seed=` in `retheme()`) to choose the k-means seed; results are repeatable for a given seed.
+* Studio Sweep tab: pick k values and themes, render a thumbnail grid, and click a tile to open that combination in the editor. Tiles use the editor's full-resolution regions, and up to 16 k values are cached per image.
 * New API: `find_regions()` returning a `Regions` object (label map, colors, counts) that can be reused across calls, `paint()`, `retheme_file()`, `parse_color()`, `parse_palette()`, `all_themes()`, `themes_dir()`.
 * `python -m superwand`, `superwand --version`, `--host` for the Studio, `-q/--quiet`, `--delay` for GIFs.
 * Studio: smooth-edges and preserve-shading toggles, a before/after compare slider, region shares, SVG upload with rendered previews, CSS match mode and contrast repair, and an upload store capped by item count and memory. Regions are cached per image and `k`.

@@ -15,8 +15,16 @@ from .css import css_retheme
 from .gif import theme_cycle_gif
 from .palette_io import load_palette, save_palette
 from .regions import Regions, extract_palette, find_regions
-from .render import gradient_enforce, paint, retheme, retheme_file, transfer_palette
+from .render import (
+    gradient_enforce,
+    paint,
+    render_theme,
+    retheme,
+    retheme_file,
+    transfer_palette,
+)
 from .svg import svg_retheme
+from .sweep import SweepTile, contact_sheet, k_sweep, parse_k_values
 from .themes import all_themes, color_themes, match_palette, resolve_theme, themes_dir
 
 try:
@@ -26,18 +34,23 @@ except PackageNotFoundError:  # pragma: no cover - running from a source tree
 
 __all__ = [
     "Regions",
+    "SweepTile",
     "__version__",
     "all_themes",
     "color_themes",
+    "contact_sheet",
     "css_retheme",
     "extract_palette",
     "find_regions",
     "gradient_enforce",
+    "k_sweep",
     "load_palette",
     "match_palette",
     "paint",
     "parse_color",
+    "parse_k_values",
     "parse_palette",
+    "render_theme",
     "resolve_theme",
     "retheme",
     "retheme_file",

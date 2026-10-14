@@ -29,6 +29,7 @@ superwand photo.jpg -t Fall --preserve-shading --smooth
 superwand logo.svg site.css -t "#ff0080,#00ffff,#1a0033"
 superwand rocket.png --palette-from shrimp.jpg -k 6 # steal another image's palette
 superwand sprites/ -t Arctic -j 4 -o out/           # a whole folder, in parallel
+superwand art.png -k 2-8 --sheet -o sweep/          # every theme at k = 2..8, plus a grid
 superwand                                           # open SuperWand Studio
 ```
 
@@ -55,6 +56,8 @@ retheme("art.png", "Vaporwave", k=6).save("art_vaporwave.png")
 - **Any palette.** 18 built-in themes, a color list on the command line, palette files (JSON,
   TOML, GIMP `.gpl`, Adobe `.ase`, `.hex`), your own themes folder, or the colors of another image.
 - **Region control.** Keep a region's original pixels (`--lock`) or pin it to a color (`--map`).
+- **Theme × k sweeps.** Render every theme at several `k` values in one run (`-k 2-8`), with a
+  labelled contact sheet (`--sheet`) and a matching grid view in the Studio.
 - **Palette export.** Save an image's dominant colors as hex, JSON, CSS variables, `.gpl` or `.ase`.
 - **SuperWand Studio.** A local web app for retheming with live previews. It works offline.
 
@@ -70,9 +73,11 @@ output folder.
 
 | Option | What it does |
 | --- | --- |
-| `-t, --theme THEME` | Theme name (case-insensitive), palette file, or colors like `"#ff0080,#00ffff"`. Repeat for several. Default: every theme. |
+| `-t, --theme THEME` | Theme name (case-insensitive), a comma list of names (`Neon,Arctic`), `all`, a palette file, or colors like `"#ff0080,#00ffff"`. Repeatable. Default: every theme. |
 | `--palette-from IMAGE` | Use the `k` dominant colors of another image as the theme. |
-| `-k K` | Number of color regions (default 4). |
+| `-k K` | Number of color regions: `4`, a list `2,3,4,6,8`, or a range `2-8` (default 4). With several values, each k gets its own `k<N>/` subfolder. |
+| `--sheet` | Also write `<name>_sheet.png`, a labelled grid with themes as rows and k as columns. |
+| `--seed N` | k-means seed (default 42). The same seed always gives the same result. |
 | `--match order\|luminance` | Pair regions with colors by size (`order`, the default for themes) or by brightness (`luminance`, the default for `--palette-from`). |
 | `--preserve-shading` | Keep each pixel's lightness relative to its region. Best for photos. |
 | `--smooth` | Blend colors across region edges. |
@@ -86,7 +91,7 @@ output folder.
 | `--palette [FILE]` | Print the image's numbered regions and colors, or save them to FILE (`.hex`, `.json`, `.css`, `.gpl`, `.ase`). |
 | `--format FMT` | Palette format for `--palette`: `text`, `hex`, `json`, `css`, `gpl` or `ase`. |
 | `--gif` | Write an animated GIF that cycles through the themes. |
-| `-o, --output-dir DIR` | Where to write results (default: current folder). |
+| `-o, --output-dir DIR` | Where to write results (default: current folder). Also `--out-dir`. |
 | `-j, --jobs N` | Process inputs in parallel. |
 | `--list-themes` | List built-in and user themes. |
 | `--host`, `--port`, `--debug` | Studio server options (default `127.0.0.1:5001`). |
@@ -102,6 +107,22 @@ $ superwand charizard.png --palette
 ```
 
 The pre-0.4 spellings (`-theme`, `-gradient`, `-palette-from`, ...) still work.
+
+### Sweeping k
+
+Choosing `k` is easiest side by side. One command renders every theme at every k, finding the
+regions once per k and reusing them for all themes:
+
+```bash
+superwand rocket.jpeg -k 2,3,4,6,8 -t Vaporwave,Neon,Forest,Volcano --sheet -o sweep/
+```
+
+That writes `sweep/k2/rocket_Neon.png` and so on, plus `sweep/rocket_sheet.png`:
+
+![theme x k sheet](https://raw.githubusercontent.com/juleshenry/superwand/main/examples/demos/sweep_sheet.webp)
+
+A single `-k` keeps the flat layout (`sweep/rocket_Neon.png`). `--lock` and `--map` apply at every
+k that has that region.
 
 ### gradient-enforce
 
@@ -137,6 +158,8 @@ from superwand import (
     css_retheme,
     theme_cycle_gif,
     save_palette,
+    k_sweep,
+    contact_sheet,
 )
 
 img = retheme("charizard.png", "Vaporwave", k=6, gradient="radial")  # an RGBA PIL Image
@@ -154,6 +177,9 @@ save_palette(colors, "shrimp.ase")  # or .gpl .json .css .hex
 svg = svg_retheme("logo.svg", "Forest")
 css = css_retheme("site.css", "Tropical", min_contrast=4.5)
 theme_cycle_gif("charizard.png", "charizard_themes.gif")
+
+tiles = k_sweep("rocket.jpeg", "2-8", ["Neon", "Forest"])  # [SweepTile(theme, k, image), ...]
+contact_sheet(tiles, cell=200).save("sheet.png")
 ```
 
 `retheme()` accepts a path or a PIL image and always returns RGBA. Region indexes in
@@ -186,7 +212,9 @@ A theme can be any of these:
 
 SuperWand Studio is a local web app for interactive retheming. Upload an image, drag the `k`
 slider, pick colors per region, add gradients, toggle smooth edges and preserve shading, compare
-before and after, and download the result. It also rethemes CSS and SVG files. Install it with
+before and after, and download the result. The Sweep tab renders a theme × k grid of
+thumbnails. Clicking a tile opens that exact combination in the editor, and regions are cached
+per k, so switching themes doesn't re-run clustering. It also rethemes CSS and SVG files. Install it with
 `pip install "superwand[studio]"`, run `superwand`, then open <http://127.0.0.1:5001>.
 
 ## Demos

@@ -197,3 +197,67 @@ def test_css_retheme_cli(tmp_path, capsys):
     svg.write_text('<svg fill="red"/>')
     assert css_main([str(svg), "Neon"]) == 0
     assert Path(svg).read_text() == '<svg fill="red"/>'  # input untouched
+
+
+def test_k_sweep_writes_one_folder_per_k_and_a_sheet(tmp_path, quad_path):
+    out = tmp_path / "sweep"
+    assert run(quad_path, "-k", "2,3", "-t", "Neon,Arctic", "--sheet", "--out-dir", out, "-q") == 0
+    assert sorted(p.name for p in (out / "k2").iterdir()) == ["quad_Arctic.png", "quad_Neon.png"]
+    assert sorted(p.name for p in (out / "k3").iterdir()) == ["quad_Arctic.png", "quad_Neon.png"]
+    assert Image.open(out / "quad_sheet.png").width > 2 * 200
+
+
+def test_single_k_stays_flat(tmp_path, quad_path):
+    assert run(quad_path, "-k", "3", "-t", "Neon", "-o", tmp_path, "-q") == 0
+    assert (tmp_path / "quad_Neon.png").exists()
+    assert not (tmp_path / "k3").exists()
+
+
+def test_k_range_and_all_themes(tmp_path, quad_path):
+    assert run(quad_path, "-k", "2-4", "-t", "all", "-o", tmp_path, "-q") == 0
+    for k in (2, 3, 4):
+        assert len(list((tmp_path / f"k{k}").glob("*.png"))) == len(color_themes)
+
+
+def test_theme_list_vs_color_list(tmp_path, quad_path):
+    assert run(quad_path, "-t", "neon,arctic", "-o", tmp_path, "-q") == 0
+    assert {p.name for p in tmp_path.glob("*.png")} >= {"quad_Neon.png", "quad_Arctic.png"}
+    assert run(quad_path, "-t", "red,blue", "-o", tmp_path, "-q") == 0
+    assert (tmp_path / "quad_custom.png").exists()
+
+
+def test_seed_makes_runs_repeatable(tmp_path):
+    noise = np.random.default_rng(5).integers(0, 256, (40, 40, 3), dtype=np.uint8)
+    src = tmp_path / "noise.png"
+    Image.fromarray(noise).save(src)
+    for name in ("a", "b"):
+        assert run(src, "-t", "Neon", "-k", "12", "--seed", "3", "-o", tmp_path / name, "-q") == 0
+    a = np.array(Image.open(tmp_path / "a" / "noise_Neon.png"))
+    b = np.array(Image.open(tmp_path / "b" / "noise_Neon.png"))
+    assert np.array_equal(a, b)
+
+
+def test_sweep_skips_locks_where_the_region_does_not_exist(tmp_path, quad_path):
+    assert run(quad_path, "-k", "2,4", "-t", "Neon", "--lock", "4", "-o", tmp_path, "-q") == 0
+    k4 = np.array(Image.open(tmp_path / "k4" / "quad_Neon.png"))
+    assert k4[39, 39, :3].tolist() == [250, 250, 250]  # region 4 (white) kept
+    # With a single k a missing region is an error for that input
+    assert run(quad_path, "-k", "2", "-t", "Neon", "--lock", "4", "-o", tmp_path) == 1
+
+
+def test_sweep_palette_and_gif(tmp_path, quad_path, capsys):
+    assert run(quad_path, "--palette", "-k", "2,4") == 0
+    out = capsys.readouterr().out
+    assert "k = 2:" in out and "k = 4:" in out
+    with pytest.raises(SystemExit):
+        run(quad_path, "--palette", tmp_path / "x.hex", "-k", "2,4")
+    assert run(quad_path, "--gif", "-t", "Neon", "-k", "2,3", "-o", tmp_path, "-q") == 0
+    assert (tmp_path / "k2" / "quad_themes.gif").exists()
+    with pytest.raises(SystemExit):
+        run(quad_path, "--gif", "--sheet")
+
+
+def test_bad_k_values(quad_path):
+    for bad in ("0", "2-", "x", "70"):
+        with pytest.raises(SystemExit):
+            run(quad_path, "-k", bad)

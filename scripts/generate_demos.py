@@ -17,9 +17,11 @@ from PIL import Image, ImageDraw, ImageOps
 
 from superwand import (
     color_themes,
+    contact_sheet,
     extract_palette,
     find_regions,
     gradient_enforce,
+    k_sweep,
     retheme,
     svg_retheme,
     theme_cycle_gif,
@@ -145,6 +147,12 @@ def demos() -> None:
         + [(retheme(rocket, "Vaporwave", k=k), f"k = {k}") for k in (2, 4, 6, 8)],
         "k_sweep.webp",
     )
+    tiles = k_sweep(rocket, "2,3,4,6,8", ["Vaporwave", "Neon", "Forest", "Volcano"], preview=320)
+    path = EXAMPLES / "demos" / "sweep_sheet.webp"
+    contact_sheet(tiles, cell=160, title="superwand rocket.jpeg -k 2,3,4,6,8 --sheet").save(
+        path, quality=90, method=6
+    )
+    wrote(path)
     sheet(
         [
             (retheme(rocket, "Vaporwave", gradient="left-right", polarity=p), f"polarity {p}")
