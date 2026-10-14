@@ -1,145 +1,38 @@
-r"""
-                                ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
-                                ███████▇▃ ▅██▆
-                                ▅██████▇▅▁███▃
-                                ▄██████▇▃▁██▆▁
-                                ▁▇██████▅▃██▅
-                             ▁▃  ▇█████▆ ▁██▅ ▁▃▁
-                             ███▆▇█████▆▁▁▇█▇▅██▇
-                             ▇█████▇▇▇█▇▄▄▇▇▆███▅
-                             ▁▃▇██████████████▆▂
-                               ▁▁▅██▇▆▇▁▆▇▅█▆▁
-                                 ▁▆█▂ ▇▁▁ ▁▆▁
-                                  ▃█▇▆▆▇▅▅▇█▃
-                               ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁
-                           ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁
-                          ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄
-                         ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁
-                         ▄████▅▁  ▃▁       ▅   ▂███████▂
-                         ██████▄  ▄▁       ▅  ▂████████▇▁
-                        ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄
-                       ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁
-                       ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆
-                      ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃
-                     ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁
-                    ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁
-                    ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁
-                    ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅
-                    ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂
-                   ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁
-                   █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄
-                 ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅
-               ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄
-            ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂
-          ▂▄▇▅▁             ▁██████████████████████▁
-        ▁▂▆▃▁               ▁██████████▇███████████▁
-     ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁
-   ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁
-▂▁▂▂▁                        ▃█████████▁ ▄█████████
-▁▂▁                          ▁▅███████▆  ▃████████▃
-                              ▃██████▇▁   ▇███████▂
-                               ██████▇    ▁██████▇▂
-                               ▂█████▃     ▇█████▁
-                               ▂█████▂     ▄█████▁
-                              ▂██████▄     ▄█████▆▁
-                            ▁▄██████▆▃     ▃██████▇▂
-                           ▁█████▆▂▁        ▁▂▅█████▅▁
-                            ▂▂▂▂▁              ▁▄▅▇▇▇▂
-
-
-                                                                     ||`
-                                                                     ||
-('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||
- `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
-`...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||.
-                ||
-               .||
-                           by Julian Henry
-"""
-
-import sys
+import numpy as np
 import pytest
-from unittest.mock import MagicMock
-
-# Mock modules that might be missing or we don't want to use in tests
-module_names = [
-    "matplotlib",
-    "matplotlib.pyplot",
-    "PIL",
-    "PIL.Image",
-    "PIL.ImageDraw",
-    "PIL.ImageFont",
-    "numpy",
-    "scipy",
-    "scipy.spatial",
-    "scipy.spatial.distance",
-    "sklearn",
-    "superwand.core.np_colorgram",
-    "superwand.core.np_themes",
-]
-
-# We need to be careful. If we mock numpy, we might break things if tests use real numpy.
-# But since numpy is missing in the environment where pytest runs (3.14), we MUST mock it.
-
-
-class MockNumpy(MagicMock):
-    bool_ = bool  # Define bool_ as a type (built-in bool)
-
-    def array(self, *args, **kwargs):
-        return MagicMock()
-
-    def sqrt(self, *args, **kwargs):
-        return 0.0
-
-    def sum(self, *args, **kwargs):
-        return 0.0
-
-    def argwhere(self, *args, **kwargs):
-        return MagicMock(tolist=lambda: [])
-
-    def zeros(self, *args, **kwargs):
-        return MagicMock()
-
-    def full(self, *args, **kwargs):
-        return MagicMock()
-
-    def concatenate(self, *args, **kwargs):
-        return MagicMock()
-
-    def unique(self, *args, **kwargs):
-        return MagicMock(), MagicMock()
-
-    def argsort(self, *args, **kwargs):
-        return MagicMock()
-
-
-# Apply mocks
-# Note: We only mock if they are not importable, to allow running in an env where they exist.
+from PIL import Image
 
 
 @pytest.fixture
-def img_path(tmp_path):
-    import PIL.Image
-    import numpy as np
-
-    path = tmp_path / "test_image.png"
-    # Create a simple RGB image
-    img = PIL.Image.fromarray(np.zeros((10, 10, 3), dtype=np.uint8))
-    img.save(path)
-    return str(path)
+def quad_img():
+    """Four flat regions: black (700 px), dark gray (400), light gray (400), white (100)."""
+    arr = np.zeros((40, 40, 3), dtype=np.uint8)
+    arr[:20, 20:] = (80, 80, 80)
+    arr[20:, :20] = (170, 170, 170)
+    arr[30:, 30:] = (250, 250, 250)
+    return Image.fromarray(arr)
 
 
-def pytest_configure(config):
-    """Mock missing modules."""
+@pytest.fixture
+def sprite():
+    """A red/blue sprite on a fully transparent background, with a half-transparent pixel."""
+    arr = np.zeros((32, 32, 4), dtype=np.uint8)
+    arr[8:24, 8:16] = (220, 30, 30, 255)
+    arr[8:24, 16:24] = (30, 30, 220, 255)
+    arr[8, 8] = (220, 30, 30, 128)
+    return Image.fromarray(arr, "RGBA")
 
-    def mock_if_missing(module_name):
-        try:
-            __import__(module_name)
-        except ImportError:
-            if module_name == "numpy":
-                sys.modules[module_name] = MockNumpy()
-            else:
-                sys.modules[module_name] = MagicMock()
 
-    for name in module_names:
-        mock_if_missing(name)
+@pytest.fixture
+def quad_path(tmp_path, quad_img):
+    path = tmp_path / "quad.png"
+    quad_img.save(path)
+    return path
+
+
+@pytest.fixture(autouse=True)
+def isolated_user_themes(tmp_path, monkeypatch):
+    """Point the user themes folder at an empty temp dir so local themes don't leak in."""
+    folder = tmp_path / "user-themes"
+    monkeypatch.setenv("SUPERWAND_THEMES_DIR", str(folder))
+    return folder

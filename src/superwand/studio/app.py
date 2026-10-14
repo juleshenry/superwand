@@ -1,297 +1,504 @@
-r"""
-                                ▂▃▃▃▄▄▄▄▃▂▃▃▂▁
-                                ███████▇▃ ▅██▆
-                                ▅██████▇▅▁███▃
-                                ▄██████▇▃▁██▆▁
-                                ▁▇██████▅▃██▅
-                             ▁▃  ▇█████▆ ▁██▅ ▁▃▁
-                             ███▆▇█████▆▁▁▇█▇▅██▇
-                             ▇█████▇▇▇█▇▄▄▇▇▆███▅
-                             ▁▃▇██████████████▆▂
-                               ▁▁▅██▇▆▇▁▆▇▅█▆▁
-                                 ▁▆█▂ ▇▁▁ ▁▆▁
-                                  ▃█▇▆▆▇▅▅▇█▃
-                               ▁▂▅▇▆▇▇▅▆▅▇▃▆▃▅▃▁
-                           ▁▂▄▆▅▃▁▃▆▂▂▄▄▂▁▁▆ ▁▃▆█▆▅▃▁
-                          ▂███▆▂  ▁▂▄▃▃▂▂▃▁▅  ▁▄█████▄
-                         ▁▇███▅▃▁          ▅  ▂▄▇█████▄▁
-                         ▄████▅▁  ▃▁       ▅   ▂███████▂
-                         ██████▄  ▄▁       ▅  ▂████████▇▁
-                        ▅███████▁ ▃▁  ▂    ▆ ▁▆█████████▄
-                       ▂████████▆▁▄▁  ▁   ▁▆▁▆███████████▁
-                       ▇█████████▅▄▂▁▁▂▁▂▂▄▆▂████████████▆
-                      ▄██████████▆▆█▅▆▆▄▃▃▅▇█████▇▅███████▃
-                     ▁██████████████▇▇▅▂ ▁▄██████▇▂████████▁
-                    ▁▄▅▄▅▇██▇██████▇▄▆▅▂  ▃███████▃▅█████▇▇▅▁
-                    ▂▃    ▂█▆▇████████▆▃ ▁▅███████▄▁██▅▂▁  ▁▄▁
-                    ▅▂▂▁▁▁▁▅▁▇██████████▇▆█████████▁▃▆    ▁▂▂▅
-                    ▃▃▁▁▆▄▆▅▄██████████████████████▁ ▅▃▂▃▃▃▆▅▂
-                   ▂▅▂▄▇▇▆▃ ▂██████████████████████▁ ▁▃▃▆▃▁▂▅▁
-                   █▅ ▆▇▆   ▂██████████████████████▁    ▄▁▄▁▁▄
-                 ▁▃██▂▅▅▃   ▂██████████████████████▁   ▁▅▄▂▇▁▅
-               ▂▅▇▅▃▄▃▂     ▂██████████████████████▁   ▁▃▄▅▇▃▄
-            ▁▃▆▆▃▁          ▁██████████████████████▁     ▁▅▅▂
-          ▂▄▇▅▁             ▁██████████████████████▁
-        ▁▂▆▃▁               ▁██████████▇███████████▁
-     ▁▁▁▁▁                  ▁▅█████████▂▄██████████▁
-   ▁▁▂▁▁                     ▃█████████▁▃▇█████████▁
-▂▁▂▂▁                        ▃█████████▁ ▄█████████
-▁▂▁                          ▁▅███████▆  ▃████████▃
-                              ▃██████▇▁   ▇███████▂
-                               ██████▇    ▁██████▇▂
-                               ▂█████▃     ▇█████▁
-                               ▂█████▂     ▄█████▁
-                              ▂██████▄     ▄█████▆▁
-                            ▁▄██████▆▃     ▃██████▇▂
-                           ▁█████▆▂▁        ▁▂▅█████▅▁
-                            ▂▂▂▂▁              ▁▄▅▇▇▇▂
+"""
+The SuperWand Studio Flask app.
 
-
-                                                                     ||`
-                                                                     ||
-('''' '||  ||` '||''|, .|''|, '||''| '\\    //`  '''|.  `||''|,  .|''||
- `'')  ||  ||   ||  || ||..||  ||      \\/\//   .|''||   ||  ||  ||  ||
-`...'  `|..'|.  ||..|' `|...  .||.      \/\/    `|..||. .||  ||. `|..||.
-                ||
-               .||
-                           by Julian Henry
-
+Uploads live in memory only, in a size-capped LRU store, and every image is
+normalized to PNG on upload. Region clustering results are cached per image
+and k, so dragging sliders doesn't re-cluster.
 """
 
-import os
-import io
+from __future__ import annotations
+
 import base64
-import uuid
+import io
 import logging
-from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
-from werkzeug.utils import secure_filename
-from PIL import Image, ImageOps, UnidentifiedImageError
-import pillow_avif  # Register AVIF support
+import threading
+import uuid
+from collections import OrderedDict
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from functools import partial
+from pathlib import Path
+from typing import Any
+
 import numpy as np
+from flask import Flask, Response, current_app, jsonify, render_template, request, send_file
+from PIL import Image, UnidentifiedImageError
+from werkzeug.exceptions import HTTPException
+from werkzeug.utils import secure_filename
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+from ..color import RGB, parse_color, rgb_to_hex
+from ..css import recolor_text
+from ..gradients import GRADIENT_STYLES
+from ..regions import Regions, U8Array, load_image, regions_from_array
+from ..render import Target, gradient_enforce, paint, render_theme
+from ..sweep import downsample, parse_k_values
+from ..themes import MATCH_MODES, all_themes, match_palette, resolve_theme
+
 logger = logging.getLogger(__name__)
-from ..core.np_region_identifier import (
-    np_get_prominent_regions,
-    np_inject_theme_image,
-)
-from ..utils.css_rethemer import css_retheme
-from ..utils.gradients import gradient_enforce
-from ..core.np_themes import CORES_DOIS as CORES
 
-app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024  # 32MB
-
-# In-memory storage for uploaded files during the session
-in_memory_storage = {}
+MAX_UPLOAD_BYTES = 32 * 1024 * 1024
+MAX_K = 32
+TEXT_KINDS = {".css": "css", ".svg": "svg"}
+REGION_CACHE_SIZE = 16  # k values remembered per image (enough for a full sweep)
+MAX_SWEEP_TILES = 400
 
 
-@app.route("/")
-def index():
-    return render_template("index.html", themes=CORES)
+class BadRequest(ValueError):
+    """Invalid client input; answered with a 400 and the message."""
 
 
-@app.route("/process", methods=["POST"])
-def process_image():
-    data = request.json
-    image_name = data.get("image_name")
-    if not image_name:
-        return jsonify({"error": "No image selected"}), 400
+class NotFound(Exception):
+    """A missing or expired upload; answered with a 404 and the message."""
 
-    file_bytes = in_memory_storage.get(image_name)
-    if not file_bytes:
-        logger.error(f"Image not found in memory: {image_name}")
-        return jsonify({"error": "Image not found in memory"}), 404
 
-    # Parameters
-    k = int(data.get("k", 4))
-    threshold = int(data.get("threshold", 50))
-    flood = data.get("flood", False)
-    apply_palette = data.get("apply_palette", False)
-    gradient_styles = data.get("gradient_styles")
-    gradient_polarities = data.get("gradient_polarities")
-    colors = data.get("colors", [])  # List of [r, g, b] or [[r, g, b], [r, g, b]]
+@dataclass
+class StoredFile:
+    """One upload: PNG bytes for images, UTF-8 bytes for CSS/SVG, plus caches."""
 
-    # Process
+    data: bytes
+    kind: str  # "image", "css" or "svg"
+    decoded: tuple[U8Array, U8Array | None] | None = None
+    regions: OrderedDict[int, Regions] = field(default_factory=OrderedDict)
+
+    @property
+    def nbytes(self) -> int:
+        size = len(self.data)
+        if self.decoded is not None:
+            rgb, alpha = self.decoded
+            size += rgb.nbytes + (alpha.nbytes if alpha is not None else 0)
+        return size + sum(r.labels.nbytes for r in self.regions.values())
+
+
+class UploadStore:
+    """Thread-safe LRU of uploads, capped by item count and total bytes (caches included)."""
+
+    def __init__(self, max_items: int = 32, max_bytes: int = 512 * 1024 * 1024) -> None:
+        self.max_items = max_items
+        self.max_bytes = max_bytes
+        self._items: OrderedDict[str, StoredFile] = OrderedDict()
+        self._lock = threading.RLock()
+
+    def __len__(self) -> int:
+        return len(self._items)
+
+    def __contains__(self, key: object) -> bool:
+        return key in self._items
+
+    @property
+    def total_bytes(self) -> int:
+        with self._lock:
+            return sum(item.nbytes for item in self._items.values())
+
+    def put(self, key: str, item: StoredFile) -> None:
+        with self._lock:
+            self._items[key] = item
+            self._items.move_to_end(key)
+            self._evict()
+
+    def get(self, key: str) -> StoredFile | None:
+        with self._lock:
+            item = self._items.get(key)
+            if item is not None:
+                self._items.move_to_end(key)
+            return item
+
+    def clear(self) -> None:
+        with self._lock:
+            self._items.clear()
+
+    def _evict(self) -> None:
+        # The most recent item always stays, even if it alone exceeds max_bytes
+        while len(self._items) > 1 and (
+            len(self._items) > self.max_items or self.total_bytes > self.max_bytes
+        ):
+            evicted, _ = self._items.popitem(last=False)
+            logger.debug("Evicted upload %s", evicted)
+
+    def decoded(self, item: StoredFile) -> tuple[U8Array, U8Array | None]:
+        """The upload as (rgb, alpha) arrays, decoded once."""
+        decoded = item.decoded
+        if decoded is None:
+            decoded = load_image(Image.open(io.BytesIO(item.data)))
+            with self._lock:
+                item.decoded = decoded
+                self._evict()
+        return decoded
+
+    def regions(self, item: StoredFile, k: int, compute: Callable[[], Regions]) -> Regions:
+        """Regions for this upload and k, computed at most once while cached."""
+        with self._lock:
+            cached = item.regions.get(k)
+            if cached is not None:
+                item.regions.move_to_end(k)
+                return cached
+        found = compute()
+        with self._lock:
+            item.regions[k] = found
+            # Keep the cache from crowding out other uploads: at most half the budget
+            while len(item.regions) > 1 and (
+                len(item.regions) > REGION_CACHE_SIZE
+                or sum(r.labels.nbytes for r in item.regions.values()) > self.max_bytes // 2
+            ):
+                item.regions.popitem(last=False)
+            self._evict()
+        return found
+
+
+def _store() -> UploadStore:
+    store: UploadStore = current_app.extensions["superwand"]
+    return store
+
+
+def _payload() -> dict[str, Any]:
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        raise BadRequest("Expected a JSON object body")
+    return data
+
+
+def _lookup(data: dict[str, Any], key: str, kind: str | None = None) -> StoredFile:
+    file_id = data.get(key)
+    if not file_id:
+        raise BadRequest(f"Missing {key}")
+    item = _store().get(str(file_id))
+    if item is None:
+        raise NotFound("File not found; it may have expired, please upload it again")
+    if kind == "image" and item.kind != "image":
+        raise BadRequest("That upload is not an image")
+    if kind == "text" and item.kind not in ("css", "svg"):
+        raise BadRequest("That upload is not a CSS or SVG file")
+    return item
+
+
+def _int_param(data: dict[str, Any], key: str, default: int, lo: int, hi: int) -> int:
     try:
-        # Open image once and use it everywhere
-        try:
-            logger.info(f"Opening image for processing: {image_name}, size: {len(file_bytes)} bytes")
-            original_img = Image.open(io.BytesIO(file_bytes))
-            logger.info(f"Successfully opened {image_name}. Format: {original_img.format}, Size: {original_img.size}")
-            original_img = ImageOps.exif_transpose(original_img).convert("RGB")
-        except UnidentifiedImageError as e:
-            logger.error(f"Failed to identify image {image_name}: {str(e)}")
-            return jsonify({"error": f"Cannot identify image file: {str(e)}. Please try another format (PNG, JPG, WEBP)."}), 400
-
-        # Get regions
-        regions = np_get_prominent_regions(original_img, number=k, tolerance=threshold)
-
-        # Prepare theme colors
-        theme_rgbs = []
-        region_keys = list(regions.keys())
-        for i in range(len(region_keys)):
-            if i < len(colors):
-                color = colors[i]
-                if not apply_palette:
-                    if (
-                        gradient_styles
-                        and i < len(gradient_styles)
-                        and gradient_styles[i] != "none"
-                    ):
-                        if (
-                            isinstance(color, list)
-                            and len(color) > 0
-                            and isinstance(color[0], list)
-                        ):
-                            theme_rgbs.append((tuple(color[0]), tuple(color[1])))
-                        else:
-                            theme_rgbs.append(region_keys[i])
-                    else:
-                        theme_rgbs.append(None)
-                else:
-                    if color is None:
-                        theme_rgbs.append(region_keys[i])
-                    elif (
-                        isinstance(color, list)
-                        and len(color) > 0
-                        and isinstance(color[0], list)
-                    ):
-                        theme_rgbs.append((tuple(color[0]), tuple(color[1])))
-                    else:
-                        theme_rgbs.append(tuple(color))
-            else:
-                theme_rgbs.append(region_keys[i] if apply_palette else None)
-
-        # Inject theme
-        processed_img = np_inject_theme_image(
-            regions,
-            theme_rgbs,
-            original_img,
-            flood=flood,
-            gradient_styles=gradient_styles,
-            gradient_polarities=gradient_polarities,
-        )
-
-        # Convert to base64 for live display
-        buffered = io.BytesIO()
-        processed_img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-
-        return jsonify(
-            {"image": img_str, "original_colors": [list(c) for c in regions.keys()]}
-        )
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        value = int(data.get(key, default))
+    except (TypeError, ValueError) as e:
+        raise BadRequest(f"{key} must be an integer") from e
+    if not lo <= value <= hi:
+        raise BadRequest(f"{key} must be between {lo} and {hi}")
+    return value
 
 
-@app.route("/retheme_css", methods=["POST"])
-def retheme_css_route():
-    data = request.json
-    filename = data.get("filename")
-    colors = data.get("colors", [])
-
-    if not filename:
-        return jsonify({"error": "No CSS file selected"}), 400
-
-    file_bytes = in_memory_storage.get(filename)
-    if not file_bytes:
-        return jsonify({"error": "File not found in memory"}), 404
-
+def _float_or_none(value: Any, key: str) -> float | None:
+    if value is None or value == "":
+        return None
     try:
-        custom_theme = [tuple(c) for c in colors]
-        modified_css = css_retheme(io.BytesIO(file_bytes), custom_theme=custom_theme)
-        return jsonify({"css": modified_css})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return float(value)
+    except (TypeError, ValueError) as e:
+        raise BadRequest(f"{key} must be a number") from e
 
 
-@app.route("/apply_gradient", methods=["POST"])
-def apply_gradient_route():
-    data = request.json
-    image_name = data.get("image_name")
-    style = data.get("style", "auto")
-
-    if not image_name:
-        return jsonify({"error": "No image selected"}), 400
-
-    file_bytes = in_memory_storage.get(image_name)
-    if not file_bytes:
-        return jsonify({"error": "Image not found in memory"}), 404
-
-    try:
-        img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
-        processed_img = gradient_enforce(img, style=style)
-
-        buffered = io.BytesIO()
-        processed_img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-
-        return jsonify({"image": img_str})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route("/image/<filename>")
-def serve_image(filename):
-    file_bytes = in_memory_storage.get(filename)
-    if not file_bytes:
-        return "Image not found", 404
-    
-    # Identify format from filename extension
-    ext = os.path.splitext(filename)[1].lower()
-    mimetype = "image/png" if ext == ".png" else "image/jpeg"
-    
-    return send_file(
-        io.BytesIO(file_bytes),
-        mimetype=mimetype,
-        as_attachment=False,
-        download_name=filename
+def _is_pair(color: Any) -> bool:
+    return (
+        isinstance(color, (list, tuple)) and len(color) == 2 and isinstance(color[0], (list, tuple))
     )
 
-@app.route("/upload", methods=["POST"])
-def upload_file():
-    if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
-    file = request.files["file"]
+
+def _color(value: Any) -> RGB:
+    try:
+        return parse_color(value)
+    except (TypeError, ValueError) as e:
+        raise BadRequest(f"Invalid color {value!r}") from e
+
+
+def build_targets(
+    region_colors: list[RGB],
+    colors: list[Any],
+    gradient_styles: list[Any] | None,
+    apply_palette: bool,
+) -> list[Target]:
+    """
+    Per-region paint targets from the Studio's controls.
+
+    With "Apply Color Palette" on, each region takes its picked color or
+    gradient pair (regions without one are repainted in their own color).
+    With it off, only regions with a gradient are repainted: from their picked
+    pair, or from their own color; the rest keep their original pixels.
+    """
+    targets: list[Target] = []
+    for i, own in enumerate(region_colors):
+        color: Any = colors[i] if i < len(colors) else None
+        pair = (_color(color[0]), _color(color[1])) if _is_pair(color) else None
+        has_gradient = bool(
+            gradient_styles
+            and i < len(gradient_styles)
+            and gradient_styles[i] not in (None, "none")
+        )
+        if apply_palette:
+            targets.append(pair or (own if color is None else _color(color)))
+        elif has_gradient:
+            targets.append(pair or own)
+        else:
+            targets.append(None)
+    return targets
+
+
+def _png_base64(img: Image.Image) -> str:
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
+
+
+def _image_from_arrays(rgb: U8Array, alpha: U8Array | None) -> Image.Image:
+    if alpha is None:
+        return Image.fromarray(rgb, "RGB")
+    return Image.fromarray(np.dstack([rgb, alpha]), "RGBA")
+
+
+def _normalize_image(data: bytes) -> bytes:
+    """Re-encodes any Pillow-readable image (EXIF-rotated, alpha kept) as PNG."""
+    with Image.open(io.BytesIO(data)) as img:
+        rgb, alpha = load_image(img)
+    buf = io.BytesIO()
+    _image_from_arrays(rgb, alpha).save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def index() -> str:
+    return render_template("index.html", themes=all_themes())
+
+
+def upload_file() -> tuple[Response, int] | Response:
+    file = request.files.get("file")
+    if file is None:
+        raise BadRequest("No file part")
     if not file.filename:
-        return jsonify({"error": "No selected file"}), 400
+        raise BadRequest("No selected file")
+    name = secure_filename(file.filename) or "upload"
+    data = file.read()
+    if not data:
+        raise BadRequest("Uploaded file is empty")
 
-    original_filename = secure_filename(file.filename)
-    
-    # Ensure we're at the beginning of the stream and read all bytes
-    file.seek(0)
-    file_bytes = file.read()
-    
-    if not file_bytes:
-        return jsonify({"error": "Uploaded file is empty"}), 400
-
-    # Basic format check: if it looks like an image, try to open and normalize it
-    ext = os.path.splitext(original_filename.lower())[1]
-    if ext in ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.gif', '.avif', '.heic', '.tiff']:
+    stem, ext = Path(name).stem or "upload", Path(name).suffix.lower()
+    kind = TEXT_KINDS.get(ext)
+    if kind:
         try:
-            logger.info(f"Attempting to normalize uploaded file: {original_filename}, size: {len(file_bytes)} bytes")
-            with Image.open(io.BytesIO(file_bytes)) as img:
-                logger.info(f"Identified as {img.format}, Size: {img.size}")
-                # Normalize to PNG for consistent browser support and to fix mislabeled formats (like AVIF-as-JPG)
-                img = ImageOps.exif_transpose(img).convert("RGBA")
-                output = io.BytesIO()
-                img.save(output, format="PNG")
-                file_bytes = output.getvalue()
-                # Change the extension in the stored filename to .png to reflect reality
-                original_filename = os.path.splitext(original_filename)[0] + ".png"
-                logger.info(f"Normalization successful: {original_filename}, new size: {len(file_bytes)} bytes")
-        except Exception as e:
-            logger.error(f"Image normalization failed for {original_filename}: {str(e)}")
-            return jsonify({"error": f"Cannot identify or normalize image file: {str(e)}"}), 400
+            data.decode("utf-8")
+        except UnicodeDecodeError as e:
+            raise BadRequest(f"{ext} files must be UTF-8 text") from e
+        stored_name = name
+    else:
+        try:
+            data = _normalize_image(data)
+        except (UnidentifiedImageError, Image.DecompressionBombError, OSError, ValueError) as e:
+            logger.info("Rejected upload %s: %s", name, e)
+            raise BadRequest(
+                "Unsupported file: upload an image (PNG, JPEG, WebP, AVIF, GIF, BMP, TIFF), "
+                "a .css or an .svg file"
+            ) from e
+        kind = "image"
+        stored_name = f"{stem}.png"
 
-    # Use a unique ID to avoid any filename collision or secure_filename stripping issues
-    file_id = f"{uuid.uuid4().hex}_{original_filename}"
-    in_memory_storage[file_id] = file_bytes
-
-    return jsonify({"filename": file_id})
+    file_id = f"{uuid.uuid4().hex}_{stored_name}"
+    _store().put(file_id, StoredFile(data=data, kind=kind))
+    return jsonify({"filename": file_id, "kind": kind})
 
 
-if __name__ == "__main__":
-    app.run(port=5001)
+def serve_image(filename: str) -> Response:
+    item = _store().get(filename)
+    if item is None or item.kind != "image":
+        raise NotFound("Image not found")
+    return send_file(
+        io.BytesIO(item.data), mimetype="image/png", as_attachment=False, download_name=filename
+    )
+
+
+def process_image() -> Response:
+    data = _payload()
+    item = _lookup(data, "image_name", kind="image")
+    k = _int_param(data, "k", 4, 1, MAX_K)
+    flood, smooth, shading = (bool(data.get(key)) for key in ("flood", "smooth", "shading"))
+    if flood and smooth:
+        raise BadRequest("Flood and smooth edges can't be combined")
+    apply_palette = bool(data.get("apply_palette"))
+    colors = data.get("colors") or []
+    styles = data.get("gradient_styles")
+    polarities = data.get("gradient_polarities")
+    if not isinstance(colors, list):
+        raise BadRequest("colors must be a list")
+    if styles is not None and not isinstance(styles, (list, str)):
+        raise BadRequest("gradient_styles must be a list")
+    if isinstance(polarities, list):
+        polarities = [_float_or_none(p, "gradient_polarities") for p in polarities]
+    else:
+        polarities = _float_or_none(polarities, "gradient_polarities")
+
+    store = _store()
+    rgb, alpha = store.decoded(item)
+    regions = store.regions(item, k, lambda: regions_from_array(rgb, alpha, k))
+    style_list = [styles] * len(regions) if isinstance(styles, str) else styles
+    targets = build_targets(list(regions.colors), colors, style_list, apply_palette)
+    img = paint(
+        rgb,
+        alpha,
+        regions,
+        targets,
+        gradient=styles,
+        polarity=0.5 if polarities is None else polarities,
+        flood=flood,
+        smooth=smooth,
+        shading=shading,
+    )
+    total = sum(regions.counts) or 1
+    return jsonify(
+        {
+            "image": _png_base64(img),
+            "original_colors": [list(c) for c in regions.colors],
+            "region_shares": [count / total for count in regions.counts],
+        }
+    )
+
+
+def sweep_image() -> Response:
+    """
+    Renders preview tiles for every (theme, k) pair. Regions come from the
+    full image through the same per-k cache /process uses, so opening a tile
+    in the editor reproduces it exactly without clustering again.
+    """
+    data = _payload()
+    item = _lookup(data, "image_name", kind="image")
+    raw_ks = data.get("ks", "2,3,4,6,8")
+    try:
+        ks = parse_k_values(raw_ks if isinstance(raw_ks, (str, int)) else list(raw_ks))
+    except (TypeError, ValueError) as e:
+        raise BadRequest(f"ks: {e}") from e
+    if ks[-1] > MAX_K:
+        raise BadRequest(f"k must be at most {MAX_K}")
+
+    available = all_themes()
+    raw_themes = data.get("themes") or "all"
+    if raw_themes == "all":
+        names = list(available)
+    elif isinstance(raw_themes, list) and all(isinstance(t, str) for t in raw_themes):
+        unknown = [t for t in raw_themes if t not in available]
+        if unknown:
+            raise BadRequest(f"Unknown theme {unknown[0]!r}")
+        names = list(dict.fromkeys(raw_themes))
+    else:
+        raise BadRequest('themes must be a list of theme names or "all"')
+    if len(names) * len(ks) > MAX_SWEEP_TILES:
+        raise BadRequest(f"Too many tiles ({len(names) * len(ks)}); the limit is {MAX_SWEEP_TILES}")
+
+    match = data.get("match") or "order"
+    if match not in MATCH_MODES:
+        raise BadRequest(f"match must be one of {', '.join(MATCH_MODES)}")
+    smooth, shading = bool(data.get("smooth")), bool(data.get("shading"))
+    size = _int_param(data, "size", 240, 64, 512)
+
+    store = _store()
+    rgb, alpha = store.decoded(item)
+    tiles = []
+    for k in ks:
+        regions = store.regions(item, k, partial(regions_from_array, rgb, alpha, k))
+        p_rgb, p_alpha, p_regions = downsample(rgb, alpha, regions, size)
+        for name in names:
+            colors = match_palette(regions.colors, resolve_theme(name), match)
+            img = render_theme(
+                p_rgb, p_alpha, p_regions, name, match=match, smooth=smooth, shading=shading
+            )
+            tiles.append(
+                {
+                    "theme": name,
+                    "k": k,
+                    "regions": len(regions),
+                    "colors": [rgb_to_hex(c) for c in colors],
+                    "image": _png_base64(img),
+                }
+            )
+    return jsonify({"ks": ks, "themes": names, "tiles": tiles})
+
+
+def retheme_text() -> Response:
+    data = _payload()
+    item = _lookup(data, "filename", kind="text")
+    colors = data.get("colors") or []
+    if not isinstance(colors, list):
+        raise BadRequest("colors must be a list")
+    palette: Any = [_color(c) for c in colors if c is not None] or data.get("theme") or "Tropical"
+    match = data.get("match") or "order"
+    if match not in MATCH_MODES:
+        raise BadRequest(f"match must be one of {', '.join(MATCH_MODES)}")
+    min_contrast = _float_or_none(data.get("min_contrast"), "min_contrast")
+    if min_contrast is not None and not 1 <= min_contrast <= 21:
+        raise BadRequest("min_contrast must be between 1 and 21")
+
+    result = recolor_text(
+        item.data.decode("utf-8"),
+        palette,
+        kind=item.kind,
+        match=match,
+        min_contrast=min_contrast if item.kind == "css" else None,
+    )
+    fixes = [
+        {
+            "selector": fix.selector,
+            "before": rgb_to_hex(fix.before),
+            "after": rgb_to_hex(fix.after),
+            "background": rgb_to_hex(fix.background),
+            "ratio_before": round(fix.ratio_before, 2),
+            "ratio_after": round(fix.ratio_after, 2),
+        }
+        for fix in result.contrast_fixes
+    ]
+    return jsonify(
+        {"text": result.text, "css": result.text, "kind": item.kind, "contrast_fixes": fixes}
+    )
+
+
+def apply_gradient_route() -> Response:
+    data = _payload()
+    item = _lookup(data, "image_name", kind="image")
+    style = data.get("style") or "auto"
+    if style not in GRADIENT_STYLES or style == "none":
+        raise BadRequest(f"Unsupported gradient style {style!r}")
+    k = _int_param(data, "k", 4, 1, MAX_K)
+    rgb, alpha = _store().decoded(item)
+    img = gradient_enforce(_image_from_arrays(rgb, alpha), style=style, number=k)
+    return jsonify({"image": _png_base64(img)})
+
+
+def _error(message: str, status: int) -> tuple[Response, int]:
+    return jsonify({"error": message}), status
+
+
+def create_app(max_items: int = 32, max_bytes: int = 512 * 1024 * 1024) -> Flask:
+    """Builds a Studio app with its own in-memory upload store."""
+    app = Flask(__name__)
+    app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
+    app.extensions["superwand"] = UploadStore(max_items=max_items, max_bytes=max_bytes)
+
+    app.add_url_rule("/", view_func=index)
+    app.add_url_rule("/upload", view_func=upload_file, methods=["POST"])
+    app.add_url_rule("/image/<path:filename>", view_func=serve_image)
+    app.add_url_rule("/process", view_func=process_image, methods=["POST"])
+    app.add_url_rule("/sweep", view_func=sweep_image, methods=["POST"])
+    app.add_url_rule("/retheme_text", view_func=retheme_text, methods=["POST"])
+    app.add_url_rule(
+        "/retheme_css", endpoint="retheme_css", view_func=retheme_text, methods=["POST"]
+    )
+    app.add_url_rule("/apply_gradient", view_func=apply_gradient_route, methods=["POST"])
+
+    @app.errorhandler(BadRequest)
+    def bad_request(e: BadRequest) -> tuple[Response, int]:
+        return _error(str(e), 400)
+
+    @app.errorhandler(NotFound)
+    def not_found(e: NotFound) -> tuple[Response, int]:
+        return _error(str(e), 404)
+
+    @app.errorhandler(HTTPException)
+    def http_error(e: HTTPException) -> tuple[Response, int]:
+        if e.code == 413:
+            limit = (app.config["MAX_CONTENT_LENGTH"] or 0) // (1024 * 1024)
+            return _error(f"File too large (limit {limit} MB)", 413)
+        return _error(e.description or e.name, e.code or 500)
+
+    @app.errorhandler(Exception)
+    def server_error(e: Exception) -> tuple[Response, int]:
+        if isinstance(e, ValueError):  # bad parameters caught deeper in the pipeline
+            return _error(str(e), 400)
+        logger.exception("Studio request failed")
+        return _error(f"Internal error: {e}", 500)
+
+    return app
