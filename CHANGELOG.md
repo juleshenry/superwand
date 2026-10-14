@@ -58,7 +58,7 @@ releases may contain breaking changes, and those are called out explicitly.
 
 ### Removed
 
-* The bundled Arial Unicode font (a proprietary font, 23 MB of the 15.6 MB wheel); labels use Pillow's built-in font. The wheel is now about 70 KB.
+* The bundled Arial Unicode font (a proprietary font, 23 MB uncompressed; it made the wheel 15.6 MB); labels use Pillow's built-in font. The wheel is now about 70 KB.
 * Unused and scratch modules: the pure-Python region finder, the interactive prompt helpers, and `np_colorgram`.
 * Dependencies `matplotlib` (never imported) and `pillow-avif-plugin` (Pillow 11.3+ reads AVIF natively).
 * Test images and theme swatches from the installed package.
