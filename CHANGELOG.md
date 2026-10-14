@@ -6,6 +6,8 @@ releases may contain breaking changes, and those are called out explicitly.
 
 ## [Unreleased]
 
+## v0.4.0 (2026-10-14)
+
 ### Breaking changes
 
 * `pip install superwand` no longer installs Flask. Install `superwand[studio]` for SuperWand Studio; `superwand` with no inputs explains this when Flask is missing.
