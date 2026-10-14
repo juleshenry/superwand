@@ -1,9 +1,22 @@
+# Python
 __pycache__/
-.DS_Store
-.venv/
-venv/
+*.py[cod]
+*.egg-info/
 build/
 dist/
-*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# Tooling
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
 .coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# OS
+.DS_Store
