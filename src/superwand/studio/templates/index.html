@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuperWand Studio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='studio.css') }}">
     <style>
-        .color-preview { width: 30px; height: 30px; border-radius: 4px; display: inline-block; margin-right: 5px; }
         .preset-item:hover { background-color: #f3f4f6; cursor: pointer; }
+        .checker {
+            background-color: #f9fafb;
+            background-image:
+                linear-gradient(45deg, #e5e7eb 25%, transparent 25%),
+                linear-gradient(-45deg, #e5e7eb 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
+                linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -15,61 +24,67 @@
         <!-- Sidebar -->
         <div class="w-80 bg-white shadow-lg p-6 overflow-y-auto">
             <h1 class="text-2xl font-bold mb-6 text-indigo-600">SuperWand Studio</h1>
-            
+
             <div class="mb-4 flex space-x-1 bg-gray-100 p-1 rounded-lg">
                 <button onclick="switchTab('image')" id="tab-image" class="flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm">Image</button>
-                <button onclick="switchTab('css')" id="tab-css" class="flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200">CSS</button>
+                <button onclick="switchTab('text')" id="tab-text" class="flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200">CSS / SVG</button>
             </div>
 
             <div id="sidebar-image">
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
-                    <input type="file" id="imageInput" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    <label class="block text-sm font-medium text-gray-700 mb-2" for="imageInput">Upload Image</label>
+                    <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
 
                 <hr class="my-6">
 
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Regions (k): <span id="kValue">4</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" for="kSlider">Regions (k): <span id="kValue">4</span></label>
                     <input type="range" id="kSlider" min="2" max="16" value="4" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tolerance: <span id="thresholdValue">50</span></label>
-                    <input type="range" id="thresholdSlider" min="1" max="255" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                </div>
-
-                <div class="mb-6 flex items-center">
+                <div class="mb-4 flex items-center">
                     <input type="checkbox" id="paletteCheckbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                     <label for="paletteCheckbox" class="ml-2 block text-sm font-medium text-gray-700">Apply Color Palette</label>
+                </div>
+
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="smoothCheckbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="smoothCheckbox" class="ml-2 block text-sm font-medium text-gray-700">Smooth edges</label>
+                </div>
+
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="shadingCheckbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="shadingCheckbox" class="ml-2 block text-sm font-medium text-gray-700">Preserve shading</label>
                 </div>
 
                 <div class="mb-6 flex items-center">
                     <input type="checkbox" id="floodCheckbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                     <label for="floodCheckbox" class="ml-2 block text-sm font-medium text-gray-700">Flood (Aggressive)</label>
                 </div>
-
-                <hr class="my-6">
-
-                <div class="mb-6 hidden">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">Gradient Style</h3>
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <button class="gradient-type-btn p-2 text-xs border rounded bg-indigo-50 border-indigo-200" data-style="none">None</button>
-                        <button class="gradient-type-btn p-2 text-xs border rounded hover:bg-gray-50" data-style="vertical">Vertical</button>
-                        <button class="gradient-type-btn p-2 text-xs border rounded hover:bg-gray-50" data-style="horizontal">Horizontal</button>
-                        <button class="gradient-type-btn p-2 text-xs border rounded hover:bg-gray-50" data-style="radial">Radial</button>
-                    </div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Gradient Polarity: <span id="polarityValue">50</span>%</label>
-                    <input type="range" id="polaritySlider" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                </div>
+                <p class="text-[10px] text-gray-400 -mt-4 mb-6">Smooth edges and flood can't be combined.</p>
             </div>
 
-            <div id="sidebar-css" class="hidden">
+            <div id="sidebar-text" class="hidden">
                 <div class="mb-6">
-                    <h3 class="text-sm font-medium text-gray-700 mb-3">CSS Rethemer</h3>
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">CSS / SVG Rethemer</h3>
                     <div class="space-y-3">
-                        <input type="file" id="cssInput" accept=".css" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-gray-100">
-                        <button id="rethemeCssBtn" class="w-full bg-indigo-100 text-indigo-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-200 transition hidden">Retheme CSS</button>
+                        <input type="file" id="textInput" accept=".css,.svg,text/css,image/svg+xml" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-gray-100">
+                        <div class="flex items-center justify-between">
+                            <label for="matchSelect" class="text-xs font-medium text-gray-700">Match colors by</label>
+                            <select id="matchSelect" class="text-xs border rounded p-1 bg-gray-50">
+                                <option value="order">usage</option>
+                                <option value="luminance">brightness</option>
+                            </select>
+                        </div>
+                        <div id="contrastRow" class="flex items-center">
+                            <input type="checkbox" id="contrastCheckbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <label for="contrastCheckbox" class="ml-2 text-xs font-medium text-gray-700">Fix text contrast to at least</label>
+                            <input type="number" id="contrastInput" min="1" max="21" step="0.5" value="4.5" class="ml-2 w-14 text-xs border rounded p-1 bg-gray-50">
+                            <span class="ml-1 text-xs text-gray-500">:1</span>
+                        </div>
+                        <button id="rethemeTextBtn" class="w-full bg-indigo-100 text-indigo-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-200 transition hidden">Retheme</button>
+                        <p class="text-[10px] text-gray-400">Uses the colors below; with none picked, the Tropical theme.</p>
                     </div>
                 </div>
             </div>
@@ -87,9 +102,9 @@
 
             <div class="mb-6">
                 <h3 class="text-sm font-medium text-gray-700 mb-3">Presets</h3>
-                <div class="space-y-2">
+                <div id="presets" class="space-y-2">
                     {% for theme_name, colors in themes.items() %}
-                    <div class="preset-item p-2 rounded border border-gray-200 transition" onclick='applyPreset("{{ theme_name }}", {{ colors | tojson }})'>
+                    <div class="preset-item p-2 rounded border border-gray-200 transition" data-name="{{ theme_name }}" data-colors='{{ colors | tojson }}'>
                         <div class="text-xs font-semibold mb-1">{{ theme_name }}</div>
                         <div class="flex h-3 w-full rounded-sm overflow-hidden shadow-inner border border-gray-100">
                             {% for r, g, b in colors %}
@@ -104,40 +119,75 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-10 flex flex-col overflow-hidden">
-            <div id="content-image" class="flex-1 flex space-x-6">
-                <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col">
+            <div id="content-image" class="flex-1 flex space-x-6 min-h-0">
+                <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col min-w-0">
                     <h3 class="text-gray-500 text-sm font-medium mb-4 uppercase tracking-wider">Original</h3>
-                    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
-                        <img id="originalPreview" class="max-w-full max-h-full object-contain hidden">
-                        <div id="originalPlaceholder" class="text-gray-400">No image uploaded</div>
+                    <div class="relative flex-1 checker rounded-lg overflow-hidden">
+                        <img id="originalPreview" alt="Original image" class="absolute inset-0 w-full h-full object-contain hidden">
+                        <div id="originalPlaceholder" class="absolute inset-0 flex items-center justify-center text-gray-400">No image uploaded</div>
                     </div>
                 </div>
-                <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col relative">
+                <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col min-w-0">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider">Processed</h3>
-                        <button id="downloadImageBtn" class="hidden text-indigo-600 text-xs font-bold hover:underline">DOWNLOAD .PNG</button>
+                        <div class="flex items-center space-x-4">
+                            <label class="hidden items-center text-xs font-bold text-gray-500 cursor-pointer" id="compareToggleLabel">
+                                <input type="checkbox" id="compareCheckbox" class="w-3 h-3 mr-1 text-indigo-600 border-gray-300 rounded">COMPARE
+                            </label>
+                            <button id="downloadImageBtn" class="hidden text-indigo-600 text-xs font-bold hover:underline">DOWNLOAD .PNG</button>
+                        </div>
                     </div>
-                    <div class="flex-1 flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
-                        <img id="processedPreview" class="max-w-full max-h-full object-contain hidden">
-                        <div id="processedPlaceholder" class="text-gray-400">Upload to see result</div>
-                        <div id="loadingOverlay" class="hidden absolute flex flex-col items-center">
+                    <div id="processedStage" class="relative flex-1 checker rounded-lg overflow-hidden select-none">
+                        <img id="processedPreview" alt="Processed image" class="absolute inset-0 w-full h-full object-contain hidden">
+                        <img id="compareOriginal" alt="Original image for comparison" class="absolute inset-0 w-full h-full object-contain hidden pointer-events-none">
+                        <div id="compareDivider" class="absolute top-0 bottom-0 hidden pointer-events-none" style="width: 2px; background: white; box-shadow: 0 0 4px rgba(0,0,0,.6);">
+                            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-6 h-6 rounded-full bg-white shadow flex items-center justify-center text-[10px] text-gray-500 font-bold">&#x2194;</div>
+                        </div>
+                        <div id="compareLabels" class="absolute top-2 left-2 right-2 hidden justify-between pointer-events-none">
+                            <span class="bg-black/50 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">Before</span>
+                            <span class="bg-black/50 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">After</span>
+                        </div>
+                        <div id="processedPlaceholder" class="absolute inset-0 flex items-center justify-center text-gray-400">Upload to see result</div>
+                        <div id="loadingOverlay" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white/40">
                             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-2"></div>
                             <span class="text-indigo-600 font-medium">Processing...</span>
                         </div>
                     </div>
+                    <input type="range" id="compareSlider" min="0" max="100" value="50" aria-label="Before/after position" class="hidden mt-3 w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                 </div>
             </div>
 
-            <div id="content-css" class="hidden flex-1 bg-white rounded-xl shadow-md p-6 flex flex-col">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider">CSS Preview</h3>
-                    <div class="flex space-x-4">
-                        <button id="copyCssBtn" class="hidden text-gray-500 text-xs font-bold hover:text-indigo-600">COPY TO CLIPBOARD</button>
-                        <button id="downloadCssBtn" class="hidden text-indigo-600 text-xs font-bold hover:underline">DOWNLOAD .CSS</button>
+            <div id="content-text" class="hidden flex-1 flex flex-col space-y-4 min-h-0">
+                <div id="svgPreviews" class="hidden flex space-x-6 h-64">
+                    <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col min-w-0">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2 uppercase tracking-wider">Before</h3>
+                        <div class="relative flex-1 checker rounded-lg overflow-hidden">
+                            <img id="svgBefore" alt="Original SVG" class="absolute inset-0 w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-white rounded-xl shadow-md p-4 flex flex-col min-w-0">
+                        <h3 class="text-gray-500 text-sm font-medium mb-2 uppercase tracking-wider">After</h3>
+                        <div class="relative flex-1 checker rounded-lg overflow-hidden">
+                            <img id="svgAfter" alt="Rethemed SVG" class="absolute inset-0 w-full h-full object-contain">
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 bg-gray-900 rounded-lg p-4 overflow-y-auto">
-                    <pre id="cssPreview" class="text-indigo-300 font-mono text-sm whitespace-pre-wrap"></pre>
+
+                <div class="flex-1 bg-white rounded-xl shadow-md p-6 flex flex-col min-h-0">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="textPreviewTitle" class="text-gray-500 text-sm font-medium uppercase tracking-wider">CSS / SVG Preview</h3>
+                        <div class="flex space-x-4">
+                            <button id="copyTextBtn" class="hidden text-gray-500 text-xs font-bold hover:text-indigo-600">COPY TO CLIPBOARD</button>
+                            <button id="downloadTextBtn" class="hidden text-indigo-600 text-xs font-bold hover:underline">DOWNLOAD</button>
+                        </div>
+                    </div>
+                    <div id="contrastFixes" class="hidden mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
+                        <div class="font-bold mb-1">Contrast fixes</div>
+                        <ul id="contrastFixList" class="space-y-1 font-mono"></ul>
+                    </div>
+                    <div class="flex-1 bg-gray-900 rounded-lg p-4 overflow-y-auto">
+                        <pre id="textPreview" class="text-indigo-300 font-mono text-sm whitespace-pre-wrap">Upload a .css or .svg file to retheme it.</pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,143 +196,271 @@
     <script>
         let currentImageName = null;
         let isProcessing = false;
+        let pendingProcess = false;
         let debounceTimer = null;
         let currentActiveTab = 'image';
         let currentOriginalColors = [];
-        let regionGradients = []; // Array of { style: 'none', color2: null, polarity: 0.5, paletteColor: null }
+        let currentRegionShares = [];
+        let regionGradients = []; // [{ style: 'none', color2: null, polarity: 0.5, paletteColor: null }]
+        let comparePosition = 0.5;
 
-        const kSlider = document.getElementById('kSlider');
-        const kValue = document.getElementById('kValue');
-        const thresholdSlider = document.getElementById('thresholdSlider');
-        const thresholdValue = document.getElementById('thresholdValue');
-        const floodCheckbox = document.getElementById('floodCheckbox');
-        const paletteCheckbox = document.getElementById('paletteCheckbox');
-        const colorPickers = document.getElementById('colorPickers');
-        const imageInput = document.getElementById('imageInput');
-        
+        const $ = (id) => document.getElementById(id);
+        const kSlider = $('kSlider');
+        const kValue = $('kValue');
+        const floodCheckbox = $('floodCheckbox');
+        const smoothCheckbox = $('smoothCheckbox');
+        const shadingCheckbox = $('shadingCheckbox');
+        const paletteCheckbox = $('paletteCheckbox');
+        const colorPickers = $('colorPickers');
+        const imageInput = $('imageInput');
+        const processedPreview = $('processedPreview');
+        const compareOriginal = $('compareOriginal');
+
         function hexToRgb(hex) {
-            if (!hex || typeof hex !== 'string') return [0,0,0];
+            if (!hex || typeof hex !== 'string') return [0, 0, 0];
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
             const b = parseInt(hex.slice(5, 7), 16);
             return [isNaN(r) ? 0 : r, isNaN(g) ? 0 : g, isNaN(b) ? 0 : b];
         }
 
-        const cssInput = document.getElementById('cssInput');
-        const rethemeCssBtn = document.getElementById('rethemeCssBtn');
-        const cssPreview = document.getElementById('cssPreview');
-        const downloadCssBtn = document.getElementById('downloadCssBtn');
-        let currentCssName = null;
-        let lastProcessedCss = "";
+        function rgbToHex(rgb) {
+            return '#' + rgb.map(x => Number(x).toString(16).padStart(2, '0')).join('');
+        }
+
+        function displayName(fileId, fallback) {
+            if (!fileId) return fallback;
+            const i = fileId.indexOf('_');
+            return i >= 0 ? fileId.slice(i + 1) : fileId;
+        }
+
+        function downloadBlob(blob, name) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        async function readError(resp, fallback) {
+            try {
+                const data = await resp.json();
+                return data.error || fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function svgDataUri(text) {
+            const bytes = new TextEncoder().encode(text);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i += 0x8000) {
+                binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+            }
+            return 'data:image/svg+xml;base64,' + btoa(binary);
+        }
 
         function switchTab(tab) {
             currentActiveTab = tab;
-            // Sidebar
-            document.getElementById('sidebar-image').classList.toggle('hidden', tab !== 'image');
-            document.getElementById('sidebar-css').classList.toggle('hidden', tab !== 'css');
-            // Content
-            document.getElementById('content-image').classList.toggle('hidden', tab !== 'image');
-            document.getElementById('content-css').classList.toggle('hidden', tab !== 'css');
-            // Tab buttons
-            document.getElementById('tab-image').className = tab === 'image' 
-                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm' 
+            $('sidebar-image').classList.toggle('hidden', tab !== 'image');
+            $('sidebar-text').classList.toggle('hidden', tab !== 'text');
+            $('content-image').classList.toggle('hidden', tab !== 'image');
+            $('content-text').classList.toggle('hidden', tab !== 'text');
+            $('tab-image').className = tab === 'image'
+                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm'
                 : 'flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200';
-            document.getElementById('tab-css').className = tab === 'css' 
-                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm' 
+            $('tab-text').className = tab === 'text'
+                ? 'flex-1 py-1 text-xs font-medium rounded-md bg-white shadow-sm'
                 : 'flex-1 py-1 text-xs font-medium rounded-md hover:bg-gray-200';
         }
 
-        // CSS Rethemer logic
-        cssInput.onchange = async () => {
-            const file = cssInput.files[0];
-            if (!file) return;
+        // ---- CSS / SVG rethemer -------------------------------------------------
+        const textInput = $('textInput');
+        const rethemeTextBtn = $('rethemeTextBtn');
+        const textPreview = $('textPreview');
+        const downloadTextBtn = $('downloadTextBtn');
+        const copyTextBtn = $('copyTextBtn');
+        let currentTextName = null;
+        let currentTextKind = null;
+        let lastProcessedText = '';
 
+        textInput.onchange = async () => {
+            const file = textInput.files[0];
+            if (!file) return;
             const formData = new FormData();
             formData.append('file', file);
-
-            const resp = await fetch('/upload', { method: 'POST', body: formData });
-            const data = await resp.json();
-            
-            if (data.filename) {
-                currentCssName = data.filename;
-                rethemeCssBtn.classList.remove('hidden');
-                processCss(); // Initial preview
+            try {
+                const resp = await fetch('/upload', { method: 'POST', body: formData });
+                if (!resp.ok) throw new Error(await readError(resp, 'Upload failed'));
+                const data = await resp.json();
+                if (data.kind !== 'css' && data.kind !== 'svg') {
+                    throw new Error('Please choose a .css or .svg file');
+                }
+                currentTextName = data.filename;
+                currentTextKind = data.kind;
+                $('textPreviewTitle').textContent = data.kind === 'svg' ? 'SVG Source' : 'CSS Preview';
+                $('contrastRow').classList.toggle('hidden', data.kind !== 'css');
+                $('svgPreviews').classList.toggle('hidden', data.kind !== 'svg');
+                if (data.kind === 'svg') {
+                    $('svgBefore').src = svgDataUri(await file.text());
+                }
+                rethemeTextBtn.classList.remove('hidden');
+                processText();
+            } catch (err) {
+                console.error('Upload failed', err);
+                alert('Upload Error: ' + err.message);
             }
         };
 
-        async function processCss() {
-            if (!currentCssName) return;
-            
-            const colors = regionGradients.map(grad => {
-                const hex = grad.paletteColor || "#000000";
-                return [
-                    parseInt(hex.slice(1, 3), 16),
-                    parseInt(hex.slice(3, 5), 16),
-                    parseInt(hex.slice(5, 7), 16)
-                ];
-            });
-
-            const resp = await fetch('/retheme_css', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    filename: currentCssName,
-                    colors: colors
-                })
-            });
-            const data = await resp.json();
-            if (data.css) {
-                lastProcessedCss = data.css;
-                cssPreview.innerText = data.css;
-                downloadCssBtn.classList.remove('hidden');
-                document.getElementById('copyCssBtn').classList.remove('hidden');
+        async function processText() {
+            if (!currentTextName) return;
+            const colors = regionGradients
+                .filter(grad => grad.paletteColor)
+                .map(grad => hexToRgb(grad.paletteColor));
+            const body = {
+                filename: currentTextName,
+                colors: colors,
+                match: $('matchSelect').value,
+            };
+            if (currentTextKind === 'css' && $('contrastCheckbox').checked) {
+                body.min_contrast = parseFloat($('contrastInput').value) || 4.5;
+            }
+            try {
+                const resp = await fetch('/retheme_text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                if (!resp.ok) throw new Error(await readError(resp, 'Retheme failed'));
+                const data = await resp.json();
+                lastProcessedText = data.text;
+                textPreview.textContent = data.text;
+                downloadTextBtn.classList.remove('hidden');
+                copyTextBtn.classList.remove('hidden');
+                downloadTextBtn.textContent = data.kind === 'svg' ? 'DOWNLOAD .SVG' : 'DOWNLOAD .CSS';
+                if (data.kind === 'svg') {
+                    $('svgAfter').src = svgDataUri(data.text);
+                }
+                renderContrastFixes(data.contrast_fixes || []);
+            } catch (err) {
+                console.error('Retheme failed', err);
+                alert('Studio Error: ' + err.message);
             }
         }
 
-        rethemeCssBtn.onclick = processCss;
+        function renderContrastFixes(fixes) {
+            const list = $('contrastFixList');
+            list.replaceChildren();
+            fixes.forEach(fix => {
+                const li = document.createElement('li');
+                li.textContent = `${fix.selector}: ${fix.before} → ${fix.after} on ${fix.background} `
+                    + `(${fix.ratio_before}:1 → ${fix.ratio_after}:1)`;
+                list.appendChild(li);
+            });
+            $('contrastFixes').classList.toggle('hidden', fixes.length === 0);
+        }
 
-        downloadCssBtn.onclick = () => {
-            if (!lastProcessedCss) return;
-            const blob = new Blob([lastProcessedCss], { type: 'text/css' });
-            const url = window.URL.createObjectURL(blob);
+        rethemeTextBtn.onclick = processText;
+        $('matchSelect').onchange = processText;
+        $('contrastCheckbox').onchange = processText;
+        $('contrastInput').onchange = () => { if ($('contrastCheckbox').checked) processText(); };
+
+        downloadTextBtn.onclick = () => {
+            if (!lastProcessedText) return;
+            const isSvg = currentTextKind === 'svg';
+            const blob = new Blob([lastProcessedText], { type: isSvg ? 'image/svg+xml' : 'text/css' });
+            downloadBlob(blob, 'rethemed_' + displayName(currentTextName, isSvg ? 'image.svg' : 'style.css'));
+        };
+
+        copyTextBtn.onclick = () => {
+            if (!lastProcessedText) return;
+            navigator.clipboard.writeText(lastProcessedText).then(() => {
+                const originalText = copyTextBtn.textContent;
+                copyTextBtn.textContent = 'COPIED!';
+                setTimeout(() => { copyTextBtn.textContent = originalText; }, 2000);
+            });
+        };
+
+        // ---- Image download & before/after compare ------------------------------
+        $('downloadImageBtn').onclick = () => {
+            const src = processedPreview.src;
+            if (!src) return;
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'rethemed_' + (currentCssName || 'style.css');
+            a.href = src;
+            const base = displayName(currentImageName, 'image.png').replace(/\.png$/i, '');
+            a.download = 'rethemed_' + base + '.png';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         };
 
-        const copyCssBtn = document.getElementById('copyCssBtn');
-        copyCssBtn.onclick = () => {
-            if (!lastProcessedCss) return;
-            navigator.clipboard.writeText(lastProcessedCss).then(() => {
-                const originalText = copyCssBtn.innerText;
-                copyCssBtn.innerText = 'COPIED!';
-                setTimeout(() => {
-                    copyCssBtn.innerText = originalText;
-                }, 2000);
-            });
-        };
+        function contentRect(img) {
+            // Where an object-contain image actually draws inside its box
+            const box = img.getBoundingClientRect();
+            const iw = img.naturalWidth, ih = img.naturalHeight;
+            if (!iw || !ih || !box.width || !box.height) return { left: 0, width: box.width };
+            const scale = Math.min(box.width / iw, box.height / ih);
+            const width = iw * scale;
+            return { left: (box.width - width) / 2, width: width };
+        }
 
-        const downloadImageBtn = document.getElementById('downloadImageBtn');
-        downloadImageBtn.onclick = () => {
-            const preview = document.getElementById('processedPreview');
-            if (preview.src.startsWith('data:')) {
-                const a = document.createElement('a');
-                a.href = preview.src;
-                a.download = 'rethemed_' + (currentImageName || 'image.png');
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            }
-        };
+        function updateCompare() {
+            const on = $('compareCheckbox').checked && !processedPreview.classList.contains('hidden');
+            compareOriginal.classList.toggle('hidden', !on);
+            $('compareDivider').classList.toggle('hidden', !on);
+            $('compareLabels').classList.toggle('hidden', !on);
+            $('compareLabels').classList.toggle('flex', on);
+            $('compareSlider').classList.toggle('hidden', !on);
+            if (!on) return;
+            const box = processedPreview.getBoundingClientRect();
+            const rect = contentRect(processedPreview);
+            const x = rect.left + comparePosition * rect.width;
+            compareOriginal.style.clipPath = `inset(0 ${Math.max(0, box.width - x)}px 0 0)`;
+            $('compareDivider').style.left = (x - 1) + 'px';
+        }
 
-        // Initialize color pickers based on k
+        function setComparePosition(pos) {
+            comparePosition = Math.min(1, Math.max(0, pos));
+            $('compareSlider').value = Math.round(comparePosition * 100);
+            updateCompare();
+        }
+
+        $('compareCheckbox').onchange = updateCompare;
+        $('compareSlider').oninput = (e) => setComparePosition(e.target.value / 100);
+        window.addEventListener('resize', updateCompare);
+        processedPreview.addEventListener('load', updateCompare);
+
+        const stage = $('processedStage');
+        let dragging = false;
+        function dragTo(e) {
+            const box = processedPreview.getBoundingClientRect();
+            const rect = contentRect(processedPreview);
+            setComparePosition((e.clientX - box.left - rect.left) / (rect.width || 1));
+        }
+        stage.addEventListener('pointerdown', (e) => {
+            if (!$('compareCheckbox').checked) return;
+            dragging = true;
+            stage.setPointerCapture(e.pointerId);
+            dragTo(e);
+        });
+        stage.addEventListener('pointermove', (e) => { if (dragging) dragTo(e); });
+        stage.addEventListener('pointerup', () => { dragging = false; });
+        stage.addEventListener('pointercancel', () => { dragging = false; });
+
+        // ---- Region color pickers -----------------------------------------------
+        function smallLabel(text) {
+            const el = document.createElement('div');
+            el.className = 'text-[6px] text-gray-400 font-bold uppercase mt-1';
+            el.textContent = text;
+            return el;
+        }
+
         function updateColorPickers() {
             const k = parseInt(kSlider.value);
-            
-            // Adjust regionGradients size
+
             while (regionGradients.length < k) {
                 regionGradients.push({ style: 'none', color2: null, polarity: 0.5, paletteColor: null });
             }
@@ -290,31 +468,32 @@
                 regionGradients = regionGradients.slice(0, k);
             }
 
-            colorPickers.innerHTML = '';
+            colorPickers.replaceChildren();
             for (let i = 0; i < k; i++) {
                 const grad = regionGradients[i];
                 const container = document.createElement('div');
                 container.className = 'mb-4 p-3 border rounded-xl bg-white shadow-sm flex flex-col space-y-3';
-                
+
                 const topRow = document.createElement('div');
                 topRow.className = 'flex items-center space-x-3';
 
-                // Original color preview
                 const origRGB = currentOriginalColors[i] || [200, 200, 200];
-                const origHex = "#" + origRGB.map(x => x.toString(16).padStart(2, '0')).join('');
-                
-                // If it's a newly added region or it was using the default gray placeholder, update it with the actual detected color
-                // Also update if we just got real colors from backend
+                const origHex = rgbToHex(origRGB);
+
+                // Seed the picker with the detected color once we know it
                 if (currentOriginalColors[i] && (!grad.paletteColor || grad.paletteColor === '#c8c8c8')) {
                     grad.paletteColor = origHex;
                 }
 
                 const origBox = document.createElement('div');
                 origBox.className = 'flex-shrink-0 flex flex-col items-center cursor-pointer hover:opacity-80';
-                origBox.innerHTML = `
-                    <div class="w-8 h-8 rounded border shadow-sm" style="background-color: ${origHex}"></div>
-                    <div class="text-[6px] text-gray-400 font-bold uppercase mt-1">Orig</div>
-                `;
+                origBox.title = 'Reset to the original color';
+                const swatch = document.createElement('div');
+                swatch.className = 'w-8 h-8 rounded border shadow-sm';
+                swatch.style.backgroundColor = origHex;
+                origBox.appendChild(swatch);
+                const share = currentRegionShares[i];
+                origBox.appendChild(smallLabel(share !== undefined ? `Orig ${(share * 100).toFixed(1)}%` : 'Orig'));
                 origBox.onclick = () => {
                     grad.paletteColor = origHex;
                     updateColorPickers();
@@ -322,83 +501,69 @@
                 };
                 topRow.appendChild(origBox);
 
-                // Arrow
                 const arrow = document.createElement('div');
                 arrow.className = 'text-gray-300';
-                arrow.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 5l7 7-7 7" /></svg>`;
+                arrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>';
                 topRow.appendChild(arrow);
 
-                // Palette Color Picker
                 const palettePickerDiv = document.createElement('div');
                 palettePickerDiv.className = 'flex flex-col items-center';
                 const paletteInput = document.createElement('input');
                 paletteInput.type = 'color';
-                paletteInput.value = grad.paletteColor;
+                paletteInput.value = grad.paletteColor || '#000000';
                 paletteInput.className = 'w-8 h-8 border-0 rounded cursor-pointer';
-                paletteInput.oninput = (e) => { 
-                    grad.paletteColor = e.target.value; 
-                    triggerProcess(); 
+                paletteInput.oninput = (e) => {
+                    grad.paletteColor = e.target.value;
+                    triggerProcess();
                 };
                 palettePickerDiv.appendChild(paletteInput);
-                const paletteLabel = document.createElement('div');
-                paletteLabel.className = 'text-[6px] text-gray-400 font-bold uppercase mt-1';
-                paletteLabel.innerText = 'Palette';
-                palettePickerDiv.appendChild(paletteLabel);
+                palettePickerDiv.appendChild(smallLabel('Palette'));
                 topRow.appendChild(palettePickerDiv);
 
-                // Gradient Section
                 if (grad.style === 'none') {
                     const addBtn = document.createElement('button');
                     addBtn.className = 'ml-auto bg-indigo-50 text-indigo-600 px-2 py-1 rounded text-[10px] font-bold border border-indigo-100 hover:bg-indigo-100';
-                    addBtn.innerText = '+ ADD GRADIENT';
+                    addBtn.textContent = '+ ADD GRADIENT';
                     addBtn.onclick = () => {
                         grad.style = 'vertical';
-                        grad.paletteColor = origHex;
-                        
-                        // Make color2 slightly different so the gradient is visible immediately
-                        const rgb = hexToRgb(origHex);
-                        const r = Math.max(0, Math.min(255, rgb[0] > 128 ? rgb[0] - 50 : rgb[0] + 50));
-                        const g = Math.max(0, Math.min(255, rgb[1] > 128 ? rgb[1] - 50 : rgb[1] + 50));
-                        const b = Math.max(0, Math.min(255, rgb[2] > 128 ? rgb[2] - 50 : rgb[2] + 50));
-                        grad.color2 = "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
-                        
+                        grad.paletteColor = grad.paletteColor || origHex;
+                        // Make the end color visibly different so the gradient shows immediately
+                        const rgb = hexToRgb(grad.paletteColor);
+                        grad.color2 = rgbToHex(rgb.map(c => Math.max(0, Math.min(255, c > 128 ? c - 50 : c + 50))));
                         updateColorPickers();
                         triggerProcess();
                     };
                     topRow.appendChild(addBtn);
                 } else {
-                    // Second color picker
                     const color2Div = document.createElement('div');
                     color2Div.className = 'flex flex-col items-center';
                     const color2Input = document.createElement('input');
                     color2Input.type = 'color';
-                    color2Input.value = grad.color2 || grad.paletteColor;
+                    color2Input.value = grad.color2 || grad.paletteColor || '#000000';
                     color2Input.className = 'w-8 h-8 border-0 rounded cursor-pointer';
                     color2Input.oninput = (e) => { grad.color2 = e.target.value; triggerProcess(); };
                     color2Div.appendChild(color2Input);
-                    const color2Label = document.createElement('div');
-                    color2Label.className = 'text-[6px] text-gray-400 font-bold uppercase mt-1';
-                    color2Label.innerText = 'End';
-                    color2Div.appendChild(color2Label);
+                    color2Div.appendChild(smallLabel('End'));
                     topRow.appendChild(color2Div);
 
-                    // Style selector
                     const styleSelect = document.createElement('select');
                     styleSelect.className = 'ml-auto text-[10px] border rounded p-1 bg-gray-50';
                     ['vertical', 'horizontal', 'radial'].forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s;
-                        opt.innerText = s.toUpperCase();
+                        opt.textContent = s.toUpperCase();
                         if (s === grad.style) opt.selected = true;
                         styleSelect.appendChild(opt);
                     });
                     styleSelect.onchange = (e) => { grad.style = e.target.value; updateColorPickers(); triggerProcess(); };
                     topRow.appendChild(styleSelect);
 
-                    // Polarity slider in a second row
                     const polarityRow = document.createElement('div');
                     polarityRow.className = 'flex items-center space-x-2 px-2';
-                    polarityRow.innerHTML = `<span class="text-[8px] font-bold text-gray-400 uppercase w-12">Polarity</span>`;
+                    const polarityLabel = document.createElement('span');
+                    polarityLabel.className = 'text-[8px] font-bold text-gray-400 uppercase w-12';
+                    polarityLabel.textContent = 'Polarity';
+                    polarityRow.appendChild(polarityLabel);
                     const polarityInput = document.createElement('input');
                     polarityInput.type = 'range';
                     polarityInput.min = '0';
@@ -410,14 +575,14 @@
 
                     const removeLink = document.createElement('button');
                     removeLink.className = 'text-[8px] text-red-400 hover:text-red-600 font-bold uppercase ml-auto transition-colors';
-                    removeLink.innerText = 'Remove';
+                    removeLink.textContent = 'Remove';
                     removeLink.onclick = () => {
                         grad.style = 'none';
                         updateColorPickers();
                         triggerProcess();
                     };
                     polarityRow.appendChild(removeLink);
-                    
+
                     container.appendChild(polarityRow);
                 }
 
@@ -426,16 +591,17 @@
             }
         }
 
+        // ---- Image processing -----------------------------------------------------
         function triggerProcess() {
             if (currentActiveTab === 'image' && currentImageName) {
-                document.getElementById('loadingOverlay').classList.remove('hidden');
+                $('loadingOverlay').classList.remove('hidden');
             }
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 if (currentActiveTab === 'image') {
                     processImage();
-                } else if (currentActiveTab === 'css') {
-                    processCss();
+                } else if (currentActiveTab === 'text') {
+                    processText();
                 }
             }, 300);
         }
@@ -446,71 +612,58 @@
 
             const formData = new FormData();
             formData.append('file', file);
-
-            // Show placeholders/loading state
-            document.getElementById('loadingOverlay').classList.remove('hidden');
+            $('loadingOverlay').classList.remove('hidden');
 
             try {
                 const resp = await fetch('/upload', { method: 'POST', body: formData });
-                if (!resp.ok) {
-                    const errorData = await resp.json();
-                    throw new Error(errorData.error || "Upload failed");
-                }
+                if (!resp.ok) throw new Error(await readError(resp, 'Upload failed'));
                 const data = await resp.json();
-                
-                if (data.filename) {
-                    currentImageName = data.filename;
-                    currentOriginalColors = []; // Reset colors for new image
-                    regionGradients = []; // Reset gradients and palette selection
-                    
-                    // Show normalized image from server in original preview
-                    const normalizedUrl = `/image/${currentImageName}`;
-                    
-                    document.getElementById('originalPreview').src = normalizedUrl;
-                    document.getElementById('originalPreview').classList.remove('hidden');
-                    document.getElementById('originalPlaceholder').classList.add('hidden');
-                    
-                    // Also show in processed preview immediately (as is)
-                    const processedPreview = document.getElementById('processedPreview');
-                    processedPreview.src = normalizedUrl;
-                    processedPreview.classList.remove('hidden');
-                    document.getElementById('processedPlaceholder').classList.add('hidden');
-                    document.getElementById('downloadImageBtn').classList.remove('hidden');
+                if (data.kind !== 'image') throw new Error('Please choose an image file');
 
-                    updateColorPickers(); // Show gray boxes while processing
-                    await processImage();
-                }
+                currentImageName = data.filename;
+                currentOriginalColors = [];
+                currentRegionShares = [];
+                regionGradients = [];
+
+                // The server normalizes every upload to PNG
+                const normalizedUrl = `/image/${encodeURIComponent(currentImageName)}`;
+                $('originalPreview').src = normalizedUrl;
+                $('originalPreview').classList.remove('hidden');
+                $('originalPlaceholder').classList.add('hidden');
+                compareOriginal.src = normalizedUrl;
+
+                processedPreview.src = normalizedUrl;
+                processedPreview.classList.remove('hidden');
+                $('processedPlaceholder').classList.add('hidden');
+                $('downloadImageBtn').classList.remove('hidden');
+                $('compareToggleLabel').classList.remove('hidden');
+                $('compareToggleLabel').classList.add('flex');
+
+                updateColorPickers();
+                await processImage();
             } catch (err) {
-                console.error("Upload failed", err);
-                alert("Upload Error: " + err.message);
+                console.error('Upload failed', err);
+                alert('Upload Error: ' + err.message);
             } finally {
-                document.getElementById('loadingOverlay').classList.add('hidden');
+                $('loadingOverlay').classList.add('hidden');
             }
         }
 
         async function processImage() {
             if (!currentImageName) return;
-            if (isProcessing) return;
-            
-            const k = parseInt(kSlider.value);
-            const threshold = parseInt(thresholdSlider.value);
-            const flood = floodCheckbox.checked;
-            const applyPalette = paletteCheckbox.checked;
+            if (isProcessing) {
+                pendingProcess = true;  // run once more with the latest settings
+                return;
+            }
 
             const colors = [];
             const gradientStyles = [];
             const gradientPolarities = [];
-
             regionGradients.forEach(grad => {
-                const c1 = hexToRgb(grad.paletteColor || "#000000");
+                const c1 = grad.paletteColor ? hexToRgb(grad.paletteColor) : null;
                 if (grad.style !== 'none') {
                     gradientStyles.push(grad.style);
-                    if (grad.color2) {
-                        const c2 = hexToRgb(grad.color2);
-                        colors.push([c1, c2]);
-                    } else {
-                        colors.push(c1);
-                    }
+                    colors.push(grad.color2 && c1 ? [c1, hexToRgb(grad.color2)] : c1);
                 } else {
                     colors.push(c1);
                     gradientStyles.push('none');
@@ -519,7 +672,7 @@
             });
 
             isProcessing = true;
-            document.getElementById('loadingOverlay').classList.remove('hidden');
+            $('loadingOverlay').classList.remove('hidden');
 
             try {
                 const resp = await fetch('/process', {
@@ -527,89 +680,90 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         image_name: currentImageName,
-                        k: k,
-                        threshold: threshold,
-                        flood: flood,
+                        k: parseInt(kSlider.value),
+                        flood: floodCheckbox.checked,
+                        smooth: smoothCheckbox.checked,
+                        shading: shadingCheckbox.checked,
                         gradient_styles: gradientStyles,
                         gradient_polarities: gradientPolarities,
                         colors: colors,
-                        apply_palette: applyPalette
-                    })
+                        apply_palette: paletteCheckbox.checked,
+                    }),
                 });
-                
-                if (!resp.ok) {
-                    const errorData = await resp.json();
-                    throw new Error(errorData.error || "Backend processing failed");
-                }
-                
+                if (!resp.ok) throw new Error(await readError(resp, 'Backend processing failed'));
                 const data = await resp.json();
-                
-                if (data.original_colors) {
-                    currentOriginalColors = data.original_colors;
-                }
 
+                if (data.original_colors) currentOriginalColors = data.original_colors;
+                if (data.region_shares) currentRegionShares = data.region_shares;
                 if (data.image) {
-                    const preview = document.getElementById('processedPreview');
-                    preview.src = 'data:image/png;base64,' + data.image;
-                    preview.classList.remove('hidden');
-                    document.getElementById('processedPlaceholder').classList.add('hidden');
-                    document.getElementById('downloadImageBtn').classList.remove('hidden');
+                    processedPreview.src = 'data:image/png;base64,' + data.image;
+                    processedPreview.classList.remove('hidden');
+                    $('processedPlaceholder').classList.add('hidden');
+                    $('downloadImageBtn').classList.remove('hidden');
                 }
-                
                 updateColorPickers();
-                
             } catch (err) {
-                console.error("Processing failed", err);
-                alert("Studio Error: " + err.message);
+                console.error('Processing failed', err);
+                alert('Studio Error: ' + err.message);
             } finally {
                 isProcessing = false;
-                document.getElementById('loadingOverlay').classList.add('hidden');
+                $('loadingOverlay').classList.add('hidden');
+                if (pendingProcess) {
+                    pendingProcess = false;
+                    processImage();
+                }
             }
         }
 
-        function applyPreset(name, colors) {
+        function applyPreset(colors) {
             const presetK = colors.length;
             kSlider.value = Math.min(Math.max(presetK, 2), 16);
-            kValue.innerText = kSlider.value;
+            kValue.textContent = kSlider.value;
             paletteCheckbox.checked = true;
-            
-            // Reset gradients when applying a preset
+
             regionGradients = [];
             while (regionGradients.length < presetK) {
                 regionGradients.push({ style: 'none', color2: null, polarity: 0.5, paletteColor: null });
             }
-
             colors.forEach((rgb, i) => {
-                if (i >= regionGradients.length) return;
-                const hex = "#" + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
-                regionGradients[i].paletteColor = hex;
+                if (i < regionGradients.length) regionGradients[i].paletteColor = rgbToHex(rgb);
             });
-            
+
             updateColorPickers();
             triggerProcess();
         }
 
+        $('presets').addEventListener('click', (e) => {
+            const item = e.target.closest('.preset-item');
+            if (item) applyPreset(JSON.parse(item.dataset.colors));
+        });
+
         kSlider.oninput = () => {
-            kValue.innerText = kSlider.value;
+            kValue.textContent = kSlider.value;
             updateColorPickers();
             triggerProcess();
         };
 
-        thresholdSlider.oninput = () => {
-            thresholdValue.innerText = thresholdSlider.value;
-            triggerProcess();
-        };
-
-        floodCheckbox.onchange = triggerProcess;
+        // Flood grows regions over each other; smoothing blends their edges. Pick one.
+        function syncEdgeOptions() {
+            floodCheckbox.disabled = smoothCheckbox.checked;
+            smoothCheckbox.disabled = floodCheckbox.checked;
+            floodCheckbox.parentElement.classList.toggle('opacity-50', floodCheckbox.disabled);
+            smoothCheckbox.parentElement.classList.toggle('opacity-50', smoothCheckbox.disabled);
+        }
+        floodCheckbox.onchange = () => { syncEdgeOptions(); triggerProcess(); };
+        smoothCheckbox.onchange = () => { syncEdgeOptions(); triggerProcess(); };
+        shadingCheckbox.onchange = triggerProcess;
         paletteCheckbox.onchange = () => {
             if (!paletteCheckbox.checked && currentImageName) {
-                document.getElementById('processedPreview').src = `/image/${currentImageName}`;
+                processedPreview.src = `/image/${encodeURIComponent(currentImageName)}`;
             }
             triggerProcess();
         };
         imageInput.onchange = uploadImage;
 
         // Init
+        syncEdgeOptions();
         updateColorPickers();
     </script>
 
