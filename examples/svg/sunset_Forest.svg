@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#006400"/>
+      <stop offset="1" stop-color="#6b8e23"/>
+    </linearGradient>
+    <style>
+      .far { fill: #2e8b57; }
+      .near { fill: #008000; }
+      .ripple { stroke: #20b2aa; stroke-width: 3; stroke-linecap: round; }
+    </style>
+  </defs>
+  <rect width="400" height="240" fill="url(#sky)"/>
+  <circle cx="200" cy="138" r="56" fill="#3cb371"/>
+  <path class="far" d="M0 150 L70 96 L130 132 L190 82 L260 128 L330 90 L400 140 V170 H0 Z"/>
+  <path class="near" d="M0 170 L60 134 L120 160 L180 126 L250 162 L320 132 L400 168 V180 H0 Z"/>
+  <rect y="178" width="400" height="62" style="fill: #228b22"/>
+  <line class="ripple" x1="150" y1="196" x2="250" y2="196"/>
+  <line class="ripple" x1="170" y1="212" x2="230" y2="212"/>
+  <line class="ripple" x1="185" y1="226" x2="215" y2="226"/>
+  <path d="M96 60 q10 -10 20 0 q10 -10 20 0" fill="none" stroke="#008000" stroke-width="3"/>
+</svg>
